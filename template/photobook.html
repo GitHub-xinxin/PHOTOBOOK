@@ -1,0 +1,78 @@
+{template 'common/header'}
+
+<style>
+th{
+	text-align: center !important;
+}
+
+td{
+	text-align: center !important;
+	white-space: normal !important;
+	word-break: break-all !important;
+}
+</style>
+<div class="panel panel-default">
+
+<div class='panel-heading'>
+    <a class="btn btn-success" href="{php echo $this->createWebUrl('CreateBook')}">添加照片书</a>
+</div>
+
+	<div class="panel-body" style="text-align: center;">
+
+        <table class="table table-hover">
+
+            <thead class="navbar-inner">
+
+                <tr>
+
+                    <th>照片书名称</th>
+                    <th>展示图</th>
+                    <th>价格</th>
+                    <th>内部价格</th>
+                    <th>修改时间</th>
+                    <th>销量</th>
+                    <th>尺寸</th>
+                    <th>软硬壳</th>
+                    <th style="width: 200px;">操作</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="table_content">
+
+                {loop $list $l}
+
+                <tr>
+
+                    <td>{$l['name']}</td>
+                    <td><img src="{media $l['thumb']}" height="50px"></td>
+                    <td>{$l['price']}元</td>
+                    <td>{$l['inner_price']}元</td>
+                    <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+                    <td>{$l['sales']}</td>
+                    <td>{$l['size']}</td>
+                    <td>{if $l['shell']}
+                    <span class="label label-primary">硬壳</span>
+                    {else}
+                    <span class="label label-success">软壳</span>
+                    {/if}
+                    </td>
+                    <td>
+                    	<a href='{php echo $this->createWebUrl("editbook",array("b_id"=>$l["id"]))}' class="btn btn-default btn-sm">编辑</a>
+                        <a href='{php echo $this->createWebUrl("edittemplateimage",array("t_id"=>$l["id"]))}' class="btn btn-primary btn-sm">修改书模板</a>
+                    	<a href='{php echo $this->createWebUrl("deletetemplate",array("t_id"=>$l["id"]))}' onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger btn-sm">删除</a>
+						
+                    </td>
+
+                </tr>
+
+                {/loop}
+
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+{template 'common/footer'}

@@ -1,0 +1,41 @@
+{template 'header'}
+<style>
+	#ture_sumb{
+		width: 33%;
+		margin-left: 33%;
+		margin-right: 33%;
+	}
+	#ture_input{
+		background-color: #bcf0f1;
+		font-family: "黑体";
+		color: #ac173b;
+	}
+</style>
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<ul class="mui-table-view" style="margin: 0.5em;">
+			<li class="mui-table-view-cell">
+				<h4>必读:</h4>
+				请输入上级所给的邀请码
+			</li>
+		</ul>
+		<div class="mui-col-sm-12 mui-col-xs-12">
+			<form class="mui-input-group" action="" method="post" style="margin-left:0.5em;margin-right:0.5em" >
+				<div class="mui-input-row">
+					<label style="color:#d24624">邀请码</label>
+				</div>
+				<div class="mui-input-row" >
+					<input type="text" name="code" value="" id="ture_input" placeholder="点此输入...">
+				</div>
+				<div class="mui-button-row">
+					<input type="hidden" name="token" value="{$_W['token']}">
+					<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-warning" id="ture_sumb">确认</button>
+				</div>
+			</form>
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+</div>
+</div>
+{template 'footer'}

@@ -1,0 +1,57 @@
+{template 'header'}
+
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div style="font-size: 12px;font-family: '微软雅黑';">
+			<span class="mui-icon mui-icon-arrowdown"></span>
+			{$Atitle}
+		</div>
+		<div class="mui-row">
+			<ul class="mui-table-view">
+				{loop $orders $order}
+				<li class="mui-table-view-cell" id="li_shops">
+					<div class="mui-row">
+						<div class="mui-col-sm-12 mui-col-xs-12">
+							<div class="mui-row">
+								<div class="mui-col-sm-2 mui-col-xs-2">
+									<img src="{media $order['template']['thumb']}" alt="" style="width: 100%;border-radius: 5px;" />
+								</div>
+								<div class="mui-col-sm-10 mui-col-xs-10" style="padding-left: 1em;">
+									<div style="color: #2c3e50;">
+										{$order['template']['name']}
+										<br>
+										<span class="mui-badge mui-badge-success mui-badge-inverted">
+											制作时间:{php echo date('Y-m-d H:i',$order['createtime'])}
+										</span>
+									</div>
+									<div>
+										<button type="button" data-id="{$order['id']}" class="mui-btn mui-btn-success mui-btn-outlined Preview_of_works">作品预览</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+	$(".Order_details").bind("tap",function(e){
+		var orderid=$(this).data("id")
+		window.location.href="{$url_details}"+"&order_id="+orderid;
+		console.log(orderid)
+	})
+	$(".Preview_of_works").bind("tap",function(e){
+		var orderid=$(this).data("id")
+		window.location.href="{$url_Preview}"+"&tid="+orderid;
+		console.log(orderid)
+	})
+	$(function(){
+
+	})
+</script>
+{template 'footer'}

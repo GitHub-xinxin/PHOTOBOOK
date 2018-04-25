@@ -1,0 +1,117 @@
+{template 'common/header'}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            设置内部代理商
+        </h3>
+    </div>
+    <div class="panel-body">
+    	<div class="alert alert-warning">
+		    <a href="#" class="close" data-dismiss="alert">
+		        &times;
+		    </a>
+		    <strong>提示！</strong>输入要添加的代理商名字或者手机号设置代理商。
+		</div>
+    	<form class="form-inline" role="form" action="" method="post">
+		<!--   <div class="form-group">
+		  <label class="sr-only" for="phone">微信昵称</label>
+		  <input type="text" class="form-control" id="name" name="name" placeholder="请输入微信昵称" value="{$_GPC['name']}">
+		  
+		</div>
+		或者 -->
+		  <div class="form-group">
+		    <label class="sr-only" for="name">openid</label>
+		    <input type="text" class="form-control" id="phone" name="phone" placeholder="请输入openid" value="{$_GPC['openid']}">
+		  </div>
+		  <input type="hidden" name="token" value="{$_W['token']}">
+		  <input type="submit" name="submit" value="搜索" class="btn btn-primary">
+		</form>
+
+		{if isset($toAgent)}
+		<hr>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th>昵称</th>
+			      <th>openid</th>
+			      
+			      <!-- <th>加入时间</th> -->
+			      <th>操作</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{if !empty($toAgent)}
+				  	{loop $toAgent $l}
+					    <tr>
+					      <td>{$l['userInfo']['nickname']}</td>
+					      <td>{$l['openid']}</td>
+					      <!-- <td>{php echo date('Y-m-d:H:i:s',$l['in_time'])}</td> -->
+					      <td>
+					      	<button class="btn btn-primary" onclick="setAgent({$l['id']},2)">
+					      	设置代理</button>
+					      </td>
+					    </tr>
+				    {/loop}
+				    {else}
+					    <tr>
+					    	<td colspan="6" style="text-align: center;">没有搜索到啊~</td>
+					    </tr>
+			    {/if}
+			  </tbody>
+			</table>
+		{/if}
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            已有代理商列表
+        </h3>
+    </div>
+    <div class="panel-body">
+    	<table class="table">
+		  <thead>
+		    <tr>
+		      <th>昵称</th>
+		      <th>openid</th>
+		      <th>邀请码</th>
+		      <!-- <th>加入时间</th> -->
+		      <th>操作</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	{loop $list $l}
+		    <tr>
+		      <td>{$l['userInfo']['nickname']}</td>
+		      <td>{$l['openid']}</td>
+		      <td>{$l['agent_code']}</td>
+		      <!-- <td>{php echo date('Y-m-d:H:i:s',$l['in_time'])}</td> -->
+		      <td>
+		      	<button class="btn btn-danger" onclick="setAgent({$l['id']},-1)">
+		      	取消代理</button>
+		      </td>
+		    </tr>
+		    {/loop}
+		  </tbody>
+		</table>
+		{$pager}
+    </div>
+</div>
+
+<script type="text/javascript">
+	function setAgent(id,s){
+		$.post('{php echo $this->createWebUrl("setinAgent")}',{'id':id,'s':s},function(res){
+			if(res){
+				alert('操作成功');
+				window.location.href='{php echo $this->createWebUrl("inneragent")}';
+			}else{
+				alert('操作失败')
+			}
+		})
+	}
+</script>
+
+{template 'common/footer'}

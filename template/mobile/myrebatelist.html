@@ -1,0 +1,66 @@
+{template 'header'}
+<style>
+	#scroll_count{
+		color: #c0392b;
+		text-align: center;
+	}
+</style>
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div class="mui-col-sm-12 mui-col-xs-12">
+			<div class="mui-card">
+			<div class="mui-card-header">
+				<div style="color: #d35400;font-size: 14px">
+					当前可提现金额：
+				</div>
+			</div>
+			<div class="mui-card-content" id="scroll_count">
+				<h4>{$allmoney}元</h4>
+			</div>
+			<div class="mui-card-footer">
+					<button type="button" onclick="applyrebate()" style="width: 100%;margin-top: 10px" class="mui-btn mui-btn-warning">申请提现</button>
+				</div>
+		</div>
+			<div style="width: 100%;text-align: center;margin-top: 10px;font-size: 28px">
+				
+			</div>
+			
+			<hr>
+			 <ul class="mui-table-view"> 
+			 	{loop $rebate $k $c}
+		        <li class="mui-table-view-cell mui-collapse">
+		            <a class="mui-navigate-right" href="#">返利金额：{$c['money']}</a>
+		            <div class="mui-collapse-content">
+		                <p>状态：{if $c['status']==0}
+							未申请提现
+							{else if $c['status']==1}
+							申请提现待审核
+							{else if $c['status']==2}
+							已经体现并通过
+							{/if}
+		                </p>
+		                <p>备注：{$c['remark']}</p>
+		                <p>时间：<?php echo date('Y-m-d H:i:s',$c['createtime']);?></p>
+		            </div>
+		        </li>
+		        {/loop}
+		    </ul>
+		    
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+
+<script type="text/javascript" src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+	function applyrebate(){
+		$.post('{php echo $this->createMobileUrl("applyrebate")}', {param1: 'value1'}, function(res, textStatus, xhr) {
+			if(res){
+				alert('申请成功');
+			}else{
+				alert('申请失败');
+			}
+		});
+	}
+</script>
+{template 'footer'}

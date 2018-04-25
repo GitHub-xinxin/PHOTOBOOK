@@ -1,0 +1,27 @@
+.mui-control-content-height{
+height:  -webkit-calc(100% + 200px);
+}
+.touxiang{
+	text-align: center;margin-top: 2em;
+}
+.cebians{
+	background-color: #343336;
+}
+.cebians li{
+	color: #bdc3c7;
+}
+.photoshelf{
+	padding: 3px;
+	margin: -2px;
+	border: 1px solid cornsilk;
+}
+.photoshelf .title{
+	text-align: center;
+}
+.photoshelf .slogan{
+	text-align: center;
+}
+.photoshelf .photoimg img{
+	width: 100%;
+}
+

@@ -1,0 +1,42 @@
+{template 'header'}
+
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-row" style="margin-top: 1em;background-color: yellowgreen">
+							<div class="mui-col-sm-4 mui-col-xs-4">
+								<img src="{$userInfo['headimgurl']}" alt="" / style="width: 60px;height: 60px;border-radius: 30px;margin: 1em;border: 2px solid #fff;">
+							</div>
+							<div class="mui-col-sm-5 mui-col-xs-5" style="margin-top: 1.8em;; font-size: 20px;">
+								我的下级
+								<span class="mui-badge mui-badge-purple">
+									总共{$userscount}位
+								</span>
+							</div>
+						</div>
+						<div class="mui-col-sm-12 mui-col-xs-12">
+							<div class="mui-row" style="margin-top: 2em;">
+								<ul class="mui-table-view" style="margin-left: 0.5em;margin-right: 0.5em;">
+									{if empty($list)}
+									<li class="mui-table-view-cell" style="color: #00aab8;text-align: center;">
+								    	<span class="mui-icon mui-icon-close"></span>
+								    	暂时没有下线
+								    </li>
+										
+								    {else}
+								    	{loop $list $index $v}
+								    <li class="mui-table-view-cell">
+								    	<span class="mui-icon mui-icon-person" style="color: #2980b9;"></span>
+								    	<span>{$v['nickname']}</span>
+								    	<img src="{$v['avatar']}" alt="" style="width: 3em;border-radius: 1em">
+								    	<span class="mui-badge mui-badge-success">{php echo date("Y-m-d H:i:s",$v['createtime'])}</span>
+								    </li>
+								    {/loop}
+								    {/if}
+								</ul>
+							</div>
+						</div>
+						<div style="height: 4em;"></div>
+					</div>
+				</div>
+
+{template 'footer'}

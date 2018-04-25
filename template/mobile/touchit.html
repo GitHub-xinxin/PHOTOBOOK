@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<script type="text/javascript" src="../addons/photobook/template/mobile/js/touch.min.js"></script>
+	<script type="text/javascript" src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../addons/photobook/template/mobile/css/mui.min.css"/>
+	<title></title>
+	<style type="text/css">
+	body{
+		background: white;
+		height: auto;
+	}
+	ul li{
+		list-style: none;
+	}
+	#kuai{
+		border:  dashed 1px salmon;
+		background-color: rgba(120,0,0,0.2);
+		position: fixed;
+		z-index:2;
+		top:0px;
+		left:0px;
+	}
+	#aflull{
+		width: 100%;
+		position: fixed;
+		z-index: 1;
+	}
+	#xiafull{
+		width: 100%;
+		background: white;
+		height: 200px;
+
+	}
+	#target{
+		position: fixed;
+		z-index: 0;
+	}
+	#mui-cards{
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+	#titles{
+		position: relative;
+		z-index: 9;
+		background: white;
+	}
+	#caozuo{
+		padding-left: 1%;
+		margin-top: 20%;
+		margin-left: 5%;
+		width: 90%;
+		height: 3em;
+		position: relative;
+	}
+	.caodiv{
+		float: left;
+		height: 100%;
+	}
+	#carcount{
+		width: 100%
+	}
+	#Tpanel2 img{
+		width: 60%;
+		height: auto;
+		margin:1em 10% 0em 10%;
+		border-top: 1px dashed  #27ae60;
+		border-bottom: 1px dashed  #27ae60;
+	}
+</style>
+</head>
+<div id="Tpanel1">
+	<div class="mui-card" id="mui-cards">
+		<div class="mui-card-header" id="titles">
+			编辑模式：第0页。
+			<button type="button" id="baocun" class="mui-btn mui-btn-warning">保存</button>
+		</div>
+		<div class="mui-card-content" id="carcount">
+			<img src="{php echo tomedia($T_img)}"/ id="aflull">
+			<div id="xiafull">
+				<nav class="mui-bar mui-bar-tab">
+				</nav>
+			</div>
+			<div id="assembly"><!-- 此为组件，需动态生成 -->
+				<div id="kuai">
+					<div id="caozuo">
+						<button type="button" id="leftR1" class="mui-btn mui-btn-warning mui-btn-outlined">左旋</button>
+						<button type="button" id="alter_template" class="mui-btn mui-btn-success mui-btn-outlined">更换模板</button>
+						<button type="button" id="rightR1" class="mui-btn mui-btn-warning mui-btn-outlined">右旋</button>
+						<div style="clear:both" ></div>
+					</div>
+				</div>
+				<img id="target" data-id="{$thisid}" src="{php echo tomedia($U_img)}" />
+			</div>
+
+		</div>
+		<div class="mui-card-footer"></div>
+	</div>
+</div>
+<div id="Tpanel2">
+	<div class="mui-content">
+	    <div class="mui-row">
+	    	{loop $alltimg $index $v}
+	        <div class="mui-col-sm-4 mui-col-xs-4 temp-row" id="ctimg{$v['id']}" data-tid="{$v['id']}">
+	          <img src="{php echo tomedia($v['thumb'])}" alt="" />
+	        </div>
+	        {/loop}
+	        <nav class="mui-bar mui-bar-tab">
+				<a class="mui-tab-item mui-active" id="quxiaole">
+					<button type="button" id="alter_template" class="mui-btn mui-btn-primary">
+						<span class="mui-icon mui-icon-upload"></span>
+						取消
+					</button>
+				</a>
+			</nav>
+	    </div>
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+	window.onload=function(){ 
+		//更换模板
+		Tpanel1=$("#Tpanel1");
+		Tpanel2=$("#Tpanel2");
+		Tpanel2.hide();
+		var al_t=$("#alter_template");
+		al_t.bind("tap",function(){
+			Tpanel1.hide();
+			Tpanel2.show();
+		})
+		$("#quxiaole").bind("tap",function(){
+			Tpanel2.hide();
+			Tpanel1.show();
+		})
+		//遍历绑定方法
+		var change_t=function(tid){
+			console.log(tid);
+			$.post(
+				"{$changeTurl}",
+				{
+					"tid":tid,
+					"thisOrderId":{$thisid}
+				},
+				function(data){
+					console.log(data);
+					if(data.code==0){
+						window.location.href="{$Touchit}"+"&time="+Date.parse(new Date()) 
+					}else{
+							$('#quxiaole').trigger("click");
+					}
+				},
+				"json"
+			)
+		}
+		$(".temp-row").each(function(index, el) {
+			$(el).bind("tap",function(){
+			change_t($(el).data("tid"))		
+				Tpanel2.hide();
+				Tpanel1.show();
+			})
+		});
+		//................................
+		var jsonarr=[]
+		var degs=0
+		function change_degs(deg){
+			degs+=deg
+			if(Math.abs(degs)%360==0){
+				degs=0
+			}
+			var target = document.getElementById("target");
+			target.style.webkitTransform ="rotate("+degs+"deg)"
+		}
+		var xiafulltop=$("#titles").height()+$("#aflull").height()
+		$("#xiafull").css("position","fixed")
+		$("#xiafull").css("top",xiafulltop+"px")
+		$("#xiafull").css("height","1000px")
+		$("#xiafull").css("z-index","1")
+		var carcount=$("#carcount").width()
+		$('#aflull').width(carcount)
+		$('#target').width(carcount)
+		var assembly='<div id="kuai"><div id="caozuo"><button type="button" id="leftR1" class="mui-btn mui-btn-warning mui-btn-outlined">左旋</button><button type="button" id="t_change1" class="mui-btn mui-btn-success mui-btn-outlined">更换模板</button><button type="button" id="rightR1" class="mui-btn mui-btn-warning mui-btn-outlined">右旋</button><div style="clear:both" ></div></div></div><img id="target" data-id="{$thisid}" src="{php echo tomedia($U_img)}">';
+		touch.on('#leftR1', 'tap', function(ev) {
+			change_degs(-90)
+		});
+		touch.on('#t_change1', 'tap', function(ev) {
+			alert("点此调出！")
+		});
+		touch.on('#rightR1', 'tap', function(ev) {
+			change_degs(90)
+		});
+		touch.on('#kuai', 'touchstart', function(ev) {
+			ev.preventDefault();
+		});
+		var target = document.getElementById("target");
+		target.style.webkitTransform ="rotate("+degs+"deg)"
+		var kuai = document.getElementById("kuai");
+		var bigwidth={$BIGimg};
+		var bili=$(document.body).width()/bigwidth;
+		var Mobile_x={$Mobile_x};
+		var Mobile_y={$Mobile_y};
+		var Mobile_w={$Mobile_w};
+		var Mobile_h={$Mobile_h};
+		var this_x=Mobile_x*bili
+		var this_y=Mobile_y*bili+30
+		var this_w=Mobile_w*bili
+		var this_h=Mobile_h*bili
+		var thisarr=[this_x,this_y,this_w,this_h]
+		$kuai=$('#kuai')
+		$target=$('#target')
+		$kuai.width(this_w)
+		$kuai.height(this_h)
+		$kuai.css("top",this_y+"px")
+		$kuai.css("left",this_x+"px")
+		$target.css("top",this_y+"px")
+		$target.css("left",this_x+"px")
+		$target.width(this_w)
+		touch.on('#baocun', 'tap', function(ev) {
+			var Oneda={
+				"left":$target.position().left,
+				"top":$target.position().top,
+				"type":'img',
+				"width":$target.width(),
+				"height":$target.height(),
+				"rotate":degs,
+				"orderId":$target.data('id'),
+				"ping_width":$(document.body).width()
+			}
+			$.post(
+				"{$url}",
+				{
+					arr:JSON.stringify(Oneda)
+				},
+				function(data){
+					if(data.code==0){
+						
+					}else{
+
+					}
+					window.location.href="{$urlbook}" 
+					console.log(ata.message)
+				},"json"
+				)
+		}); 
+		var kuai_w=$('#kuai').width()-($('#target').width())
+		var kuai_h=$('#kuai').height()
+		var kuai_fw=0-($('#target').width()/2)
+		var kuai_fh=0-($('#target').height()/2)
+		console.log(kuai_h)
+		var kx, ky
+		kx=this_x
+		ky=this_y
+		var offx,offy
+		var keep=function(e){
+			var keep
+			if(e>50){
+				keep=50
+			}else if(e<=50){
+				keep=e
+			}
+			if(e<-50){
+				keep=-50
+			}
+			return keep;
+		}
+		touch.on('#kuai',"drag",function(ev){
+			kx=kx||0
+			ky=ky||0 
+			offx = kx+ keep(ev.x);
+			offy = ky + keep(ev.y);
+			target.style.webkitTransform = "rotate("+degs+"deg)"
+			target.style.top = offy + "px"
+			target.style.left = offx + "px"
+		})
+		touch.on('#kuai', 'dragend', function(ev) {
+			kx += keep(ev.x)
+			ky += keep(ev.y)
+		});
+	} 
+</script>
+</html>

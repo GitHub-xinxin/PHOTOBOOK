@@ -1,0 +1,70 @@
+{template 'header'}
+				<div id="scroll" class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" class="li_address">
+								<div class="mui-row">
+									<div class="mui-col-sm-6 mui-col-xs-6">
+										<span class="mui-icon mui-icon-contact"></span> {$address['receiver']}
+									</div>
+									<div class="mui-col-sm-6 mui-col-xs-6">
+										<span class="mui-icon mui-icon-phone"></span> {$address['phone']}
+									</div>
+								</div>
+								<div class="mui-row" style="margin-top: 0.5em;">
+									<div class="mui-col-sm-12 mui-col-xs-12">
+										<div class="mui-input-row mui-radio mui-left">
+											<label style="color: royalblue">地址：{$address['detail']}</label>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+						<ul class="mui-table-view" style="margin: 0.5em;">
+					<!-- 		<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">点此选择收货地址</a>
+					</li> -->
+							<li class="mui-table-view-cell">
+								<div class="mui-col-sm-10 mui-col-xs-10">
+									<div class="mui-row">
+										<div class="mui-col-sm-6 mui-col-xs-6">
+											<img src="{media $template['thumb']}" alt="" style="width: 100%;border-radius: 5px;" />
+										</div>
+										<div class="mui-col-sm-6 mui-col-xs-6" style="padding-left: 1em;">
+											<div style="color: #2c3e50;">
+												{$template['name']} X1
+											</div>
+											<div>
+												<p style="margin-top: 2em;color: darkgoldenrod;font-size: 20px;">
+													{if $is_inner_sub}内部价格
+												￥{$template['inner_price']}
+													{else}
+												￥{$template['price']}
+												{/if}
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="mui-table-view-cell">配送方式：包邮</li>
+							<li class="mui-table-view-cell">
+								<a class="mui-navigate-right">
+									<p>共{$number}件商品</p>
+									<p>合计:￥{$order_main['price']}元</p>
+								</a>
+							</li>
+						</ul>
+						<div class="mui-col-sm-12 mui-col-xs-12">
+							<form class="mui-input-group">
+								<div class="mui-button-row">
+									<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
+								</div>
+							</form>
+						</div>
+						<div style="height: 4em;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+{template 'footer'}

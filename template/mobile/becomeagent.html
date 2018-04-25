@@ -1,0 +1,44 @@
+{template 'header'}
+				<div id="scroll" class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view" style="margin: 0.5em;">
+							<li class="mui-table-view-cell">
+								<h5>成为代理商的好处:</h5>
+								<div style="font-size: 10px">
+									<p>……</p>
+								 	<p>……</p>
+								 	<p>……</p>
+								</div>
+								 
+							</li>
+							<li class="mui-table-view-cell">
+								<div class="mui-col-sm-10 mui-col-xs-10">
+									<div class="mui-row">
+										<div class="mui-col-sm-12 mui-col-xs-12" style="padding-left: 1em;">
+											<div style="color: #2c3e50;font-weight: 700;">
+												成为代理商您需要支付200￥
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+								<div style="margin: 1em;color: #95a5a6;line-height: 1.5em;">
+									
+								</div>
+						
+								<div class="mui-input-row mui-radio mui-left">
+									<label>我同意 <span style="color:#0062CC;">免责条款</span></label>
+									<input name="radio1" type="radio">
+								</div> 
+								<div class="mui-button-row">
+									<input type="hidden" name="token" value="{$_W['token']}">
+								<a href="{php echo $this->createMobileUrl('becomeagent',array('pay'=>1))}" class="mui-btn mui-btn-primary" style="width: 33%;margin:1em,33%,1em,33% ">立即支付</a>
+								</div>
+						</div>
+						<div style="height: 6em;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+{template 'footer'}

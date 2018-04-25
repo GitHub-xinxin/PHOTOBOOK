@@ -1,0 +1,51 @@
+{template 'common/header'}
+
+<style>
+th{
+	text-align: center !important;
+}
+
+td{
+	text-align: center !important;
+	white-space: normal !important;
+	word-break: break-all !important;
+}
+</style>
+
+<div class="panel panel-default">
+
+<div class='panel-heading'>
+  照片书订单详情
+</div>
+    <div class="panel-body" style="text-align: center;">
+        <table class="table table-hover">
+                <tr><th>订单号</th><th>{$info['order_id']}</th></tr>
+                <tr><th>微信用户</th><th>{$info['userInfo']['nickname']}</th></tr>
+                <!-- phone -->
+                <tr><th>收件人</th><th>{$info['reciver']['receiver']}</th></tr>
+                <tr><th>收件人地址</th><th>{$info['reciver']['detail']}</th></tr>
+                <tr><th>快递</th><th>{$info['express']}</th></tr>
+                <tr><th>快递号</th><th>{$info['express_id']}</th></tr>
+                <tr><th>状态</th><th>
+                    {if $info['status']==1}
+                    <span class="label label-success">未打印</span>
+                    {else if $info['status']==2}
+                    <span class="label label-danger">已打印</span>
+                    {else if $info['status']==3}
+                    <span class="label label-danger">已发货</span>
+                    {else if $info['status']==4}
+                    <span class="label label-danger">已收货</span>
+                    {/if}
+                </th></tr>
+                <tr><th>数量</th><th>{$info['count']}</th></tr>
+                <tr><th>时间</th><th>{php echo date('Y-m-d H:i:s',$info['createtime'])}</th></tr>
+                <tr><th>留言</th><th>{$info['remark']}</th></tr>
+            </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+</script>
+{template 'common/footer'}

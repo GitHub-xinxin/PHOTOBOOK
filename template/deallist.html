@@ -1,0 +1,62 @@
+{template 'common/header'}
+
+<style>
+    th {
+        text-align: center !important;
+    }
+
+    td {
+        text-align: center !important;
+        white-space: normal !important;
+        word-break: break-all !important;
+    }
+</style>
+<div class="panel panel-default">
+
+    <div class='panel-heading'>
+        <span>代理列表</span>
+    </div>
+
+    <div class="panel-body" style="text-align: center;">
+
+        <table class="table table-hover">
+
+            <thead class="navbar-inner">
+
+                <tr>
+
+                    <th>序号</th>
+                    <th>昵称</th>
+                    <th>提成</th>
+                    <th>代理商邀请码</th>
+                    <th style="width: 300px;">操作</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="table_content">
+
+                {loop $list $index $l}
+
+                <tr>
+
+                    <td>{php echo $index+1}</td>
+                    <td>{$l['nickname']}</td>
+                    <td>{$l['commission']}</td>
+                    <td>{$l['agent_code']}</td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('sharelist',array('id'=>$l['id']))}">推广记录 【{$l['count']}】</a>
+                    </td>
+
+                </tr>
+
+                {/loop}
+
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+{template 'common/footer'}

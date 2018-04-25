@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.we7.cc" versionCode="0.6">
+	<application setting="true">
+		<name><![CDATA[照片书]]></name>
+		<identifie><![CDATA[photobook]]></identifie>
+		<version><![CDATA[1.0062]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[照片书等其他印刷定制类商品]]></ability>
+		<description><![CDATA[照片书等其他印刷定制类商品]]></description>
+		<author><![CDATA[leyao]]></author>
+		<url><![CDATA[http://bbs.we7.cc/]]></url>
+	</application>
+	<platform>
+		<subscribes>
+			<message type="text" />
+			<message type="image" />
+			<message type="voice" />
+			<message type="video" />
+			<message type="shortvideo" />
+			<message type="location" />
+			<message type="link" />
+			<message type="subscribe" />
+			<message type="unsubscribe" />
+			<message type="qr" />
+			<message type="trace" />
+			<message type="click" />
+			<message type="view" />
+		</subscribes>
+		<handles>
+			<message type="text" />
+			<message type="image" />
+			<message type="voice" />
+			<message type="video" />
+			<message type="shortvideo" />
+			<message type="location" />
+			<message type="link" />
+			<message type="subscribe" />
+			<message type="qr" />
+			<message type="trace" />
+			<message type="click" />
+			<!-- <message type="merchant_order" /> -->
+		</handles>
+		<rule embed="true" />
+		<card embed="false" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="home" do="homea" state="" direct="false" />
+			<entry title="首页" do="home" state="" direct="false" />
+			<entry title="个人中心" do="userCenter" state="" direct="false" />
+			<entry title="客服中心" do="service" state="" direct="false" />
+			<entry title="我的下线" do="junior" state="" direct="false" />
+			<entry title="优惠券" do="quanList" state="" direct="false" />
+			<entry title="我的地址" do="view_address" state="" direct="false" />
+			<entry title="我的订单" do="orderList" state="" direct="false" />
+			<entry title="成为代理商" do="becomeAgent" state="" direct="false" />
+			<entry title="我的作品" do="MyWork" state="" direct="false" />
+			<entry title="购物车" do="ShoppingCart" state="" direct="false" />
+			<entry title="照片上传" do="upload_user_photo" state="" direct="false" />
+		</cover>
+		<rule>
+			<entry title="rou" do="rou" state="" direct="false" />
+		</rule>
+		<menu>
+			<entry title="分享海报" do="mposter" state="" direct="false" />
+			<entry title="照片书管理" do="photobook" state="" direct="false" />
+			<entry title="订单管理" do="book_order" state="" direct="false" />
+			<entry title="代金券管理" do="cartlist" state="" direct="false" />
+			<entry title="客服消息" do="ser_message" state="" direct="false" />
+			<entry title="内部代理" do="inneragent" state="" direct="false" />
+			<entry title="奖励申请" do="rebatelist" state="" direct="false" />
+			<entry title="模块设置" do="setting" state="" direct="false" />
+			<entry title="代理列表" do="dealerlist" state="" direct="false" />
+		</menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

@@ -1,0 +1,36 @@
+{template 'header'}
+
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div class="mui-col-sm-12 mui-col-xs-12">
+			{loop $subs $s}
+			<ul class="mui-table-view">
+			    <li class="mui-table-view-cell"><img src="{$s['avatar']}" height="40px"><span style="margin-left: 20px">{$s['nickname']}</span><button type="button" onclick="giveHe('{$s['openid']}','{$s['nickname']}',{$coid})" class="mui-btn mui-btn-success">给他</button></li>
+			</ul>
+		        {/loop}
+		    </ul>
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+<script type="text/javascript" src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+	function giveHe(openid,name,coid){
+		if(confirm('确定要给'+name+'吗？')){
+			var count=prompt('输入数量，最多{$conum}个');
+			if(count>{$conum}){
+				alert('数量过多');
+				return false;
+			}
+			$.post('{php echo $this->createMobileUrl("giveHeCard")}', {number:count,openid: openid,coid:coid}, function(data, textStatus, xhr) {
+				if(data){
+					alert('操作成功');
+				}else{
+					alert('操作成功');
+				}
+			});
+		}
+		
+	}
+</script>
+{template 'footer'}

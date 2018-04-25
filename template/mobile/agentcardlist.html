@@ -1,0 +1,24 @@
+{template 'header'}
+
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div class="mui-col-sm-12 mui-col-xs-12">
+			 <ul class="mui-table-view"> 
+			 	{loop $cards $k $c}
+		        <li class="mui-table-view-cell mui-collapse">
+		            <a class="mui-navigate-right" href="#">代金券<?php echo $k+1;?></a>
+		            <div class="mui-collapse-content">
+		                <p>数量：{$c['number']}</p>
+		                <p>代理商价：{$c['dealer_price']}</p>
+		                <p>零售价：{$c['list_price']}</p>
+				<a href="{php echo $this->createMobileUrl('agentsublist',array('cid'=>$c['id'],'cnum'=>$c['number']))}" class="mui-btn mui-btn-primary" style="width: 100%">转卖</a>
+		            </div>
+		        </li>
+		        {/loop}
+		    </ul>
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+
+{template 'footer'}

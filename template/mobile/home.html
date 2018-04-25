@@ -1,0 +1,132 @@
+{template 'header'}
+				<div id="scroll" class="mui-content mui-scroll-wrapper ">
+					<div class="mui-scroll">
+						<div class="mui-slider" id="mslider">
+							<div class="mui-slider-group mui-slider-loop">
+								<div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA6.jpg" /></a>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA1.jpg" /></a>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA2.jpg" /></a>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA3.jpg" /></a>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA4.jpg" /></a>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA5.jpg" /></a>
+								</div>
+								<div class="mui-slider-item">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA6.jpg" /></a>
+								</div>
+								 <div class="mui-slider-item mui-slider-item-duplicate">
+									<a href="#"><img src="../addons/photobook/template/mobile/img/AA1.jpg" /></a>
+								 </div>
+							</div>
+							<div class="mui-slider-indicator">
+								<div class="mui-indicator mui-active"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+								<div class="mui-indicator"></div>
+							</div>
+						</div>
+						<div class="mui-col-sm-12 mui-col-xs-12" style="text-align: center;background-color: #eee;margin: 1em 1em;">
+							
+						</div>	
+						<div class="mui-row">
+							<div class="mui-col-sm-6 mui-col-xs-6 photoshelf" data-booktype="1" >
+								<div class="title">
+									<h4>新款照片书</h4>
+								</div>
+								<div class="slogan">
+									<h5>将时间停止的魔法</h5>
+								</div>
+								<div class="mui-row">
+									<div class="labels mui-col-sm-4 mui-col-xs-4">
+										<button type="button" class="mui-btn mui-btn-danger">
+										推荐
+									</button>
+									</div>
+									<div class="photoimg mui-col-sm-8 mui-col-xs-8">
+										<img src="../addons/photobook/template/mobile/img/AB4.jpg" />
+									</div>
+								</div>
+							</div>
+							<div class="mui-col-sm-6 mui-col-xs-6 photoshelf" data-booktype="2">
+								<div class="title">
+									<h4>12寸精装对裱册</h4>
+								</div>
+								<div class="slogan">
+									<h5>将时间停止的魔法</h5>
+								</div>
+								<div class="mui-row">
+									<div class="labels mui-col-sm-4 mui-col-xs-4">
+										<button type="button" class="mui-btn mui-btn-danger">
+										推荐
+									</button>
+									</div>
+									<div class="photoimg mui-col-sm-8 mui-col-xs-8">
+										<img src="../addons/photobook/template/mobile/img/AB1.jpg" />
+									</div>
+								</div>
+							</div>
+							<div class="mui-col-sm-6 mui-col-xs-6 photoshelf" data-booktype="3">
+								<div class="title">
+									<h4>方款精装对裱册</h4>
+								</div>
+								<div class="slogan">
+									<h5>将时间停止的魔法</h5>
+								</div>
+								<div class="mui-row">
+									<div class="labels mui-col-sm-4 mui-col-xs-4">
+										<button type="button" class="mui-btn mui-btn-danger">
+										推荐
+									</button>
+									</div>
+									<div class="photoimg mui-col-sm-8 mui-col-xs-8">
+										<img src="../addons/photobook/template/mobile/img/AB2.jpg" />
+									</div>
+								</div>
+							</div> 
+							<div class="mui-col-sm-6 mui-col-xs-6 photoshelf" data-booktype="4">
+								<div class="title">
+									<h4>精品杂志册</h4>
+								</div>
+								<div class="slogan">
+									<h5>将时间停止的魔法</h5>
+								</div>
+								<div class="mui-row">
+									<div class="labels mui-col-sm-4 mui-col-xs-4">
+										<button type="button" class="mui-btn mui-btn-danger">
+										推荐
+									</button>
+									</div>
+									<div class="photoimg mui-col-sm-8 mui-col-xs-8">
+										<img src="../addons/photobook/template/mobile/img/AB3.jpg" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="height: 4em;"></div>
+					</div>
+				</div>
+				<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+				<script>
+					mui.plusReady(function(){
+				        mui('#mslider').slider({
+				  	    interval:1000
+				    });
+				});
+					$(".photoshelf").bind('tap', function() {
+						var type=$(this).data("booktype")
+						window.location.href="{php echo $this->createMobileUrl('home')}"+"&booktype="+type;
+					});
+				</script>
+{template 'footer'}

@@ -1,0 +1,115 @@
+{template 'common/header'}
+<div class="main"> 
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+            <a class="btn btn-success" href="{php echo $this->createWebUrl('Photobook')}">返回模板列表</a>
+            </div>
+            <div class='panel-body'>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">模板名称</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" id="title" name="name" class="form-control"  value="{$book['name']}" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">展示图</label>
+                    <div class="col-sm-9 col-xs-12">
+                    <div class="alert alert-danger">
+                    <a href="javascript:;" class="alert-link">强烈建议上传【宽:360px,高360px】的图</a>
+                </div>
+                    {php echo tpl_form_field_image('thumb',$book['thumb']);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">模板介绍</label>
+                    <div class="col-sm-9 col-xs-12">
+                    {php echo tpl_ueditor('detail',$book['detail']);}
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">软硬壳类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label>
+                            <input name="shell" type="radio" {if $book['shell']==0}checked="checked"{/if} value="0">
+                            软壳a4
+                        </label>
+                        <label style="margin-left: 10px;">
+                            <input {if $book['shell']==1}checked="checked"{/if} name="shell" type="radio" value="1">
+                            硬壳a3
+                        </label>
+                          <label style="margin-left: 10px;">
+                            <input {if $book['shell']==2}checked="checked"{/if} name="shell" type="radio" value="2">
+                            正方形款
+                        </label>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">照片书类型</label>
+                    <!-- [1]新款照片书[2]12寸精装对裱册[3]方款精装对裱册[4]精品杂志册 -->
+                    <div class="col-sm-9 col-xs-12">
+                        <label>
+                            <input name="booktype" type="radio" {if $book['booktype']==1}checked="checked"{/if} value="1">
+                            新款照片书
+                        </label>
+                        <label style="margin-left: 10px;">
+                            <input {if $book['booktype']==2}checked="checked"{/if} name="booktype" type="radio" value="2">
+                            12寸精装对裱册
+                        </label>
+                          <label style="margin-left: 10px;">
+                            <input {if $book['booktype']==3}checked="checked"{/if} name="booktype" type="radio" value="3">
+                            方款精装对裱册
+                        </label>
+                        <label style="margin-left: 10px;">
+                            <input {if $book['booktype']==4}checked="checked"{/if} name="booktype" type="radio" value="3">
+                            精品杂志册
+                        </label>
+                    </div>
+                </div>
+<!--                 <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">尺寸</label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="size" value="{$book['size']}">
+                        </div>
+                </div> -->
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">价格</label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="price" value="{$book['price']}">
+                        </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">内部价格</label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="text" class="form-control" placeholder="" name="inner_price" value="{$book['inner_price']}">
+                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">最小页数</label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="number" class="form-control" name="min_page" value="{$book['min_page']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">最大页数</label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="number" class="form-control" name="max_page" value="{$book['max_page']}">
+                    </div>
+                </div>
+            <input type="hidden" name="id" value="{$book['id']}">
+            <div class="panel-body">
+            <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1"  />
+                            <input type="hidden" name="token" value="{$_W['token']}"  />
+                    </div>
+            </div>
+            </div>
+        </div>
+        </form>
+ </div>
+
+{template 'common/footer'}

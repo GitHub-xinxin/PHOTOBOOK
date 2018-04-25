@@ -1,0 +1,145 @@
+{template 'common/header'}
+
+<style>
+th{
+	text-align: center !important;
+}
+
+td{
+	text-align: center !important;
+	white-space: normal !important;
+	word-break: break-all !important;
+}
+</style>
+<!-- 1：未打印，2：已打印，3：已发货，4：已收货 -->
+<ul class="nav nav-tabs">
+    <li
+    {if !$_GPC['status']}
+    class="active"
+    {/if}
+    ><a href="{php echo $this->createWebUrl('book_order')}">未打印</a></li>
+
+    <li {if $_GPC['status']==2}
+    class="active"
+    {/if}><a href="{php echo $this->createWebUrl('book_order',array('status'=>2))}">已打印</a></li>
+
+    <li {if $_GPC['status']==3}
+    class="active"
+    {/if}><a href="{php echo $this->createWebUrl('book_order',array('status'=>3))}">已发货</a></li>
+
+    <li {if $_GPC['status']==4}
+    class="active"
+    {/if}><a href="{php echo $this->createWebUrl('book_order',array('status'=>4))}">已收货</a></li>
+</ul>
+
+
+<div class="panel panel-default">
+
+<div class='panel-heading'>
+  照片书订单
+</div>
+
+    <div class="panel-body" style="text-align: center;">
+        <table class="table table-hover">
+
+            <thead class="navbar-inner">
+
+                <tr>
+                    <th>订单号</th>
+                    <th>用户</th>
+                    <th>状态</th>
+                    <th>数量</th>
+                    <th>时间</th>
+                    <th style="width: 270px;">操作</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="table_content">
+                {loop $list $l}
+                    <tr>
+                        <td>{$l['order_id']}</td>
+                        <td>{$l['userInfo']['nickname']}</td>
+                        <td>{if $l['status']==1}
+                            <span class="label label-success">未打印</span>
+                            {else if $l['status']==2}
+                            <span class="label label-danger">已打印</span>
+                            {else if $l['status']==3}
+                            <span class="label label-danger">已发货</span>
+                            {else if $l['status']==4}
+                            <span class="label label-danger">已收货</span>
+                            {/if}
+                        </td>
+                        <td>{$l['count']}</td>
+                        <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+                        <td>
+                        <button class="btn btn-warning" onclick="sdfghdf({$l['id']})">发货</button>
+                        <button class="btn btn-primary" onclick="create(this,{$l['id']})">下载打印</button>
+                        <a href="{php echo $this->createWebUrl('book_order_detail',array('id'=>$l['id']))}" class="btn btn-info"> 详情</a>
+                        </td>
+                    </tr>
+                {/loop}
+
+            </tbody>
+
+            </table>
+            {$pager}
+    </div>
+
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">快递信息</h4>
+            </div>
+            <form action="" method="post">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">快递公司</label>
+                    <input type="text" class="form-control" name="express" value="">
+                    <br>
+                    <label for="name">快递编号</label>
+                    <input type="text" class="form-control" name="express_id" value="">
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input type="hidden" id="book_id" name="book_id" value="">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <input type="submit" name="submit" value="提交" class="btn btn-primary">
+                <!-- <button type="button" >提交更改</button> -->
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+
+function sdfghdf(id){
+    $('#myModal').modal({
+        keyboard: true
+    })
+    $("#book_id").val(id)
+}
+
+function create(obj,id){
+    $(obj).text('正在合成');
+    $(obj).attr('disabled', 'disabled');
+    $.post('{php echo $this->createWebUrl("PrintBook")}', {id: id}, function(res, textStatus, xhr) {
+        console.log(res);
+        res=$.parseJSON(res)
+        console.log(res);
+        if(res.status){
+            $(obj).removeAttr('disabled');
+            window.location.href='{php echo $this->createWebUrl("PrintBook")}'+'&filename='+res.filename;
+            $(obj).text('下载打印');
+        }
+    });
+}
+</script>
+{template 'common/footer'}

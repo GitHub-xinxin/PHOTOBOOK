@@ -1,0 +1,117 @@
+{template 'common/header'}
+
+<style>
+th{
+	text-align: center !important;
+}
+
+td{
+	text-align: center !important;
+	white-space: normal !important;
+	word-break: break-all !important;
+}
+</style>
+
+<ul class="nav nav-tabs">
+    <li
+    {if !$_GPC['status']}
+    class="active"
+    {/if}
+    ><a href="{php echo $this->createWebUrl('ser_message')}">未回复</a></li>
+    <li {if $_GPC['status']}
+    class="active"
+    {/if}><a href="{php echo $this->createWebUrl('ser_message',array('status'=>1))}">已回复</a></li>
+</ul>
+
+
+<div class="panel panel-default">
+
+<div class='panel-heading'>
+  代金券列表
+</div>
+
+    <div class="panel-body" style="text-align: center;">
+        <input type="hidden" name="token" value="{$_W['token']}">
+        <table class="table table-hover">
+
+            <thead class="navbar-inner">
+
+                <tr>
+                    <th>订单号</th>
+                    <th>用户</th>
+                    <th>状态</th>
+                    <th>标题</th>
+                    <th>消息</th>
+                    <th>时间</th>
+                    <th style="width: 200px;">操作</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="table_content">
+                {loop $list $l}
+                    <tr>
+                        <td>{$l['order_id']}</td>
+                        <td>{$l['openid']}</td>
+                        <td>{if $l['status']}
+                            <span class="label label-success">已回复</span>
+                            {else}
+                            <span class="label label-danger">未回复</span>
+                            {/if}
+                        </td>
+                        <td>{$l['title']}</td>
+                        <td>{$l['detail']}</td>
+                        <!-- <button class="btn btn-primary">点击查看</button> -->
+                        <td>{php echo date('Y-m-d H:i:s',$l['create_time'])}</td>
+                        <td>
+                        <button class="btn btn-primary" onclick="sdfghdf({$l['id']})">回复</button>
+                        <a href="{php echo $this->createWebUrl('deleteser_msg',array('id'=>$l['id']))}" onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger"> 删除</a>
+                        </td>
+                    </tr>
+                {/loop}
+
+            </tbody>
+
+            </table>
+            {$pager}
+    </div>
+
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">回复</h4>
+            </div>
+            <form action="" method="post">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">回复内容</label>
+                    <textarea class="form-control" rows="5" name="detail"></textarea>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input type="hidden" id="post_id" name="post_id" value="">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <input type="submit" name="submit" value="发送" class="btn btn-primary">
+                <!-- <button type="button" >提交更改</button> -->
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+
+function sdfghdf(id){
+    $('#myModal').modal({
+        keyboard: true
+    })
+    $("#post_id").val(id)
+}
+</script>
+{template 'common/footer'}

@@ -1,0 +1,132 @@
+{template 'header'}
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-row" style="margin-top: 1em;background-color: yellowgreen">
+							<div class="mui-col-sm-4 mui-col-xs-4">
+								<img src="{$userInfo['headimgurl']}" alt="" / style="width: 60px;height: 60px;border-radius: 30px;margin: 1em;border: 2px solid #fff;">
+							</div>
+							<div class="mui-col-sm-5 mui-col-xs-5" style="margin-top: 1.8em;; font-size: 20px;">
+								{$userInfo['nickname']}
+							</div>
+							<div class="mui-col-sm-3 mui-col-xs-3" style="margin-top: 1.5em;font-size: 20px;">
+								<!-- <button type="button" class="mui-btn mui-btn-danger">签到</button> -->
+							</div>
+						</div>
+						<div class="mui-col-sm-12 mui-col-xs-12">
+							<ul class="mui-table-view">
+<!-- 								<li class="mui-table-view-cell">
+									<a class="mui-navigate-right">
+										<span class="mui-icon-extra mui-icon-extra-addpeople"></span> 会员号：23232
+									</a>
+								</li> -->
+								<li class="mui-table-view-cell">
+									<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('orderlist')}">
+										我的订单
+										<div style="float: right;margin-right: 2em;">查看全部订单</div>
+										<div style="clear: both;"></div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell">
+									<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('quanlist')}">
+										购买代金券
+										<div style="float: right;margin-right: 2em;">查看所有代金券</div>
+										<div style="clear: both;"></div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell">
+									<div class="mui-row">
+										<div class="mui-col-sm-4 mui-col-xs-4">
+											<div style="text-align: center;">
+												0
+											</div>
+											<div style="text-align: center;">
+												未支付
+											</div>
+										</div>
+										<div class="mui-col-sm-4 mui-col-xs-4">
+											<div style="text-align: center;">
+												0
+											</div>
+											<div style="text-align: center;">
+												待收货
+											</div>
+										</div>
+										<div class="mui-col-sm-4 mui-col-xs-4">
+											<div style="text-align: center;">
+												0
+											</div>
+											<div style="text-align: center;">
+												待评价
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<div class="mui-row" style="margin-top: 2em;">
+								<ul class="mui-table-view">
+									<li class="mui-table-view-cell">
+										<div class="mui-row">
+											<div class="mui-col-sm-6 mui-col-xs-6">
+												<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('myrebatelist')}">
+													<div style="text-align: center;">
+														0
+													</div>
+													<div style="text-align: center;">
+														可提现金额
+													</div>
+												</a>
+											</div>
+											<div class="mui-col-sm-6 mui-col-xs-6">
+												<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('agentcardlist')}">
+													<div style="text-align: center;">
+														0
+													</div>
+													<div style="text-align: center;">
+														优惠券
+													</div>
+												</a>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="mui-row" style="margin-top: 2em;">
+								<ul class="mui-table-view">
+									<li class="mui-table-view-cell">
+										<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('becomeagent')}">
+											<span class="mui-icon-extra mui-icon-extra-addpeople"></span> 成为代理商
+										</a>
+									</li>
+<!-- 									<li class="mui-table-view-cell">
+										<a class="mui-navigate-right">
+											<span class="mui-icon-extra mui-icon-extra-addpeople"></span> 照片书总代
+										</a>
+									</li>
+									<li class="mui-table-view-cell">
+										<a class="mui-navigate-right">
+											<span class="mui-icon-extra mui-icon-extra-people"></span> 完善个人信息
+											<span style="font-size: 12px;color: #aaa;">让您的朋友和粉丝更容易找到您</span>
+										</a>
+									</li> -->
+								</ul>
+							</div>
+							<div class="mui-row" style="margin-top: 2em;">
+								<ul class="mui-table-view">
+									<li class="mui-table-view-cell">
+										<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('view_address')}">
+											<span class="mui-icon mui-icon-plus"></span> 收货地址
+										</a>
+									</li>
+									<li class="mui-table-view-cell">
+										<a class="mui-navigate-right">
+											<span class="mui-icon-extra mui-icon-extra-cart"></span> 我的购物车
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div style="height: 4em;"></div>
+					</div>
+				</div>
+
+{template 'footer'}

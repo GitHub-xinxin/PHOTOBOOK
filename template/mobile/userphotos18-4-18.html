@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title></title>
+	{php echo register_jssdk(false);}
+	<script src="../addons/photobook/template/mobile/js/mui.min.js"></script>
+	<link href="../addons/photobook/template/mobile/layui/css/layui.css" rel="stylesheet" />
+	<link rel="icon" href="../addons/photobook/favicon.ico" type="image/x-icon">
+	<link href="../addons/photobook/template/mobile/css/mui.min.css" rel="stylesheet" />
+	<link href="../addons/photobook/template/mobile/css/app.css" rel="stylesheet" />
+	<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
+	<link href="../addons/photobook/template/mobile/css/animate.css" rel="stylesheet">
+	<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		mui.init();
+	</script>
+	<style>
+	#head_img_change{
+		position: absolute;
+		font-size: 100px;
+		right: 0;
+		top: 0;
+		opacity: 0;
+		filter: alpha(opacity=0);
+		cursor: pointer
+	}
+	#up_button{
+		width: 80%;margin-left: 10%;margin-right: 10%
+	}
+	.thisorder{
+		position: relative;height: 0px;text-align: right
+	}
+	.cardspan{
+		font-size: 20px;background-color: #27ae60;color: #fff;
+	}
+	.imgalert{
+		position: relative;height: 0px;text-align: left
+	}
+	.imgalert .one{
+		color: #f3b717;background-color: rgba(255,255,254,0.5)
+	}
+	.imgalert .two{
+		color: red;background-color: rgba(255,255,254,0.5)
+	}
+	.mui-card-content img{
+		height: 5em
+	}
+	.mui-scroll-wrapper li{
+		height: auto
+	}
+	.queding{
+
+	}
+	.star_alert{
+		display: none;
+		color: red;
+	}
+</style>
+</head>
+<body>
+	<!-- 存放模板ID -->
+	<input type="hidden" value="{$tid}" name="tid" id="tid" >
+	<!-- 侧滑导航根容器 -->
+	<div class="mui-off-canvas-wrap mui-draggable" id="jing1">
+		<!-- 菜单容器 -->
+		<aside class="mui-off-canvas-left" style="width: 40%;">
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<div class="mui-row touxiang">
+					</div>
+					<ul class="mui-table-view cebians">
+						<li class="mui-table-view-cell">
+							<span class="mui-icon "></span> 首页
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-star"></span> 产品专区
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-image"></span> 照片书
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-extra mui-icon-extra-notice"></span> 活动专区
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-starhalf"></span> 我的作品
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-extra mui-icon-extra-regist"></span> 我的订单
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-person"></span> 个人中心
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 我的照片库
+						</li>
+						<li class="mui-table-view-cell">
+							<span class="mui-icon "></span> 客服中心
+						</li>
+					</ul>
+				</div>
+			</div>
+		</aside>
+		<!-- 主页面容器 -->
+		<div class="mui-inner-wrap">
+			<!-- 主页面标题 -->
+			<header class="mui-bar mui-bar-nav">
+				<div class="mui-row">
+					<div class="mui-col-sm-2 mui-col-xs-2">
+						<span class="mui-icon mui-action-menu mui-icon-bars mui-pull-left" id="cebian_but"></span>
+					</div>
+					<div class="mui-col-sm-10 mui-col-xs-10">
+						<div style="text-align: center;padding-top: 0.5em;color: coral;">
+							{if $HIDE}
+							选择一张图片
+							{else}
+							已选：<span id="yixuan">0</span>/至少选：{$timgcount}张图
+							{/if}
+						</div>
+					</div>
+				</div>
+			</header>
+			<div id="scroll" class="mui-content mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<div class="mui-row">
+						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;text-align: center;padding-top: 1em;">
+							<div>
+								<button type="button" class="layui-btn layui-btn-danger" id="test1">上传图片</button>
+							</div>
+
+<!-- 							<button type="button" id="up_button" class="mui-btn mui-btn-danger">
+								<div>
+									<input style="opacity: 0" type="file" id="head_img_change" style="width: 100%;background-color: #fff"/>
+									点此上传
+								</div>
+							</button> -->
+							<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
+								<p style="font-size: 12px">
+									为了照片的完整性，照片的四周5mm内不要留有重要信息，以免被裁掉。
+								</p>
+								<p style="font-size: 12px">
+									<span class="mui-icon mui-icon-info" style="color: red"></span>
+									表示图片的尺寸不符合要求，可能会影响印刷出来的效果，不建议您使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+								</p>
+								<p style="font-size: 12px">
+									<span class="mui-icon mui-icon-info" style="color: #f3b717"></span>
+									表示图片尺寸太小，印刷出来的效果很差，强烈建议您不要使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+								</p>
+								
+							</div>
+						</div>
+						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;">
+							<p style="background-color: #ecf0f1;padding: 0.3em;border-radius: 2px;">最新上传</p>
+						</div>
+						<div class="mui-row" id="zuixin">
+							{loop $userimg $index $item}
+							{if $day <=(int)$item['createtime']}
+							<div class="mui-col-sm-4 mui-col-xs-4">
+								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
+									<div class="mui-card-content" style="height: 6em;overflow: hidden;">
+										<div class="thisorder"> 
+											{if !$HIDE}<span class="cardspan">0</span>{/if}
+										</div>
+										<div class="imgalert" >
+											{if  $item['width']<400}<label class="mui-icon mui-icon-info one"></label>
+											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
+											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
+										</div>
+										<img src="{php echo tomedia($item['thumb'])}" alt="" style="width: 100%;height: auto;" />
+									</div>
+								</div>
+							</div>
+							{/if}
+							{/loop}							
+						</div>
+						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
+							<p style="background-color: #ecf0f1;padding: 0.3em;border-radius: 2px;">当月之内</p>
+						</div>
+						<div class="mui-row">
+							{loop $userimg $index $item}
+							{if $day>(int)$item['createtime']&&$item['createtime']>$month}
+							<div class="mui-col-sm-4 mui-col-xs-4">
+								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
+									<div class="mui-card-content" style="height: 6em;overflow: hidden;">
+										<div class="thisorder"> 
+											{if !$HIDE}<span class="cardspan">0</span>{/if}
+										</div>
+										<div class="imgalert" > 
+											{if  $item['width']<400}<label class="mui-icon mui-icon-info one"></label>
+											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
+											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
+										</div>
+										<img src="{php echo tomedia($item['thumb'])}" alt="" style="width: 100%;height: auto;" />
+									</div>
+								</div>
+							</div>
+							{/if}
+							{/loop}
+						</div>
+						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
+							<p style="background-color: #ecf0f1;padding: 0.3em;border-radius: 2px;">更早</p>
+						</div>
+						<div class="mui-row">
+							{loop $userimg $index $item}
+							{if $month>$item['createtime']}
+							<div class="mui-col-sm-4 mui-col-xs-4">
+								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
+									<div class="mui-card-content" style="height: 6em;overflow: hidden;">
+										<div class="thisorder"> 
+											{if !$HIDE}<span class="cardspan">0</span>{/if}
+										</div>
+										<div class="imgalert" > 
+											{if  $item['width']<400}<label class="mui-icon mui-icon-info one"></label>
+											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
+											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
+										</div>
+										<img src="{php echo tomedia($item['thumb'])}" alt="" style="width: 100%;height: auto;" />
+									</div>
+								</div>
+							</div>
+							{/if}
+							{/loop}
+							</div
+							<div style="height: 6em;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{if $HIDE}
+		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
+			<a class="mui-tab-item mui-active" style="color: #e74c3c;" id="queding">
+				<span class="mui-icon mui-icon-checkmarkempty"></span>
+				<span class="mui-tab-label">确定</span>
+			</a>
+		</nav>
+		{/if}
+		{if !$HIDE}
+		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
+			<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
+				<span class="mui-icon mui-icon-image"></span>
+				<span class="mui-tab-label">快捷排序</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
+				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-tab-label">按图合成</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
+				<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
+				<span class="mui-tab-label">自动排版</span>
+			</a>
+		</nav>
+		{/if}
+		<div class="mui-content"  id="jing2">
+			<ul class="mui-table-view">
+				<style>
+				.mui-table-view-cell{
+					background-size: 100%;
+					height: 5em;
+					background-repeat:no-repeat; 
+				}
+				.thislabel{
+					background: #ecf0f1;opacity:0.8;color:#ac173b;border-radius: 2px;
+					font-size: 1em;
+					font-family: "微软雅黑";
+				}
+			</style>
+			<div class="mui-row" id="items" style="height: 500px;overflow: hidden;">
+			</div>
+		</ul>
+		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer2">
+			<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;">
+				<button type="button" class="mui-btn mui-btn-success" id="xiangshang">↑向上</button>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-chat" style="color: palevioletred;">
+				<button type="button" class="mui-btn " id="fanhui">返回</button>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
+				<button type="button" class="mui-btn  mui-btn-warning" id="baocun">生成</button>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
+				<button type="button" class="mui-btn  mui-btn-primary" id="xiangxia">↓向下</button>
+			</a>
+		</nav>
+	</div>
+	<script type="text/javascript" src="../addons/photobook/template/mobile/js/app.js"></script>
+	<script type="text/javascript">
+
+	</script>
+</body>
+<script src="../addons/photobook/template/mobile/layui/layui.js"></script>
+<script>
+	layui.use('upload', function(){
+		var upload = layui.upload;
+		var uploadInst = upload.render({
+				elem: '#test1',
+				url: '{$urlnew}',
+				accept: 'images',
+				auto:'true',
+				multiple:'true',
+				before: function(obj){
+				    layer.load(); //上传loading
+				  },
+				done: function(data){
+					layer.closeAll('loading')
+						if(data.code==0){
+							var strid='card_'+data.pid
+							var sst="#"+strid
+							$("#zuixin").prepend('<div class="mui-col-sm-4 mui-col-xs-4"><div class="mui-card" id="'+strid+'" name="'+data.pid+'"><div class="mui-card-content"><div class="thisorder">{if !$HIDE}<span class="cardspan" style="display:none">0</span>{/if}</div><div class="imgalert" > <label class="mui-icon mui-icon-info one"></label><label class="mui-icon mui-icon-info two"></label>{if $HIDE}<span class="mui-icon mui-icon-star star_alert" style="display: none;" data-check="0"></span>{/if}</div><img src="'+data.img+'" alt="" style="width: 100%;" /></div></div></div>')
+							{if $HIDE}$(sst).bind("tap",Selected_pictures);{/if}
+							{if !$HIDE}$(sst).bind("tap",func);{/if}
+							if(data.code==0){
+								mui.toast("上传成功",{ duration:'short', type:'div' })
+							}else{
+								mui.toast("上传失败",{ duration:'short', type:'div' })
+							}
+							console.log("上传成功")
+						}else{
+							mui.toast(data.message,{ duration:'short', type:'div' })
+						} 
+				},
+				error: function(){		   
+				}
+			})
+	});
+</script>
+<script type="text/javascript">
+	//如果
+	$("#jing2").hide();
+	$("#footer2").hide();
+	$("#kuaijie").bind("tap",function(){
+		$("#jing1").hide();
+		$("#footer").hide();
+		$("#jing2").show(300);
+		$("#footer2").show(300);
+		syc_photo()
+		$("#items li").addClass("animated rubberBand")
+	})
+	$(".cardspan").hide()
+	var js_data=new Array;
+	var index=1;
+	var muicard=document.getElementsByClassName("mui-card")
+	var func=function() {
+		var thisid="#"+this.id;
+		$this_span=$(thisid).find('span')
+		console.log($this_span[0])
+		var imgs=$(thisid).find('img').attr("src")
+		if($this_span.text()==0){
+				//第一次选定图片
+				var pid=this.id
+				js_data.push({
+					pid:pid,
+					img:imgs
+				})
+				$(thisid).addClass("imgselected")
+				$this_span.text(index)
+				$this_span.show()
+				$("#yixuan").text(index)
+				index=index+1
+			}else{
+			    var pid=this.id
+			    $order=$this_span.text()
+			    console.log($order)
+			    js_data.splice($order-1,1);
+			    $(".imgselected").each(function(ind,obj){
+			    	$tspan=$(obj).find('span')
+			    	var tspanval=$tspan.text();
+			    	if(tspanval>0){
+			    		if(tspanval==$order){
+			    			index=index-1
+			    			$("#yixuan").text(index-1)
+			    			$this_span.text(0)
+			    			$this_span.hide()
+			    		}
+			    		if(parseInt(tspanval)>$order){
+			    			console.log('-')
+					    	console.log(tspanval)
+					    	console.log($order)
+					    	console.log('-')
+			    			$tspan.text(tspanval-1)
+			    		}
+			    	}
+			    })
+			}
+		}
+		$("#queding").bind('tap',function(e) {
+			var dangqianimgid=sessionStorage.getItem("dangqianimgid");
+			if(dangqianimgid==0){
+				mui.toast("请选择一张图片",{ duration:'short', type:'div' })
+			}else{
+				$.post('{$url_ONE}',
+				{
+					uid: dangqianimgid
+				}, 
+				function(data) {
+					if(data.code==0){
+						var zhengze=function(str){
+							var reg=new RegExp("px","g"); 
+							var newstr=str.replace(reg,"");
+							return newstr;
+						}
+
+					var jsonarr=sessionStorage.getItem("jsonarr");//框的数据
+					var arrimgtstr=sessionStorage.getItem("arrimgt");//图片尺寸的数据
+					var Source_of_change=sessionStorage.getItem("Source_of_change");//框的序列位置
+					var order=JSON.parse(zhengze(jsonarr));
+					var arrimgt=JSON.parse(zhengze(arrimgtstr));
+					// alert(Source_of_change)
+					// console.log(Source_of_change)
+					var bi;
+					var differ=5-order.length
+					if(differ>=1){
+						for(bi=0;bi<differ;bi++){
+							order.push({
+								"imgurl":"",
+								"width":"",
+								"height":"",
+								"roate":0,
+								"imageId":"",
+								"type":"none"
+							})
+							arrimgt.push({
+								"width":0,
+								"height":0
+							})
+						}
+					}
+					order[Source_of_change].imgurl=data.img.thumb;
+					order[Source_of_change].type="img";
+					order[Source_of_change].width=data.img.width;
+					order[Source_of_change].height=data.img.height;
+					order[Source_of_change].roate=0;
+					order[Source_of_change].imageId=data.img.id;
+						//--
+						arrimgt[Source_of_change].width=data.img.width;
+						arrimgt[Source_of_change].height=data.img.height;
+						var New_insert_picture=JSON.stringify(order);
+						var New_arrimgt=JSON.stringify(arrimgt);
+						sessionStorage.setItem("jsonarr",New_insert_picture);
+						sessionStorage.setItem("arrimgt",New_arrimgt);
+						window.location.href="{$url_NEWtouch}"+"&id="+sessionStorage.getItem("WhenchangingID");
+					}else{
+						mui.toast(data.message,{ duration:'short', type:'div' })
+					}
+				},
+				"json"
+				);
+			}
+		});
+		var Selected_pictures=function(){
+			var thisid="#"+this.id;
+			console.log(thisid);
+			$this_span=$(thisid).find('span');
+			if($this_span.data("check")==0){
+				var imgs=$(thisid).find('img').attr("src");
+				var Tid=Number(thisid.replace("#card_",""));
+				$(".star_alert").hide();
+				$this_span.show();
+				$this_span.data("check","1");
+				sessionStorage.setItem("dangqianimgid",Tid);
+			}else{
+				$this_span.hide();
+				$this_span.data("check","0");
+				sessionStorage.setItem("dangqianimgid",0);
+			}
+		}
+		{if $HIDE}
+		for(var i=0;i<muicard.length;i++){
+			muicard[i].addEventListener("tap",Selected_pictures);
+		}
+		{/if}
+		{if !$HIDE}
+		for(var i=0;i<muicard.length;i++){
+			muicard[i].addEventListener("tap",func);
+		}
+		{/if}
+	//_____________快速排序页底部按钮_______________________________
+	document.getElementById("fanhui").addEventListener("tap",function(){
+		$("#jing2").hide();
+		$("#footer2").hide();
+		$("#jing1").show(300);
+		$("#footer").show(300);
+	})
+	document.getElementById("xiangshang").addEventListener("tap",function(){
+		$(document).scrollTop(-400); 
+	})
+	document.getElementById("xiangxia").addEventListener("tap",function(){
+		$(document).scrollTop(400); 
+	})
+	//--------------------------
+	var tijiao=function(arr){
+		var tid=$("#tid").val()
+		var wid=$(document.body).width();
+		$.post(
+			"{$url_save}",
+			{
+				pdatas:arr,
+				tid:tid
+			},
+			function(data){
+				console.log("返回消息！");     
+				if(data.errors==0){
+					mui.toast("提交成功",{ duration:'short', type:'div' });
+					//alert("将进入turn,mainid:"+data.mainid+",wid:"+wid);
+					turnurl="{$url_Turn}&tid="+data.mainid+"&wid="+wid+"&time="+Date.parse( new Date());
+					//alert(turnurl);
+					mui.openWindow({  
+						url:turnurl
+					})
+				}else{
+					mui.alert("出现错误"+data.errors)
+
+				}
+			},
+			'json'
+			)}
+	//--------------------------
+	{if !$HIDE}
+	document.getElementById("baocun").addEventListener("tap",function(){
+		var pdatas=new Array;
+		$("#items").children().children().each(function(ix,val){
+			var pid=val.id.replace("lik","card_");
+			var img=$(val).parent().data('img_url');
+			pdatas.push({
+				pid:pid,
+				img:img
+			})
+		})
+		tijiao(pdatas)
+	})
+	document.getElementById("antu").addEventListener("tap",function(){
+		tijiao(js_data)
+	})
+	document.getElementById("zidong").addEventListener("tap",function(){
+		tijiao(js_data)
+	})
+	{/if}
+	//_____________________________________________________________
+	$(function(){
+		　　　　$("#head_img_change").change(function() {
+			　　      var $file = $(this);
+			　　　　　var fileObj = $file[0]
+			var filepath=fileObj.files[0].name
+			var extStart =filepath.lastIndexOf(".");
+			var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+			if (ext != ".BMP" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+				mui.alert("图片限于bmp,png,gif,jpeg,jpg格式")
+			}else{
+				var windowURL = window.URL || window.webkitURL;
+				var dataURL;
+				var $img = $("#headimg")
+				if(fileObj && fileObj.files && fileObj.files[0]){
+					dataURL = windowURL.createObjectURL(fileObj.files[0]);
+					$img.attr('src',dataURL)
+				}else{
+					dataURL = $file.val()
+					var imgObj = document.getElementById("headimg");
+				}
+				var size= Math.round(fileObj.files[0].size/1024)//文件大小转化为KB
+				var reader = new FileReader()
+				var img = new Image()
+				reader.readAsDataURL(fileObj.files[0])  
+				reader.onload = function (e) {
+					var base64=this.result
+					img.src = this.result
+					mui.toast("图片正在上传中...请等待",{ duration:'short', type:'div' })
+					$.post(
+						"{$url}", 
+						{
+							image:base64,
+							size:size,
+							width:img.width,
+							height:img.height
+						},
+						function(data) {
+							var strid='card_'+data.pid
+							var sst="#"+strid
+							$("#zuixin").prepend('<div class="mui-col-sm-4 mui-col-xs-4"><div class="mui-card" id="'+strid+'" name="'+data.pid+'"><div class="mui-card-content"><div class="thisorder">{if !$HIDE}<span class="cardspan" style="display:none">0</span>{/if}</div><div class="imgalert" > <label class="mui-icon mui-icon-info one"></label><label class="mui-icon mui-icon-info two"></label>{if $HIDE}<span class="mui-icon mui-icon-star star_alert" style="display: none;" data-check="0"></span>{/if}</div><img src="'+data.img+'" alt="" style="width: 100%;" /></div></div></div>')
+							{if $HIDE}$(sst).bind("tap",Selected_pictures);{/if}
+							{if !$HIDE}$(sst).bind("tap",func);{/if}
+							if(data.code==0){
+								mui.toast("上传成功",{ duration:'short', type:'div' })
+							}else{
+								mui.toast("上传失败",{ duration:'short', type:'div' })
+							}
+						},
+						'json'
+						)
+				}
+			}
+		})
+	})
+</script>
+<script src="../addons/photobook/template/mobile/js/Sortable.min.js"></script>
+<script type="text/javascript">
+	var syc_photo=function(){
+		$("#items").html("")
+		js_data.forEach(function(val,index,arr){
+			$thiskuai=$('<div class="mui-col-sm-3 mui-col-xs-3"><li class="mui-table-view-cell" id='+val.pid.replace("card_","lik")+' style="background-image: url('+val.img+');"><label class="thislabel"></label></li></div>')
+			$("#items").append($thiskuai)
+			$thiskuai.data("img_url",val.img)
+		})
+		syc_idnum();
+	}
+	var syc_idnum=function(){
+		$("#items").children().each(function(){
+			var indexa = $("#items").children().index(this)+1;
+			$($(this).children().get(0)).html("<label class='thislabel'>"+indexa+"</label>")
+		})
+	}
+	var el = document.getElementById('items');
+	new Sortable(el,{
+				sort:true, 
+				onEnd: function (/**Event*/evt) { // 拖拽结束
+					syc_idnum()
+				} 
+//				onUpdate: function (/**Event*/evt) { 
+//				console.log(evt)
+//				}
+});
+</script>
+</html>

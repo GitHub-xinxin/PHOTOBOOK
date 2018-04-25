@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript">
+		var jsVer = 29;
+		var phoneWidth = parseInt(window.screen.width);
+		var phoneScale = phoneWidth/318;
+		
+		var ua = navigator.userAgent;
+		if (/Android (\d+\.\d+)/.test(ua)){
+			var version = parseFloat(RegExp.$1);
+			// andriod 2.3
+			if(version>2.3){
+			document.write('<meta name="viewport" content="width=318, minimum-scale = '+phoneScale+', maximum-scale = '+phoneScale+', target-densitydpi=device-dpi">');
+			// andriod 2.3以上
+			}else{
+			document.write('<meta name="viewport" content="width=318, target-densitydpi=device-dpi">');
+			}
+		// 其他系统
+		} else {
+			document.write('<meta name="viewport" content="width=318, user-scalable=no, target-densitydpi=device-dpi">');
+		}
+	</script>
+	<meta charset="UTF-8">
+	<!-- <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" /> -->
+	<script type="text/javascript" src="../addons/photobook/template/mobile/js/touch.min.js"></script>
+	<script type="text/javascript" src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="../addons/photobook/template/mobile/css/mui.min.css"/>
+	<title></title>
+	<style type="text/css">
+	body{
+
+		height: auto;
+	}
+	ul li{
+		list-style: none;
+	}
+	#aflull{
+		width: 100%;
+		position: fixed;
+		z-index: 2;
+	}
+	#mui-cards{
+		width: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	#titles{
+		position: fixed;
+		z-index: 9;
+		background: white;
+		opacity: 0.6
+	}
+	.caodiv{
+		float: left;
+		height: 100%;
+	}
+	#carcount{
+		width: 100%	
+	}
+	.Timgs{
+		width: 100%;
+		border-bottom: 1px solid #fff;
+	}
+	.texts{
+		background-color:rgba(255,255,255,0.1);
+		color: #2c3e50;
+		text-shadow:1px 1px 1px #fff;
+	}
+</style>
+</head>
+<input type="hidden" value="{$ordersubid}" id="OneOrderId">
+<div id="Tpanel1">
+	<div class="mui-card" id="mui-cards">
+		<div class="mui-card-content" id="carcount">
+		</div>
+	</div>
+	<nav class="mui-bar mui-bar-tab">
+		{if $trimtype==0}
+		<a class="mui-tab-item mui-active">
+			<button type="button" id="alter_template" class="mui-btn mui-btn-danger mui-btn-outlined">
+				<span class="mui-icon mui-icon-upload"></span>
+				更换模板
+			</button>
+		</a>
+		{/if}
+		<a class="mui-tab-item mui-active">
+			<button type="button" id="save_template" class="mui-btn mui-btn-primary">
+				保 存
+			</button>
+		</a>
+	</nav>
+</div>
+<div id="Tpanel2">
+	<div>
+		<div class="mui-content">
+			<div class="mui-row" id="T2count"">
+			</div>
+		</div>
+	</div>
+	<div style="margin-top: 5em"></div>
+	<nav class="mui-bar mui-bar-tab">
+		<a class="mui-tab-item mui-active">
+			<button type="button" id="re_template" class="mui-btn mui-btn-danger mui-btn-outlined">
+				<span class="mui-icon mui-icon-reload"></span>
+				返回	
+			</button>
+		</a>
+	</nav>
+</div>
+</body>
+<script src="../addons/photobook/template/mobile/layer/layer.js"> </script>
+<!-- <script src="../addons/photobook/template/mobile/js/mui.min.js"> </script> -->
+<script type="text/javascript">
+	//alert("carcount的宽度："+$("#carcount").width());
+	//加载时获取数据结构
+	//框的比例：
+	var ratio=1;
+	var orderval=$("#OneOrderId").val();
+	$("#Tpanel2").hide();
+	layer.load();
+	layer.closeAll('loading');
+
+	var change_degs=function(kuai,img,deg){
+		console.log("旋转前---width=="+img.data("reimgaimg").width+"  height=="+img.data("reimgaimg").height)
+		console.log("-----before_change_roate="+img.data("rou"));
+		degs=deg+img.data("rou")
+		console.log("-----after_change_roate="+degs);
+		if(Math.abs(degs)==360){
+			degs=0
+		}
+		img.data("rou",degs)
+		var convertImageToCanvasR=function(image,w,h,r){
+			var canvas = document.createElement("canvas");
+			var ctx=canvas.getContext("2d");
+			canvas.width = w;
+			canvas.height = h;
+			ctx.translate(w,0);		
+			ctx.rotate(r*Math.PI/180);
+			ctx.drawImage(image, 0,0);
+
+			return canvas.toDataURL("image/png");
+		}
+		var convertImageToCanvasl=function(image,w,h,r){
+			var canvas = document.createElement("canvas");
+			var ctx=canvas.getContext("2d");
+			canvas.width = w;
+			canvas.height = h;
+			ctx.translate(0,h);
+			ctx.rotate(r*Math.PI/180);
+			ctx.drawImage(image, 0,0);
+			return canvas.toDataURL("image/png");
+		}
+		var thisimgkuang=img.data("reimgkuang");//存的框的参数
+		var thisimgaimg=img.data("reimgaimg");//存的图像的参数
+		if(Math.abs(degs)==90||Math.abs(degs)==270){
+			var Dangimg={
+				"width":thisimgaimg.height,
+				"height":thisimgaimg.width
+			}
+		}else{
+			var Dangimg={
+				"width":thisimgaimg.width,
+				"height":thisimgaimg.height
+			}
+		}
+		var firimg=filter_img(thisimgkuang,Dangimg)
+		console.log("旋转后 width==="+thisimgaimg.top+" height=="+thisimgaimg.height)
+		img.data("reimg",firimg) 
+		var zhenthisW=img.data("zhenH")
+		var zhenthisH=img.data("zhenW")
+		img.data("zhenW",zhenthisW)
+		img.data("zhenH",zhenthisH)
+		layer.load();
+		if(deg<0){
+			img.attr({
+				src:convertImageToCanvasl(img[0],zhenthisW,zhenthisH,-90)
+			})
+		}else if(deg>0){
+			img.attr({	
+				src:convertImageToCanvasR(img[0],zhenthisW,zhenthisH,90)
+			})
+		}
+		img.attr({
+			width:Number(firimg.width)+"px",
+			height:Number(firimg.height)+"px",
+		});
+		console.log("旋转后 width==="+firimg.width+" height=="+firimg.height)
+		img.css({
+			top:Number(firimg.top)+"px",
+			left:Number(firimg.left)+"px",
+		});
+		layer.closeAll('loading');
+		ADDtouch(kuai,img)
+		//竟然不会覆盖，只会再次重载。
+		ADDtouch(kuai,img)
+	};
+	
+	//重要函数：获取图片的初始高度，宽度，位置，约束等
+	var filter_img=function(kuang,img){
+		var reimg={};
+		console.log("img.roate======================"+img.roate)
+		console.log("before----width="+img.width+" and height="+img.height+" bili="+img.width/img.height);
+		
+		if(Math.abs(img.roate)==90||Math.abs(img.roate)==270){
+			var temp=img.width;
+			img.width=img.height;
+			img.height=temp;		
+		}
+		console.log("after----width="+img.width+" and height="+img.height+" bili="+img.width/img.height);
+		if(kuang.width/kuang.height>img.width/img.height){
+			console.log('11111111111111')
+			reimg.width=kuang.width*ratio;
+			reimg.height=img.height*reimg.width/img.width;
+			reimg.yueshuh=(reimg.height-kuang.height*ratio)/2;	
+			reimg.yueshuw=0;
+			
+			if((img.Xtop==''||img.Xtop==null)&&(img.Xleft==''||img.Xleft==null)){
+			
+				reimg.top=-reimg.yueshuh;
+				reimg.left=0;
+			}else{
+				reimg.left=0;
+				reimg.top=img.Xtop;
+			}		
+		}else{
+			console.log('2222222222222');
+			reimg.height=kuang.height*ratio;
+			reimg.width=img.width*reimg.height/img.height;
+			reimg.yueshuw=(reimg.width-kuang.width*ratio)/2;
+			reimg.yueshuh=0;
+			if((img.Xtop==''||img.Xtop==null)&&(img.Xleft==''||img.Xleft==null)){	
+				reimg.top=0;
+				reimg.left=-reimg.yueshuw;
+			}else{
+				reimg.top=0;
+				reimg.left=img.Xleft;
+			}
+		}
+		if(Math.abs(img.roate)==90||Math.abs(img.roate)==270){
+			var temp=reimg.width;
+			reimg.width=reimg.height;
+			reimg.height=temp;		
+			var temp=img.width;
+			img.width=img.height;
+			img.height=temp;
+		}
+		console.log("reimg.width=="+reimg.width+" reimg.height=="+reimg.height)
+		console.log("约束高=="+reimg.yueshuh+"约束宽=="+reimg.yueshuw)
+		return reimg;
+	}
+	//+++++++++++++++++++++++++++++++++++++++++++ 
+	var ADDtouch=function (kuai,img){
+		var kx, ky;  
+		var sreimg=img.data("reimg");
+		var kuang=kuai.data("wk");
+		var keep_w=sreimg.yueshuw;
+		var keep_h=sreimg.yueshuh;
+		var imgtop=img.position().top;
+		var imgleft=img.position().left;
+		var offsetX=0,offsetY=0;
+		var originX,originY;//拖动开始前的位置
+		
+		touch.on(kuai,"drag",function(ev){
+		//alert("drag");
+			//console.log("##########");
+			//console.log("initial X:"+img.css("left").replace("px",""));
+			//console.log("initial Y:"+img.css("top").replace("px",""));
+			//console.log("keep_h:"+keep_h);
+			//console.log("keep_w:"+keep_w);
+			kuai[0].addEventListener('touchstart', function (event) {
+			    event.preventDefault();
+			});	
+
+			var maxX=0;
+			var minX=0-Math.abs(2*keep_w);
+			var maxY=0;
+			var minY=0-Math.abs(2*keep_h);
+			//console.log("minX:"+minX+",minY:"+minY);
+			
+			var currentX,currentY;
+			
+			computedX=parseFloat(img.css("left").replace("px",""))+ev.x;
+			//console.log("computedX:"+computedX);
+			if(computedX>maxX)
+				currentX=maxX;
+			else if(computedX<minX)
+				currentX=minX;	
+			else{
+				currentX=parseFloat(originX)+parseFloat(ev.x);
+				if(currentX>=minX||currentX<=maxX){
+					
+				} 
+			}
+			computedY=parseFloat(img.css("top").replace("px",""))+ev.y;
+			//console.log("computedY:"+computedY);
+			if(computedY>maxY)
+				currentY=maxY;
+			else if(computedY<minY)
+				currentY=minY;	
+			else{
+				currentY=parseFloat(originY)+parseFloat(ev.y);
+			}
+			
+			//console.log('ev.x='+ev.x+',ev.y='+ev.y);
+			//console.log("originX:"+originX+",originY:"+originY);
+			//console.log("currentX:"+currentX+".currentY:"+currentY);
+			
+			img.css({
+				"top":currentY+"px",
+				"left":currentX+"px"
+			});
+			//console.log("************");
+		});
+		var shijian=function(ev){
+			 event.preventDefault();
+		}
+		touch.on(kuai,'dragend', function(ev) {
+			//alert(JSON.stringify(ev))
+			//alert("dragend");
+			//console.log("dragend ev.x:"+ev.x+",ev.y:"+ev.y);
+
+
+		});
+		touch.on(kuai, 'dragstart', function(ev){
+		///alert("hhhh");
+			originX=img.css("left").replace("px","");
+			originY=img.css("top").replace("px","");
+			
+		});
+		
+		touch.on(kuai,"tap",function(e){
+					// alert(22);
+					tkx=e.detail.position.x;
+					tky=e.detail.position.y;
+					CAOzuo(kuai,$(this).next().find('img').eq(0),tkx,tky);
+				});
+	}
+	//操作栏
+	var CAOzuo=function(kuai,imgobj,x,y){
+		//删除之前生成的
+		$idcaozuo=$('#caozuolan');
+		var dangimgid=imgobj.data("imgid");
+		if($idcaozuo){
+			var dangcaozyolan=$idcaozuo.data('imgid');
+			console.log("{}{}{}{}{}");
+			console.log(dangcaozyolan);
+			
+			console.log(dangimgid);
+			if(dangcaozyolan==dangimgid){
+				$idcaozuo.remove();
+				console.log(11 )
+				return
+			}
+			$idcaozuo.remove();
+		}
+		$caozuolan=$("<div></div>");
+		$("#carcount").append($caozuolan);
+		$caozuolan.attr({
+			id: 'caozuolan',
+		});
+		$caozuolan.data('imgid',dangimgid);
+		$('#caozuolan').data('imgid');
+		$caozuolan.css({
+			"width":"100%",
+			"position":"fixed",
+			"top":y+"px",
+			"left":x/2+"px",
+			"z-index":10
+		});
+		//添加左旋按钮
+		$leftR=$("<button type='button' class='mui-btn mui-btn-warning'>左旋</button>");
+		$caozuolan.append($leftR);
+		$leftR.css({
+			// "width":"3em",	
+		});
+		$leftR.bind("tap",function(){
+			change_degs(kuai,imgobj,-90)
+			$(this).removeAttr("disabled");
+		});
+		//添加更换照片按钮
+		$changepo=$("<button type='button' class='mui-btn mui-btn-success'>更换照片</button>");
+		$caozuolan.append($changepo);
+		$changepo.css({
+			// "width":"3em",
+		});
+		$changepo.bind('tap',function() {
+			change_img(kuai,imgobj)
+		});
+		//添加右旋按钮
+		$rightR=$("<button type='button' class='mui-btn mui-btn-warning'>右旋</button>");
+		$caozuolan.append($rightR);
+		$rightR.css({
+			// "width":"3em",
+		});
+		$rightR.bind("tap",function(){
+			$(this).attr('disabled',"true");
+			change_degs(kuai,imgobj,90)
+			$(this).removeAttr("disabled");
+		});
+		return $caozuolan;
+	}
+	var change_img=function(kuai,imgobj){
+		jsonreq();
+		var Source_of_change=kuai.data("xulie");
+		sessionStorage.setItem("Source_of_change",Source_of_change);
+		window.location.href="{$url}"
+	}
+		//
+		//===============================================================
+		//更换模板
+		var jsonTEP={}
+		var changetepm=function(stu,tid){
+			if(stu==0){
+				//打开更换模板页
+				$("#Tpanel1").hide();
+				$("#Tpanel2").show();
+			}
+			if(stu==1){
+				//关闭模板页
+				$("#Tpanel1").show()
+				$("#Tpanel2").hide()
+			}
+			if(stu==1&&tid>0){
+				//选定模板页
+				jsonTEP.tid=tid;
+				$.post(
+					"{$url_API_Ctep}",
+					{
+						"tid":tid
+					},
+					function(data){
+						if(data.code==0){
+							sessionStorage.setItem("tep",data.tep);//模板表分表一条	
+							sessionStorage.setItem("aflull",data.tepimg);//模板图路径
+							sessionStorage.setItem("WhenchangingID",orderval);
+							sessionStorage.setItem("NewTid",data.NewTid);
+							window.location.href=window.location.href+"&timestamp="+ new Date().getTime();
+							// alert(222) 
+						}
+					}, 
+					"json"
+					)
+				// console.log(jsonTEP);
+				$("#Tpanel1").show();
+				$("#Tpanel2").hide();
+			}
+		};
+
+		//===========
+		//-------------------------------------------------------------------====================================
+		//-------------------------------------------------------------------====================================
+		//-------------------------------------------------------------------====================================
+		//-------------------------------------------------------------------====================================
+		//-------------------------------------------------------------------====================================
+		var jsonarr,tep,temlist,aflull,arrimgt;
+		var LOCsave=sessionStorage.getItem("jsonarr");
+		if(LOCsave){
+		var orderval=$("#OneOrderId").val();//当前更改的订单id
+		var WhenchangingID=sessionStorage.getItem("WhenchangingID");//正常切换页面操作时所记录的订单id
+		console.log(orderval)
+		console.log(WhenchangingID)
+		if(orderval==WhenchangingID){	//如果相等就是正常范围内操作,此时需要取得原本的数据	
+			jsonarr=sessionStorage.getItem("jsonarr"); //订单分表，	
+			tep=sessionStorage.getItem("tep");//模板表分表一条	
+			temlist=sessionStorage.getItem("temlist");//模板表分表
+			aflull=sessionStorage.getItem("aflull");//模板图路径
+			arrimgt=sessionStorage.getItem("arrimgt");//图片原图
+		}else{
+			sessionStorage.clear();
+			jsonarr='{$trim}'; //订单分表，	是订单页的trim信息的json
+			tep='{$tep}';//模板表分表一条	
+			temlist='{$enlist}';//模板表分表
+			aflull='{$tepimg}'//模板图路径
+			arrimgt='{$arrimgt}'//图片原图
+			sessionStorage.getItem("orderval");
+		}
+	}else{
+		sessionStorage.clear();
+		jsonarr='{$trim}'; //订单分表，	
+		tep='{$tep}';//模板表分表一条	
+		temlist='{$enlist}';//模板表分表
+		aflull='{$tepimg}'//模板图路径
+		arrimgt='{$arrimgt}'//图片原图
+		sessionStorage.getItem("orderval");
+	}
+	$aflull=$('<img>');//模板背景图在此设定
+	$aflull.attr({
+		"id": 'aflull',
+		"src": '../attachment/'+aflull
+	})
+	$aflull.css({
+		"width": "318px",//原来是100%，alert发现是319，在此强制设定为318
+		"position": "fixed",
+		"z-index": "2"
+	});
+	$('#carcount').prepend($aflull);
+	//alert("模板背景图宽度："+$("#aflull").width());
+	var TIMG_width=Number($aflull.css('width').replace("px",""));
+	//存本地数据
+	sessionStorage.setItem("jsonarr",jsonarr);
+	sessionStorage.setItem("tep",tep);
+	sessionStorage.setItem("temlist",temlist);
+	sessionStorage.setItem("arrimgt",arrimgt);
+	sessionStorage.setItem("aflull",aflull);
+	//更新数据//
+	var returnjson=[];
+	//遍历图片内容thisimgid
+	//获取元素的纵坐标 
+	function getTop(e){ 
+		var offset=e.offsetTop; 
+		if(e.offsetParent!=null) offset+=getTop(e.offsetParent); 
+		return offset; 
+	} 
+		//获取元素的横坐标 
+		function getLeft(e){ 
+			var offset=e.offsetLeft; 
+			if(e.offsetParent!=null) offset+=getLeft(e.offsetParent); 
+			return offset; 
+		} 
+		var jsonreq=function(){
+			$thiskuang=$(".thiskuang");
+			var AI=0;
+			$thiskuang.each(function(index,val,arr){
+				var thisimg=$(val).next().find('img').eq(0);
+				console.log(thisimg)
+				if(thisimg.length>0){
+					$oingid=$(thisimg).data("imgid");
+					returnjson[AI]={
+						//width:thisimg.width(),
+						//height:thisimg.height(),
+						width:$(thisimg).data("begin_width").toString(),
+						height:$(thisimg).data("begin_height").toString(),
+						top:getTop(thisimg[0]),
+						left:getLeft(thisimg[0]),
+						Xtop:$(thisimg).css('top'),
+						Xleft:$(thisimg).css('left'),
+						type:"img",
+						roate:$(thisimg).data("rou").toString(),
+						imageId:$(thisimg).data("imgid").toString(),
+						imgurl:$(thisimg).data("imgurl")
+					}
+				}else{
+					returnjson[AI]={
+						width:"",
+						height:"",
+						top:"",
+						left:"",
+						type:"none",
+						roate:0,
+					}
+				}
+				AI+=1;
+			});
+			$texts=$("#texts");
+			if($texts){
+				if(sessionStorage.getItem("isture")==1){
+					returnjson[AI]={
+						width:$texts.width().toString(),
+						height:$texts.height().toString(),
+						top:getTop($texts[0]).toString(),
+						left:getLeft($texts[0]).toString(),
+						type:"name",
+						text:$texts.val()
+					}
+				}
+			}
+			var JSON_re=JSON.stringify(returnjson);
+			sessionStorage.setItem("jsonarr",JSON_re);
+			var orderval=$("#OneOrderId").val();
+			sessionStorage.setItem("WhenchangingID",orderval);
+			return JSON_re;
+		};
+		var thisping=$(document.body).width();
+		var zhengze=function(str){
+			var reg=new RegExp("px","g"); 
+			var newstr=str.replace(reg,"");
+			return newstr;
+		}
+		var order=JSON.parse(zhengze(jsonarr));
+		var template=JSON.parse(zhengze(tep));
+		var Teml=JSON.parse(zhengze(temlist));
+		var arrimgt=JSON.parse(zhengze(arrimgt));
+		window.onload=function(){
+		
+			Teml.forEach(function(val,index,arr){
+				$T2=$("#T2count");
+				$Tdiv=$("<div></div>");
+				$T2.append($Tdiv);
+				$Tdiv.attr({ 
+					class:"mui-col-sm-4 mui-col-xs-4"
+				});
+				$Tthisimg=$("<img>");//每个框里的小图
+				$Tdiv.append($Tthisimg);
+				$Tthisimg.attr({
+					src: "../attachment/"+val.thumb,
+					class: 'Timgs'
+				});
+				//alert("背景图片宽度:"+$Tthisimg.width());
+				$Tthisimg.data("tid",val.id);
+				$Tthisimg.bind("tap",function(e){
+					changetepm(1,val.id);
+				})
+				$("#re_template").bind('tap',function(event) {
+					changetepm(1,0);
+				});
+				$("#alter_template").bind('tap',function(event) {
+					changetepm(0,0);
+				});
+			});
+		///////////////////////======================================//////////////////////////////
+		//定义循环的I值，当作数组下标用
+		var I=0;
+		var J=0;//所有图片框的序列
+		var order_count=0;//需要检测出图片的数量
+		template.forEach(function(val,index,arr) {
+			if(val.type=="img"){
+				order_count+=1
+			}
+		})
+		template.forEach(function(val,index,arr) {
+			if(val.type=='img'){
+				$newkuang = $("<div></div>");
+				$("#carcount").append($newkuang);
+				$newkuang.css({
+					"position":"fixed",
+					"top":val.top*ratio+"px",
+					"left":val.left*ratio+"px",
+					"height":val.height*ratio+"px",
+					"width":val.width*ratio+"px",
+					"z-index":"3",
+					"border-style":"solid"
+				});
+				var	wk={
+					width:val.width*ratio,
+					height:val.height*ratio,
+					top:val.top*ratio,
+					left:val.left*ratio
+				}
+				$newkuang.data("wk",wk)
+				$newkuang.attr({
+					"class":"thiskuang"
+				});
+				if(I<order_count){
+					if(order[I]!=undefined){
+						if(order[I].type=="img"){
+							console.log("order["+I+"].type==img")
+							// console.log(order[I]) 
+							console.log(order[I].type)
+							$newkuang2 = $("<div></div>");
+							$("#carcount").append($newkuang2);
+							$newkuang2.css({
+								"position":"fixed",
+								"top":val.top*ratio+"px",
+								"left":val.left*ratio+"px",
+								"height":val.height*ratio+"px",
+								"width":val.width*ratio+"px",
+								"overflow":"hidden",
+								"z-index":"1",
+								"border-style":"solid"
+							});
+							$imgs=$("<img/>")
+							$newkuang2.append($imgs);
+							var	akuang={
+								width:val.width,
+								height:val.height,
+								top:val.top,
+								left:val.left
+							}
+							$imgs.data("reimgkuang",akuang)
+							var aimg={
+								width:order[I].width,
+								height:order[I].height,
+								Xtop:order[I].Xtop,
+								Xleft:order[I].Xleft,
+								roate:order[I].roate
+							}
+
+							$imgs.data("reimgaimg",aimg);
+							if(arrimgt[I]!=null){
+								$imgs.data("zhenW",arrimgt[I].width/3);
+								$imgs.data("zhenH",arrimgt[I].height/3);
+							}
+							var areimg=filter_img(akuang,aimg);
+							console.log("aimg====width=="+aimg.width+" and height=="+aimg.height)
+							$imgs.data("reimg",areimg)
+							$imgs.css({
+								"position":"absolute",
+								"z-index":"1",
+								"transform":"rotate("+order[I].roate+"deg)"
+							});
+							$imgs.data("imgid",order[I].imageId);
+							$imgs.data("imgurl",order[I].imgurl);
+							
+							$imgs.data("rou",0);
+							$imgs.data("begin_width",order[I].width);
+							$imgs.data("begin_height",order[I].height);
+							
+							$imgs.attr({
+								id:"I"+order[I].imageId,
+								class:"thisimgid",
+								src:order[I].imgurl,
+								width:Number(areimg.width)+"px",
+								height:Number(areimg.height)+"px",
+							});
+							$imgs.css({
+								top:Number(areimg.top)+"px",
+								left:Number(areimg.left)+"px"
+							});
+							$imgs.data("ifold","0")
+							var img=document.getElementById("I"+order[I].imageId);
+							console.log(img)
+			
+							ADDtouch($newkuang,$imgs);
+						}else{
+							console.log(12334)
+							$jiahao=$('<span class="mui-icon mui-icon-compose">添加</span>');
+							$newkuang.append($jiahao);
+							$jiahao.css({
+								"margin-left":"10%",
+								"margin-top":"10%",
+								"width":"100%",
+							});
+							$newkuang.bind("tap",function(e){
+								jsonreq();
+								var Source_of_change=$(this).data("xulie");
+								sessionStorage.setItem("Source_of_change",Source_of_change);
+								window.location.href="{$url}"
+								// sessionStorage.getItem("jsonarr");
+							})
+						}
+			}else{
+				$jiahao=$('<span class="mui-icon mui-icon-compose">添加</span>');
+				$newkuang.append($jiahao);
+				$jiahao.css({
+					"margin-left":"10%",
+					"margin-top":"10%",
+					"width":"100%",
+				});
+				$newkuang.bind("tap",function(e){
+					jsonreq();
+					var Source_of_change=$(this).data("xulie");
+					sessionStorage.setItem("Source_of_change",Source_of_change);
+					window.location.href="{$url}"
+					// sessionStorage.getItem("jsonarr");
+				})
+			}
+			I+=1;
+		}else{
+				//无图片时，显示的加号；
+				$jiahao=$('<span class="mui-icon mui-icon-compose">添加</span>');
+				$newkuang.append($jiahao);
+				$jiahao.css({
+					"margin-left":"10%",
+					"margin-top":"10%",
+					"width":"100%",
+				});
+				$newkuang.bind("tap",function(e){
+					jsonreq();
+					var Source_of_change=$(this).data("xulie");
+					sessionStorage.setItem("Source_of_change",Source_of_change);
+					window.location.href="{$url}"
+					// sessionStorage.getItem("jsonarr");
+				})
+			}
+			$newkuang.data("xulie",J);
+			J+=1;	
+		}else if(val.type=='name'){
+			//文字字段
+			$newinput=$("<textarea id='texts'>可以在此输入文字</textarea>");
+			$("#carcount").append($newinput);
+			$newinput.css({
+				"position":"fixed",
+				"top":val.top*ratio+"px",
+				"left":val.left*ratio+"px",
+				"height":val.height*ratio+"px",
+				"width":val.width*ratio+"px",
+				"z-index":"5",
+				"border-style":"solid"
+			});
+			$newinput.attr({
+				"class":"texts"
+			});
+			var istext=0;
+			$.each(order,function(index,val,arr){
+				if(val.type=="name"){
+					istext=1;
+					$newinput.val(val.text);
+					sessionStorage.setItem("isture",1)
+				}
+			})
+			if(istext==0){
+				sessionStorage.setItem("isture",0);
+				$newinput.focus(function(){
+				$(this).val("");
+				sessionStorage.setItem("isture",1);
+			})
+			}
+		}
+ 
+});
+$("#save_template").bind("tap",function(e){
+	var rejs=jsonreq()
+	console.log('测试rejs'+rejs)
+	
+	if(!sessionStorage.getItem("NewTid")){
+		sessionStorage.setItem("NewTid","-1")
+	}
+	console.log('NewTid'+sessionStorage.getItem("NewTid"));
+	console.log('orderid'+$("#OneOrderId").val());
+	$.post(
+		"{$url_reOnesave}",
+		{	
+			"orderid":$("#OneOrderId").val(), 
+			"NewTid":sessionStorage.getItem("NewTid"),
+			"window_W":window.screen.width,
+			"Reone":rejs
+		},
+		function(data){
+			console.log('返回'+data.messages);
+					sessionStorage.clear();
+					if(data.code==0){
+						window.location.href="{$url_turn}"+"&Npage={$Npage}";
+					}
+				},
+				"json"					
+				)
+	})
+}	
+</script>
+</html>

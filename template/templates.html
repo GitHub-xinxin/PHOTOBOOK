@@ -1,0 +1,76 @@
+{template 'common/header'}
+        <div class="panel panel-info">
+            <div class="panel-heading" style="background-color: #00aab8">
+                <h3 class="panel-title" style="color: #fff">封面与封底</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row clearfix">
+                    <table class="table">
+                      <thead>
+                        <tr style="color: #8e44ad">
+                          <th>封面</th>
+                          <th>封底</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                              <img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$feng1}" style="width: 60%" >
+                              <a href="{php echo $this->createWebUrl('editimage',array('t_id'=>$_GPC['t_id'],'type'=>1))}" class="btn" style="background-color: #00aab8;color: #fff">
+                                编辑
+                              </a>
+                          </td>
+                          <td>
+                              <img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$feng2}" style="width: 60%">
+                              <a href="{php echo $this->createWebUrl('editimage',array('t_id'=>$_GPC['t_id'],'type'=>2))}" class="btn" style="background-color: #00aab8;color: #fff">
+                                编辑
+                              </a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+            </div>
+            <div class='panel-body'>
+            <div class="alert alert-success">当前照片书【{$ttitle}】模板数量：{$tcount}张</div>
+                <div class="row clearfix">
+                    {loop $images $index  $image}
+                        <div class="col-md-2 column" id="thumbsdfgh_{$image['id']}" style="border-bottom: 1px solid #bdc3c7;border-top: 1px solid #bdc3c7;border-radius: 1em;">
+                        <div class="panel-body">
+                            <div style="text-align: center;padding: 3px 0px">
+                                <span class="badge">{php echo $index+1}</span>
+                            </div>
+                            <img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$image['thumb']}" class="img-thumbnail">
+                            <button class="btn btn-danger btn-block" onclick="deleteThis({$image['id']})">删除</button>
+                            <a href="{php echo $this->createWebUrl('editimage',array('template_id'=>$image['id']))}" class="btn btn-info btn-block">修改</a>
+                            </div>
+                        </div> 
+                    {/loop}
+                </div>
+                <div style="margin-top: 1em">
+                  <a class="btn btn-block btn-success" href="{php echo $this->createWebUrl('Uploadtemplate',array('template_id'=>$_GPC['t_id']))}">
+                    <span style="text-decoration:underline">
+                        添加模板
+                    </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function deleteThis(id){
+                if(confirm('确定要删除吗？')){
+                    $.post('{php echo $this->createWebUrl("deleteThisT")}',{'id':id},function(res){
+                        if(res=='1'){
+                            $("#thumbsdfgh_"+id).remove();                        
+                        }else{
+                            alert('删除失败');
+                        }
+                    })
+                }
+            }
+        </script>
+{template 'common/footer'}

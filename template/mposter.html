@@ -1,0 +1,63 @@
+{template 'common/header'}
+
+<style>
+th{
+	text-align: center !important;
+}
+
+td{
+	text-align: center !important;
+	white-space: normal !important;
+	word-break: break-all !important;
+}
+</style>
+<div class="panel panel-default">
+
+<div class='panel-heading'>
+            <a class="btn btn-success" href="{php echo $this->createWebUrl('CreatePoster')}">添加海报</a>
+            </div>
+
+	<div class="panel-body" style="text-align: center;">
+
+        <table class="table table-hover">
+
+            <thead class="navbar-inner">
+
+                <tr>
+
+                    <th>海报名称</th>		
+                    <th>关键字</th>
+                    <th>创建时间</th>
+                    <th style="width: 300px;">操作</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="table_content">
+
+                {loop $lists $l}
+
+                <tr>
+
+                    <td>{$l['title']}</td>
+                    <td>{$l['kword']}</td>
+                    <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+                    <td>
+                    <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('postershare',array('posterid'=>$l['id']))}">推广记录 【{$l['count']}】</a>
+                    	<a href='{php echo $this->createWebUrl("editposter",array("op"=>"edit","posterid"=>$l["id"]))}' class="btn btn-default btn-sm">编辑</a>
+                    	<a href='{php echo $this->createWebUrl("editposter",array("op"=>"delete","posterid"=>$l["id"]))}' onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger btn-sm">删除</a>
+						
+                    </td>
+
+                </tr>
+
+                {/loop}
+
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+{template 'common/footer'}

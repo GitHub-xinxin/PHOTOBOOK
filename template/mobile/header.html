@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../addons/photobook/template/mobile/js/mui.min.js"></script>
+		<link href="../addons/photobook/template/mobile/css/mui.min.css" rel="stylesheet" />
+		<link href="../addons/photobook/template/mobile/css/app.css" rel="stylesheet" />
+		<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
+		<!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+		<style>
+			.mui-table-view-cell{
+				font-size: 12px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable ">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-left" style="width: 40%;">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div class="mui-row touxiang">
+						</div>
+						<ul class="mui-table-view cebians">
+							<li class="mui-table-view-cell">
+							<a href="{php echo $this->createMobileUrl('homea')}">
+								<span class="mui-icon mui-icon-image"></span> 首页
+								</a>
+							</li>
+<!-- 							<li class="mui-table-view-cell">
+								<span class="mui-icon mui-icon-star"></span> 产品专区
+							</li> -->
+<!-- 							<li class="mui-table-view-cell">
+								<span class="mui-icon mui-icon-image"></span> 照片书
+							</li> -->
+<!-- 							<li class="mui-table-view-cell">
+								<span class="mui-icon mui-icon-extra mui-icon-extra-notice"></span> 活动专区
+							</li> -->
+							<li class="mui-table-view-cell">
+								<a href="{php echo $this->createMobileUrl('MyWork')}">
+									<span class="mui-icon mui-icon-starhalf"></span> 我的作品
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a href="{php echo $this->createMobileUrl('OrderList')}">
+									<span class="mui-icon mui-icon-extra mui-icon-extra-regist"></span>我的订单
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a href="{php echo $this->createMobileUrl('usercenter')}">
+									<span class="mui-icon mui-icon-person"></span> 个人中心
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<!-- <a href="{php echo $this->createMobileUrl('userphotos')}"> -->
+									<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 照片库
+								<!-- </a> -->
+							</li>
+							<li class="mui-table-view-cell">
+							<a href="{php echo $this->createMobileUrl('service')}">
+								<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 客服中心
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</aside>
+
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav">
+					<div class="mui-row">
+						<div class="mui-col-sm-2 mui-col-xs-2">
+							<span class="mui-icon mui-action-menu mui-icon-bars mui-pull-left" id="cebian_but"></span>
+						</div>
+						<div class="mui-col-sm-8 mui-col-xs-8">
+							<div style="text-align: center;padding-top: 0.5em;color: coral;">
+								<h4>{$p_title}</h4>
+							</div>
+						</div>
+					</div>
+				</header>

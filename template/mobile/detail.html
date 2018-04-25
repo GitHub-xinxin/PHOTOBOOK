@@ -1,0 +1,104 @@
+{template 'header'}
+<style type="text/css">
+.select_ed{
+	border-bottom: 2px solid #c0392b;
+	color: #e74c3c;
+}
+#J-detail-content{
+	width: 100%
+}
+</style>
+商品详情
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll" style="">
+		<div class="mui-row">
+			<p style="font-size: 20px;color: #000;margin: 0.5em;">{$detail['name']}</p>
+			<div class="mui-col-sm-8 mui-col-xs-8">
+				<span style="color: #e74c3c;font-weight: bold;font-size: 22px;">￥{$detail['price']}</span>
+			</div>
+			<div class="mui-col-sm-4 mui-col-xs-4">
+				销量:{$detail['sales']}
+			</div>
+		</div>
+		<div class="mui-row mui-content" style="background-color: white;">
+			<div class="mui-card">
+				<div class="mui-card-header">
+					<div class="select_ed"  id="tuwen" >
+						图文详情
+					</div>
+					<div id="pingjia">
+						宝贝评价
+					</div>
+				</div>
+				<div class="mui-card-content"id="tuwenX">
+					<div style="width: 100%">{php echo htmlspecialchars_decode($detail['detail'])}</div>
+					<div style="height: 4em;"></div>
+				</div>
+				<div class="mui-card-content" id="pingjiaX">
+					<div>
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell mui-media">
+								<a href="javascript:;">
+									<img class="mui-media-object mui-pull-left" src="../addons/photobook/template/mobile/img/quan.png">
+									<div class="mui-media-body">
+										昵称
+										<p class='mui-ellipsis'>真心不错</p>
+									</div>
+								</a>
+							</li>
+							<li class="mui-table-view-cell mui-media">
+								<a href="javascript:;">
+									<img class="mui-media-object mui-pull-left" src="../addons/photobook/template/mobile/img/quan.png">
+									<div class="mui-media-body">
+										昵称
+										<p class='mui-ellipsis'>真心不错</p>
+									</div>
+								</a>
+							</li>
+							<li class="mui-table-view-cell mui-media">
+								<a href="javascript:;">
+									<img class="mui-media-object mui-pull-left" src="../addons/photobook/template/mobile/img/quan.png">
+									<div class="mui-media-body">
+										昵称
+										<p class='mui-ellipsis'>真心不错</p>
+									</div>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div style="height: 4em;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<a href="{php echo $this->createMobileUrl('userphotos',array('tid'=>$tid))}" style="color: #fff">
+	<nav class="mui-bar mui-bar-tab" style="text-align: center;padding-top: 1em;background-color: #f39c12;">
+		<span>开始定制</span>
+	</nav>
+</a>
+<script type="text/javascript" src="../addons/photobook/template/mobile/js/app.js"></script>
+<script type="text/javascript">
+	mui('body').on('tap','a',function(){document.location.href=this.href;});
+	var tuwen=document.getElementById("tuwen")
+	var pingjia=document.getElementById("pingjia")
+	var tuwenX=document.getElementById("tuwenX")
+	var pingjiaX=document.getElementById("pingjiaX")
+	pingjiaX.style.display="none";
+	tuwen.addEventListener("tap", function(e) {
+		tuwen.className="select_ed";
+		pingjia.classList.remove("select_ed");
+		pingjiaX.style.display="none";
+		tuwenX.style.display="block";
+	});
+	document.getElementById("pingjia").addEventListener("tap", function(e) {
+		pingjia.className="select_ed";
+		tuwen.classList.remove("select_ed");
+		tuwenX.style.display="none";
+		pingjiaX.style.display="block"; 
+
+	});
+</script>
+</body>
+
+</html>

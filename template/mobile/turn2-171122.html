@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width,user-scalable = no" />
+		<!-- <meta name="viewport" content="width = 1050, user-scalable = no" /> -->
+		<meta charset="utf-8" />
+		<script type="text/javascript" src="../addons/photobook/template/mobile/turn/extras/jquery.min.1.7.js"></script>
+		<script type="text/javascript" src="../addons/photobook/template/mobile/turn/extras/modernizr.2.5.3.min.js"></script>
+		<link href="../addons/photobook/template/mobile/css/mui.min.css" rel="stylesheet" />
+		<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
+	</head>
+	<style type="text/css">
+	</style>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+					<div class="mui-row">
+						<div class="mui-col-sm-2 mui-col-xs-2">
+							
+						</div>
+						<div class="mui-col-sm-8 mui-col-xs-7">
+							<div class="mui-input-row mui-search">
+								<div style="text-align: center;padding-top: 0.5em;color: coral;">
+								<h5>{$userInfo['nickname']}的照片书</h5>
+							</div>
+							</div>
+						</div>
+						<div class="mui-col-sm-2 mui-col-xs-3" style="text-align: center">
+							<a href="{php echo $this->createMobileUrl('MyWork')}">
+								<button type="button" class="mui-btn mui-btn-danger">查看作品</button>	
+							</a>
+						</div>
+					</div>
+				</header>
+<!-- 		<div class="flipbook-viewport" id="flipbook-viewport">
+			<div class="container">
+				<div class="flipbook">
+					<div style="background-image:url({$item['img']})" class="page" onclick="window.location.href=
+					'{php $nn=$index+1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'"">
+					{loop $list $index $item}
+					<div style="background-image:url({$item['img']})" class="double" onclick="window.location.href=
+					'{php $nn=$index+1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'"">
+					</div>
+					{/loop}
+					<div style="background-image:url({$item['img']})" class="page" onclick="window.location.href=
+					'{php $nn=$index+1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'"">
+				</div>
+			</div>
+		</div>
+	</div>
+</div> -->
+<div class="flipbook-viewport">
+	<div class="container">
+		<div class="flipbook">
+			{loop $list $index $item}
+				<div class="double" style="background-image:url({$item['img']})"></div>
+			{/loop}
+		</div>
+	</div>
+</div>
+		<div style="margin:350px 1em 0em 1em;text-align: center;line-height: 1em;">
+			<p style="font-size: 12px">
+				您可以反动书角进行浏览，点击右上角展开全部以平铺模式列出照片书内页列表进行浏览和编辑~
+			</p>
+			<p style="color: palevioletred;font-size: 12px">
+				温馨提示：在您制作完成照片书进行下单的时候，进行一次整书的预览是一个很好的习惯。当看到有不满意的地方时，可以点击某页编辑该内容。
+			</p>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="#tabbar">
+				<span class="mui-icon mui-icon-extra mui-icon-extra-find"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="{php echo $this->createMobileUrl('ShoppingCart')}">
+				<span class="mui-icon mui-icon-extra mui-icon-extra-cart"></span>
+				<span class="mui-tab-label">购物车</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-map">
+				
+			</a>
+			<a class="mui-tab-item" href="{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid']))}" style="background: #e74c3c;color: #fff;font-weight: bold;">
+				下单购买
+			</a>
+		</nav>
+		<script type="text/javascript">
+			window.onload=function(){
+				var windows_width= $(window).width()
+				function loadApp() {
+					var flipbook = $('.flipbook')
+					if (flipbook.width()==0 || flipbook.height()==0) {
+						setTimeout(loadApp, 10)
+						return
+					}
+					$('.flipbook .double').scissor()
+					flipbook.turn({
+						//展示方式。
+						//页数
+						page:{$Npage},
+						//硬件加速：
+						// acceleration:true,
+						//是否居中
+						autoCenter: true,
+						//转动时的动画持续时间
+						duration:600,
+						width: windows_width,
+						height: 250,
+						elevation: 50,
+						// Enable gradients
+						gradients: true,
+					});
+					var size = $('.flipbook').turn("size")
+				}
+				yepnope({
+					test: Modernizr.csstransforms,
+					yep: ['../addons/photobook/template/mobile/turn/lib/turn.min.js'],
+					nope: ['../addons/photobook/template/mobile/turn/lib/turn.html4.min.js'],
+					both: ['../addons/photobook/template/mobile/turn/lib/scissor.min.js', '../addons/photobook/template/mobile/turn/double-page/css/double.css'],
+					complete: loadApp
+				})
+			}
+		</script>
+	</body>
+</html>
