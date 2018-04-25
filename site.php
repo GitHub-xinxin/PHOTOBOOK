@@ -13,19 +13,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doMobilettt(){
 		return 1;
 	}
-	/**
-	 * 2018-4-13 
-	 * 随机文件名生成函数
-	 */
-	function file_rand_name( $length = 8 ) { 
-		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; 
-		$password = ''; 
-		for ( $i = 0; $i < $length; $i++ ) 
-		{ 
-			$password .= $chars[ mt_rand(0, strlen($chars) - 1) ]; 
-		} 
-		return $password; 
-	} 
+	
 	/**
 	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板图 $ordersub_id:订单页ID
 	 */
