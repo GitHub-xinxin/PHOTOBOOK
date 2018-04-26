@@ -111,8 +111,8 @@ class PhotobookModuleSite extends WeModuleSite {
 					$trimarray[$key]['height']=$img_h.'px';
 				} 
 			}
-			$clear = new commonFunction();
-			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
+			// $clear = new commonFunction();
+			// $clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
 		}
 		/**
 		 * png覆盖
