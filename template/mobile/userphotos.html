@@ -126,7 +126,8 @@
 					<div class="mui-row">
 						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;text-align: center;padding-top: 1em;">
 							<div>
-								<button type="button" class="layui-btn layui-btn-danger" id="test1">上传图片</button>
+								<!-- <button type="button" class="layui-btn layui-btn-danger" id="test1">上传图片</button> -->
+								<button type="button" class="layui-btn layui-btn-danger" id="del">删除图片</button>
 							</div>
 
 <!-- 							<button type="button" id="up_button" class="mui-btn mui-btn-danger">
@@ -541,6 +542,25 @@
 	})
 	document.getElementById("zidong").addEventListener("tap",function(){
 		tijiao(js_data)
+	})
+	document.getElementById("del").addEventListener("tap",function(){
+		if(js_data.length == 0){
+			alert('没有选择删除图片')
+		}
+		var tid=$("#tid").val()
+		$.ajax({
+			url:"{$url_del}",
+			data:{
+				data:js_data,
+				tid:tid
+			},
+			type:'post',
+			dataType:'json',
+			success:function(res){
+				if(res.code == 0)
+					window.location.href = "{php echo $this->createMobileUrl('userphotos')}"+'&tid='+res.tid; 
+			}
+		})
 	})
 	{/if}
 	//_____________________________________________________________

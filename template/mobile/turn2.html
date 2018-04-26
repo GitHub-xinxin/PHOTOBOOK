@@ -53,15 +53,15 @@
 	<div class="container">
 		<div class="flipbook">
 			<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$startPage['img']}" onclick="window.location.href=
-						'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'"">
+						'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'">
 		
 			{loop $list $index $item}
 				<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
-						'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'"">
+						'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
 		
 			{/loop}
 			<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
-						'{php $nn=count($list,0);echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+2,"id"=>$endPage["id"],"time"=>time()))}'"">
+						'{php $nn=count($list,0);echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+2,"id"=>$endPage["id"],"time"=>time()))}'">
 		
 		</div>
 	</div>
@@ -111,7 +111,7 @@
 					flipbook.turn({
 						//展示方式。
 						//页数
-						page:{$Npage},
+						// page:{$Npage},
 						//硬件加速：
 						// acceleration:true,
 						//是否居中

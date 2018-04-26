@@ -23,8 +23,9 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_thumb = $ordersub_id.$T_photo;
 		$send_data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
-		
+
 		foreach ($data as $key => $frame){
+			
 			/**
 			 * 判断是否为图片 生成临时
 			 */
@@ -88,7 +89,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				/**
 				 * 缩放与裁剪
 				 */ 
-				$tailor_data = '/crop,x_'.round($tailor_x).',y_'.round($tailor_y).',w_'.$frame_w.',h_'.$frame_h;
+				$tailor_data = ',limit_0/crop,x_'.round($tailor_x).',y_'.round($tailor_y).',w_'.$frame_w.',h_'.$frame_h;
 				$send_data ='x-oss-process=image/resize,'.$thumb_type.'_'.$thumb_value.$tailor_data.'|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process', $send_data);
 				
@@ -111,8 +112,8 @@ class PhotobookModuleSite extends WeModuleSite {
 					$trimarray[$key]['height']=$img_h.'px';
 				} 
 			}
-			// $clear = new commonFunction();
-			// $clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
+			$clear = new commonFunction();
+			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
 		}
 		/**
 		 * png覆盖
@@ -136,7 +137,7 @@ class PhotobookModuleSite extends WeModuleSite {
 
 			$userid =pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id'];
 			$temp =explode('.', $_GPC['org_name']);
-			$thum =$temp[0].'_thum'.$temp[1];
+			$thum =$temp[0].'_thum.'.$temp[1];
 			$data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($thum).',b_'.base64_encode('demo-photo');
 			$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$_GPC['org_name'].'?x-oss-process', $data);
 						
@@ -656,7 +657,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		 */
 		if($_W['isajax']){
 			$temp =explode('.', $_GPC['org_name']);
-			$thum =$temp[0].'_thum'.$temp[1];
+			$thum =$temp[0].'_thum.'.$temp[1];
 			$data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($thum).',b_'.base64_encode('demo-photo');
 			$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$_GPC['org_name'].'?x-oss-process', $data);
 			if($response['status'] == 'OK'){		
@@ -677,7 +678,7 @@ class PhotobookModuleSite extends WeModuleSite {
 
 			$data=array(
 				'original'=>$_GPC['filename'],
-				'thumb'=>explode('.', $_GPC['filename'])[0].'_thum'.explode('.', $_GPC['filename'])[1],
+				'thumb'=>explode('.', $_GPC['filename'])[0].'_thum.'.explode('.', $_GPC['filename'])[1],
 				'uniacid'=>$_W['uniacid'],
 				'template_id'=>$_GPC['template_id'],
 				'imagecount'=>$_GPC['imagecount'],
@@ -842,10 +843,33 @@ class PhotobookModuleSite extends WeModuleSite {
 		$urlnew=$this->createMobileUrl('API_newAccept_pictures');
 		$url=$this->createMobileUrl('API_Accept_pictures');
 		$url_save=$this->createMobileUrl('API_SaveBook');
+		$url_del=$this->createMobileUrl('Del_pic');
 		$url_Turn=$this->createMobileUrl('turn');
 		$url_ONE=$this->createMobileUrl('API_reONEpicture');
 		$url_NEWtouch=$this->createMobileUrl('Newimgtouchit',array("change_images"=>1));
 		include $this->template('userphotos');
+	}
+	/**
+	 * 删除图片
+	 */
+	public function doMobileDel_pic(){
+		global $_W,$_GPC;
+		$clear = new commonFunction();
+		if($_W['isajax']){
+			foreach($_GPC['data'] as $index=>$row){	
+				$temp =explode('.', $row['img_name']);
+				$tem =explode('_', $temp[0]);
+				$org = $tem[0].'.'.$temp[1];
+				$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$row["img_name"],'DELETE');
+				$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$org,'DELETE');
+				$userimgid=substr($row['pid'],5);	
+				$res = pdo_delete('ly_photobook_user_images',array('uniacid'=>$_W['uniacid'],'id'=>$userimgid));
+				
+			}
+			$resArr['code'] = 0;
+			$resArr['tid'] = $_GPC['tid'];
+			echo json_encode($resArr);exit;
+		}
 	}
 /**
  * 图片处理页
@@ -1002,7 +1026,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		 * 前端发送请求 后台将图片上传到oss
 		 */
 		if($_W['isajax']){
-			$thum =explode('.', $_GPC['org_name'])[0].'_thum'.explode('.', $_GPC['org_name'])[1];
+			$thum =explode('.', $_GPC['org_name'])[0].'_thum.'.explode('.', $_GPC['org_name'])[1];
 			$data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($thum).',b_'.base64_encode('demo-photo');
 			$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$_GPC['org_name'].'?x-oss-process', $data);
 			if($response['status'] == 'OK'){		
@@ -1022,7 +1046,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$feng=pdo_get("ly_photobook_template_sub",array('template_id'=>$_GPC['t_id'],'type'=>$_GPC['type']));
 				$data=array(
 					'original'=>$_GPC['filename'],
-					'thumb'=>explode('.', $_GPC['filename'])[0].'_thum'.explode('.', $_GPC['filename'])[1],
+					'thumb'=>explode('.', $_GPC['filename'])[0].'_thum.'.explode('.', $_GPC['filename'])[1],
 					'imagecount'=>$_GPC['imagecount'],
 					'uniacid'=>$_W['uniacid'],
 					'data' => htmlspecialchars_decode($_GPC['data']),
@@ -1040,7 +1064,7 @@ class PhotobookModuleSite extends WeModuleSite {
 					// 'original'=>$_GPC['bg'],
 					// 'thumb'=>$imageThumb,
 					'original'=>$_GPC['filename'],
-					'thumb'=>explode('.', $_GPC['filename'])[0].'_thum'.explode('.', $_GPC['filename'])[1],
+					'thumb'=>explode('.', $_GPC['filename'])[0].'_thum.'.explode('.', $_GPC['filename'])[1],
 					'imagecount'=>$_GPC['imagecount'],
 					'uniacid'=>$_W['uniacid'],
 					'data' => htmlspecialchars_decode($_GPC ['data'])
@@ -1623,6 +1647,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			$T_photo=$res1['thumb'];
 			// var_dump('模板图：'.$T_photo);
 			// 筐的位置尺寸
+			logging_run('进入函数前=='.str_replace('&quot;', "'", $res1['data']),'info','after');
 			$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
 			// 合成图片的位置
 			// $img = ATTACHMENT_ROOT."BOOKS/temp_book_".$value['id'].".png";
@@ -1634,6 +1659,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			// }else{
 			// }
 			if(empty($value['img_path'])){
+				
 				$this->Compound($trimarray,$data,$T_photo,$value['id']);
 			}
 			
@@ -1676,6 +1702,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doMobileNewimgtouchit(){
 		global $_W,$_GPC;
 		$Npage=$_GPC['Npage'];
+		// var_dump($Npage);
 		$url=$this->createMobileUrl("userphotos",array("type"=>"change"));
 		$url_reOnesave=$this->createMobileUrl("API_texttext");//对应前端单页保存的按钮，保存时发AJAX到这个链接
 		$url_API_Ctep=$this->createMobileUrl("API_Ctep");//应该是更换模板
