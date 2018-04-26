@@ -212,7 +212,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$list=array();
 				include "tools/posterTools.php";
 				$list=array();
-				// var_dump($res);
+				
 				foreach ($res as $key => $value) {
 					// $value为order_sub的一条记录
 					$trim=$value['trim'];
