@@ -454,7 +454,6 @@
 					order[Source_of_change].height=data.img.height;
 					order[Source_of_change].roate=0;
 					order[Source_of_change].imageId=data.img.id;
-					console.log('dddddddddddddddddddddddd')
 						//--
 						arrimgt[Source_of_change].width=data.img.width;
 						arrimgt[Source_of_change].height=data.img.height;
@@ -462,7 +461,7 @@
 						var New_arrimgt=JSON.stringify(arrimgt);
 						sessionStorage.setItem("jsonarr",New_insert_picture);
 						sessionStorage.setItem("arrimgt",New_arrimgt);
-						window.location.href="{$url_NEWtouch}"+"&id="+sessionStorage.getItem("WhenchangingID");
+						window.location.href="{$url_NEWtouch}"+"&id="+sessionStorage.getItem("WhenchangingID")+"&Npage={$_GPC['Npage']}";
 					}else{
 						mui.toast(data.message,{ duration:'short', type:'div' })
 					}

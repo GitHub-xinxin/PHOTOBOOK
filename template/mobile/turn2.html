@@ -54,15 +54,23 @@
 			<div class="flipbook">
 				<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$startPage['img']}" onclick="window.location.href=
 							'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'">
+				{if $template_main_type == 0}
+					{loop $list $index $item}
+					
+						<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
+								'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'">
+					{/loop}
+					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
+							'{php echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+1,"id"=>$endPage["id"],"time"=>time()))}'">
+				{else}
+					{loop $list $index $item}
+						<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
+								'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
+					{/loop}
+					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
+							'{php echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2,"id"=>$endPage["id"],"time"=>time()))}'">
 			
-				{loop $list $index $item}
-					<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
-							'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
-			
-				{/loop}
-				<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
-							'{php $nn=count($list,0);echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+2,"id"=>$endPage["id"],"time"=>time()))}'">
-			
+				{/if}	
 			</div>
 		</div>
 	</div>
@@ -122,10 +130,10 @@
 						height: 250,
 						elevation: 50,
 						// Enable gradients
-						gradients: true,
+						gradients: true
 					});
 					var size = $('.flipbook').turn("size")
-					// $(".flipbook").turn("page",{$Npage});
+					$(".flipbook").turn("page",{$Npage});
 				}
 				yepnope({
 					test: Modernizr.csstransforms,

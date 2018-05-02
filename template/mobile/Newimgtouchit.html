@@ -86,7 +86,7 @@
 		{/if}
 		<a class="mui-tab-item mui-active">
 			<button type="button" id="save_template" class="mui-btn mui-btn-primary">
-				保 存
+				保 存{$Npage}
 			</button>
 		</a>
 	</nav>
@@ -394,7 +394,7 @@
 		jsonreq();
 		var Source_of_change=kuai.data("xulie");
 		sessionStorage.setItem("Source_of_change",Source_of_change);
-		window.location.href="{$url}"
+		window.location.href="{$url}"+"&Npage={$Npage}"
 	}
 		//
 		//===============================================================

@@ -45,7 +45,7 @@
 								</div>
 								<div class="mui-input-row">
 									<label>选择地址</label>
-									{if !empty($address)}
+									{if empty($address)}
 									<label><a href="{$add_url}">添加地址</a></label>
 									{else}
 										<select name="address_id">

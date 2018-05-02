@@ -23,7 +23,8 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_thumb = $ordersub_id.$T_photo;
 		$send_data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
-
+		load()->func('logging');
+		logging_run('进入函数'.json_encode($trimarray),'info','compound');
 		foreach ($data as $key => $frame){
 			
 			/**
@@ -924,13 +925,21 @@ class PhotobookModuleSite extends WeModuleSite {
 		return json_encode($data);
 	}
 	/**
-	 * 传给前台照片书的信息
+	 * 传给前端照片书的信息
 	 */
 	public function doMobileAPI_reONEpicture(){
 		global $_W,$_GPC;
 		$img=pdo_get("ly_photobook_user_images",array('id'=>$_GPC['uid']),array('width','height','thumb','id'));
-		$img['width'] =360;
-		$img['height']=270;
+		/**
+		 * 获取缩略图的信息
+		 */
+		$img_info = ihttp_get('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$img['thumb'].'?x-oss-process=image/info');
+		$de_info =json_decode($img_info['content'],true);
+		/**
+		 * 缩率图宽高
+		 */
+		$img['width'] =$de_info['ImageWidth']['value'];
+		$img['height']=$de_info['ImageHeight']['value'];
 		$data=array(
 			"code"=>0,
 			"message"=>"",
@@ -2064,6 +2073,20 @@ class PhotobookModuleSite extends WeModuleSite {
 		$Atitle="购物车";
 		$p_title="购物车";
 		$m_active=2;
+		/**
+		 * 
+		 */
+		$url_Preview=$this->createMobileUrl("turn");
+		$url_details=$this->createMobileUrl("shop_order");
+		$user=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']));
+		$orders=pdo_getall('ly_photobook_order_main',array('user_id'=>$user['id'],'uniacid'=>$_W['uniacid']));
+		foreach ($orders as $key => $order) {
+			$template_sub_id=pdo_get('ly_photobook_order_sub',array('main_id'=>$order['id']),array('template_id'))['template_id'];
+			$template_id=pdo_get('ly_photobook_template_sub',array('id'=>$template_sub_id),array('template_id'));
+			// 模板信息
+			$template=pdo_get('ly_photobook_template_main',array('id'=>$template_id),array('name','price','thumb'));
+			$orders[$key]['template']=$template;
+		}
 		include $this->template('orderlist');
 	} 
 	//我的作品
