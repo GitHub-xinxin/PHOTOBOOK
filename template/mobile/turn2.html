@@ -49,23 +49,23 @@
 	</div>
 </div> -->
 <div id="alls">
-<div class="flipbook-viewport">
-	<div class="container">
-		<div class="flipbook">
-			<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$startPage['img']}" onclick="window.location.href=
-						'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'">
-		
-			{loop $list $index $item}
-				<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
-						'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
-		
-			{/loop}
-			<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
-						'{php $nn=count($list,0);echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+2,"id"=>$endPage["id"],"time"=>time()))}'">
-		
+	<div class="flipbook-viewport">
+		<div class="container">
+			<div class="flipbook">
+				<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$startPage['img']}" onclick="window.location.href=
+							'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'">
+			
+				{loop $list $index $item}
+					<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
+							'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
+			
+				{/loop}
+				<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
+							'{php $nn=count($list,0);echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+2,"id"=>$endPage["id"],"time"=>time()))}'">
+			
+			</div>
 		</div>
 	</div>
-</div>
 		<div style="margin:350px 1em 0em 1em;text-align: center;line-height: 1em;">
 			<p style="font-size: 12px">
 				您可以翻动书角进行浏览，点击右上角展开全部以平铺模式列出照片书内页列表进行浏览和编辑~
@@ -125,6 +125,7 @@
 						gradients: true,
 					});
 					var size = $('.flipbook').turn("size")
+					// $(".flipbook").turn("page",{$Npage});
 				}
 				yepnope({
 					test: Modernizr.csstransforms,

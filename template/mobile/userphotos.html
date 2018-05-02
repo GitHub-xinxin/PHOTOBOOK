@@ -111,13 +111,17 @@
 						<span class="mui-icon mui-action-menu mui-icon-bars mui-pull-left" id="cebian_but"></span>
 					</div>
 					<div class="mui-col-sm-10 mui-col-xs-10">
-						<div style="text-align: center;padding-top: 0.5em;color: coral;">
-							{if $HIDE}
-							选择一张图片
-							{else}
-							已选：<span id="yixuan">0</span>/至少选：{$timgcount}张图
-							{/if}
-						</div>
+						{if $_GPC['op'] !='del'}
+							<div style="text-align: center;padding-top: 0.5em;color: coral;">
+								{if $HIDE}
+								选择一张图片
+								{else}
+								已选：<span id="yixuan">0</span>/至少选：{$timgcount}张图
+								{/if}
+							</div>
+						{else}
+							<div style="padding-top: 0.5em;color: coral;">我的照片库</div>
+						{/if}
 					</div>
 				</div>
 			</header>
@@ -127,7 +131,13 @@
 						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;text-align: center;padding-top: 1em;">
 							<div>
 								<!-- <button type="button" class="layui-btn layui-btn-danger" id="test1">上传图片</button> -->
-								<button type="button" class="layui-btn layui-btn-danger" id="del">删除图片</button>
+								{if $_GPC['op'] !='del'}
+									<button type="button" class="layui-btn layui-btn-danger" id="del">删除图片</button>
+									<button type="button" class="layui-btn layui-btn-danger" id="upload_pic">上传图片</button>
+								{else}
+									<button type="button" class="layui-btn layui-btn-danger" id="delete">删除图片</button>
+								{/if}
+								
 							</div>
 
 <!-- 							<button type="button" id="up_button" class="mui-btn mui-btn-danger">
@@ -136,20 +146,23 @@
 									点此上传
 								</div>
 							</button> -->
-							<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
-								<p style="font-size: 12px">
-									为了照片的完整性，照片的四周5mm内不要留有重要信息，以免被裁掉。
-								</p>
-								<p style="font-size: 12px">
-									<span class="mui-icon mui-icon-info" style="color: red"></span>
-									表示图片的尺寸不符合要求，可能会影响印刷出来的效果，不建议您使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
-								</p>
-								<p style="font-size: 12px">
-									<span class="mui-icon mui-icon-info" style="color: #f3b717"></span>
-									表示图片尺寸太小，印刷出来的效果很差，强烈建议您不要使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
-								</p>
-								
-							</div>
+							{if $_GPC['op'] !='del'}
+								<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
+									<p style="font-size: 12px">
+										为了照片的完整性，照片的四周5mm内不要留有重要信息，以免被裁掉。
+									</p>
+									<p style="font-size: 12px">
+										<span class="mui-icon mui-icon-info" style="color: red"></span>
+										表示图片的尺寸不符合要求，可能会影响印刷出来的效果，不建议您使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+									</p>
+									<p style="font-size: 12px">
+										<span class="mui-icon mui-icon-info" style="color: #f3b717"></span>
+										表示图片尺寸太小，印刷出来的效果很差，强烈建议您不要使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+									</p>
+								</div>
+							{else}
+								<p></p>
+							{/if}
 						</div>
 						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;">
 							<p style="background-color: #ecf0f1;padding: 0.3em;border-radius: 2px;">最新上传</p>
@@ -237,21 +250,23 @@
 			</a>
 		</nav>
 		{/if}
-		{if !$HIDE}
-		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
-			<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
-				<span class="mui-icon mui-icon-image"></span>
-				<span class="mui-tab-label">快捷排序</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
-				<span class="mui-icon mui-icon-compose"></span>
-				<span class="mui-tab-label">按图合成</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
-				<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
-				<span class="mui-tab-label">自动排版</span>
-			</a>
-		</nav>
+		{if $_GPC['op'] !='del'}
+			{if !$HIDE}
+			<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
+				<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
+					<span class="mui-icon mui-icon-image"></span>
+					<span class="mui-tab-label">快捷排序</span>
+				</a>
+				<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
+					<span class="mui-icon mui-icon-compose"></span>
+					<span class="mui-tab-label">按图合成</span>
+				</a>
+				<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
+					<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
+					<span class="mui-tab-label">自动排版</span>
+				</a>
+			</nav>
+			{/if}
 		{/if}
 		<div class="mui-content"  id="jing2">
 			<ul class="mui-table-view">
@@ -525,46 +540,75 @@
 			)}
 	//--------------------------
 	{if !$HIDE}
-	document.getElementById("baocun").addEventListener("tap",function(){
-		var pdatas=new Array;
-		$("#items").children().children().each(function(ix,val){
-			var pid=val.id.replace("lik","card_");
-			var img=$(val).parent().data('img_url');
-			pdatas.push({
-				pid:pid,
-				img:img
+		document.getElementById("baocun").addEventListener("tap",function(){
+			var pdatas=new Array;
+			$("#items").children().children().each(function(ix,val){
+				var pid=val.id.replace("lik","card_");
+				var img=$(val).parent().data('img_url');
+				pdatas.push({
+					pid:pid,
+					img:img
+				})
 			})
+			tijiao(pdatas)
 		})
-		tijiao(pdatas)
-	})
-	document.getElementById("antu").addEventListener("tap",function(){
-		tijiao(js_data)
-	})
-	document.getElementById("zidong").addEventListener("tap",function(){
-		tijiao(js_data)
-	})
-	document.getElementById("del").addEventListener("tap",function(){
-		if(js_data.length == 0){
-			alert('没有选择删除图片')
-		}
-		var tid=$("#tid").val()
-		$.ajax({
-			url:"{$url_del}",
-			data:{
-				data:js_data,
-				tid:tid
-			},
-			type:'post',
-			dataType:'json',
-			success:function(res){
-				if(res.code == 0)
-					window.location.href = "{php echo $this->createMobileUrl('userphotos')}"+'&tid='+res.tid; 
-			}
-		})
-	})
+		
+		{if $_GPC['op'] != 'del'}
+			document.getElementById("antu").addEventListener("tap",function(){
+				tijiao(js_data)
+			})
+			document.getElementById("zidong").addEventListener("tap",function(){
+				tijiao(js_data)
+			})
+			//上传照片
+			document.getElementById("upload_pic").addEventListener("tap",function(){
+				window.location.href="{php echo $this->createMobileUrl('upload_user_photo')}"+'&tid='+"{$tid}"
+			})
+			document.getElementById("del").addEventListener("tap",function(){
+				if(js_data.length == 0){
+					alert('没有选择删除图片')
+					return false
+				}
+				var tid=$("#tid").val()
+				$.ajax({
+					url:"{$url_del}",
+					data:{
+						data:js_data,
+						tid:tid
+					},
+					type:'post',
+					dataType:'json',
+					success:function(res){
+						if(res.code == 0)
+							window.location.href = "{php echo $this->createMobileUrl('userphotos')}"+'&tid='+res.tid; 
+					}
+				})
+			})
+		{else}
+			document.getElementById("delete").addEventListener("tap",function(){
+				if(js_data.length == 0){
+					alert('没有选择删除图片')
+					return false
+				}
+				var tid=$("#tid").val()
+				$.ajax({
+					url:"{$url_del}",
+					data:{
+						data:js_data
+					},
+					type:'post',
+					dataType:'json',
+					success:function(res){
+						if(res.code == 0)
+							window.location.href = "{php echo $this->createMobileUrl('userphotos')}"+'&op=del'; 
+					}
+				})
+			})
+		{/if}
 	{/if}
 	//_____________________________________________________________
 	$(function(){
+
 		　　　　$("#head_img_change").change(function() {
 			　　      var $file = $(this);
 			　　　　　var fileObj = $file[0]

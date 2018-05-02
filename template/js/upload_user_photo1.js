@@ -22,6 +22,7 @@
 		message = policyBase64
 		var bytes = Crypto.HMAC(Crypto.SHA1, message, accesskey, { asBytes: true }) ;
 		var signature = Crypto.util.bytesToBase64(bytes);
+		var tid = document.getElementsByName('tid')[0].value;
 		
 		var uploader = new plupload.Uploader({
 			runtimes : 'html5,flash,silverlight,html4',
@@ -108,6 +109,13 @@
 				},
 				Error: function(up, err) {
 					document.getElementById('console').appendChild(document.createTextNode("\nError xml:" + err.response));
+				},
+				UploadComplete: function(up,file){
+					if(tid != '' || tid != null){
+						setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+							window.location.replace("http://photos.leyaocn.com/app/index.php?i=2&c=entry&tid="+tid+"&do=userphotos&m=photobook");//页面刷新
+							},700);
+					}
 				}
 			}
 		});

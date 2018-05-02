@@ -132,7 +132,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	 */
 	public function doMobileupload_user_photo(){
 		global $_W,$_GPC;
-
+		$tid = $_GPC['tid'];
 		if($_W['isajax']){
 
 			$userid =pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id'];
