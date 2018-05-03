@@ -8,10 +8,48 @@
 defined('IN_IA') or exit('Access Denied');
 define('M_PATH', IA_ROOT . '/addons/photobook');
 include 'tools/delete.class.php';
+require_once 'aliyun-oss-php-sdk-2.3.0/autoload.php';
+use OSS\OssClient;
+use OSS\Core\OssException;
 class PhotobookModuleSite extends WeModuleSite {
 	//测试
 	public function doMobilettt(){
 		return 1;
+	}
+	/**
+	 * OSS下载图片到本地服务器
+	 */
+	public function download($order_id){
+		global $_W,$_GPC;
+
+		$accessKeyId = "LTAIZlNllu4E2j6U";
+		$accessKeySecret = "S34tVsxyY0cucviwEgKwEBVLjUVNDc";
+		$endpoint = "http://oss-cn-beijing.aliyuncs.com";
+		try {
+			$ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
+		} catch (OssException $e) {
+			print $e->getMessage();
+		}
+		mkdir(ATTACHMENT_ROOT."BOOKS/temp_book_".$order_id);
+		/**
+		 * 从oss上下载所有的照片
+		 */
+
+		$photos = pdo_getall('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'main_id'=>$order_id));
+		foreach($photos as $index=>$row){
+			$object = $row['img_path'];
+			$localfile = ATTACHMENT_ROOT."BOOKS/temp_book_".$order_id."/".$object;
+			$options = array(
+				OssClient::OSS_FILE_DOWNLOAD => $localfile,
+			);
+			try{
+				$ossClient->getObject('demo-photo', $object, $options);
+			} catch(OssException $e) {
+				printf(__FUNCTION__ . ": FAILED\n");
+				printf($e->getMessage() . "\n");
+				return;
+			}
+		}	
 	}
 	
 	/**
@@ -205,41 +243,42 @@ class PhotobookModuleSite extends WeModuleSite {
 		if($_W['isajax']){
 			set_time_limit(0);
 			$order=pdo_get('ly_photobook_order_main',array('id'=>$bookid),array('zip_url'));
-			if(is_file($order['zip_url'])){
-				return json_encode(array('status'=>1,'filename'=>'photobook_'.$bookid.'.zip'));
-			}else{
-				mkdir(ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid);
-				$sql="SELECT * FROM ims_ly_photobook_order_sub WHERE main_id={$bookid} ORDER BY id";
-				$res=pdo_fetchall($sql);
-				$list=array();
-				include "tools/posterTools.php";
-				$list=array();
+			// if(is_file($order['zip_url'])){
+			// 	return json_encode(array('status'=>1,'filename'=>'photobook_'.$bookid.'.zip'));
+			// }else{
+				$this->download($bookid);
+	// 			mkdir(ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid);
+	// 			$sql="SELECT * FROM ims_ly_photobook_order_sub WHERE main_id={$bookid} ORDER BY id";
+	// 			$res=pdo_fetchall($sql);
+	// 			$list=array();
+	// 			include "tools/posterTools.php";
+	// 			$list=array();
 				
-				foreach ($res as $key => $value) {
-					// $value为order_sub的一条记录
-					$trim=$value['trim'];
-					$trimarray=json_decode($trim,true);
-					// 获取模板
-					$sql1="SELECT * FROM ims_ly_photobook_template_sub WHERE id={$value['template_id']} ORDER BY id limit 1";
-					$res1=pdo_fetch($sql1);
-					// echo '生成'.$value['id'].'图';
-					// var_dump($res1);
-					$T_photo=$res1['original'];
-					// 筐的位置尺寸
-					$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
-					// 合成图片的位置
-					$img = ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid.'/original_'.$bookid.'_'.$value['id'].".png";
+	// 			foreach ($res as $key => $value) {
+	// 				// $value为order_sub的一条记录
+	// 				$trim=$value['trim'];
+	// 				$trimarray=json_decode($trim,true);
+	// 				// 获取模板
+	// 				$sql1="SELECT * FROM ims_ly_photobook_template_sub WHERE id={$value['template_id']} ORDER BY id limit 1";
+	// 				$res1=pdo_fetch($sql1);
+	// 				// echo '生成'.$value['id'].'图';
+	// 				// var_dump($res1);
+	// 				$T_photo=$res1['original'];
+	// 				// 筐的位置尺寸
+	// 				$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
+	// 				// 合成图片的位置
+	// 				$img = ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid.'/original_'.$bookid.'_'.$value['id'].".png";
 				
-					createzLeafWeb($trimarray,$data,$T_photo,$img);
-	/*				$timg=str_replace("www/web/huilife/public_html/","",$img);
-					$list[]=array('img'=>$timg,'id'=>$value['id']);*/
-				}
+	// 				createzLeafWeb($trimarray,$data,$T_photo,$img);
+	// /*				$timg=str_replace("www/web/huilife/public_html/","",$img);
+	// 				$list[]=array('img'=>$timg,'id'=>$value['id']);*/
+	// 			}
 				$filename=ATTACHMENT_ROOT.'photobook_'.$bookid.'.zip';
 		        exec('zip -r '.$filename.' '.ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid);
 		        // 更新zip_url
 		        pdo_update('ly_photobook_order_main',array('zip_url'=>$filename),array('id'=>$bookid));
 				return json_encode(array('status'=>1,'filename'=>'photobook_'.$bookid.'.zip'));	
-			}
+			// }
 		}else{
 			$filename=ATTACHMENT_ROOT.$_GPC['filename'];
             header("Cache-Control: public"); 
@@ -1329,6 +1368,19 @@ class PhotobookModuleSite extends WeModuleSite {
 		global $_W,$_GPC;
 		$account_api = WeAccount::create();
 		$userInfo = $account_api->fansQueryInfo($_W['openid']);
+		$userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id'];
+		/**
+		 * 未支付订单数
+		 */
+		$pay_count = count(pdo_getall('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'user_id'=>$userid,'status'=>0)),0);
+		 /**
+		  * 待收货订单数
+		  */
+		$warting_count = count(pdo_getall('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'user_id'=>$userid,'status in'=>array(1,2,3))),0);
+		/**
+		 * 待评价订单数
+		 */
+		$comment_count = count(pdo_getall('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'user_id'=>$userid,'status'=>4)),0);
 		$p_title='个人中心';
 		 $m_active='3';
 		include $this->template('usercenter');
@@ -1970,6 +2022,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_id=pdo_get('ly_photobook_template_sub',array('id'=>$template_sub_id),array('template_id'))['template_id'];
 		$template=pdo_get('ly_photobook_template_main',array('id'=>$template_id),array('name','thumb','price','inner_price'));
 		if(checksubmit()){
+		
 			if($is_inner_sub){
 				$price=(float)$_GPC['count']*(float)$template['inner_price'];
 			}else{
@@ -1981,6 +2034,12 @@ class PhotobookModuleSite extends WeModuleSite {
 				'remark'=>$_GPC['remark'],
 				'address_id'=>$_GPC['address_id'],
 			);
+			/**
+			 * 是否加入购物车
+			 */
+			if($_GPC['shopping_cart'] == 1){
+				$data['shopping_cart'] = 1;
+			}
 			if(pdo_update('ly_photobook_order_main',$data,array('id'=>$order_id))){
 				header('Location: '.$this->createMobileUrl('Shop_order',array('order_id'=>$order_id)));
 			}else{
@@ -2056,7 +2115,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$url_Preview=$this->createMobileUrl("turn");
 		$url_details=$this->createMobileUrl("shop_order");
 		$user=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']));
-		$orders=pdo_getall('ly_photobook_order_main',array('user_id'=>$user['id'],'uniacid'=>$_W['uniacid']));
+		$orders=pdo_getall('ly_photobook_order_main',array('user_id'=>$user['id'],'uniacid'=>$_W['uniacid'],'count !='=>0),array(),'','id DESC');
 		$Atitle="订单列表";
 		foreach ($orders as $key => $order) {
 			$template_sub_id=pdo_get('ly_photobook_order_sub',array('main_id'=>$order['id']),array('template_id'))['template_id'];
@@ -2079,7 +2138,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$url_Preview=$this->createMobileUrl("turn");
 		$url_details=$this->createMobileUrl("shop_order");
 		$user=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']));
-		$orders=pdo_getall('ly_photobook_order_main',array('user_id'=>$user['id'],'uniacid'=>$_W['uniacid']));
+		$orders=pdo_getall('ly_photobook_order_main',array('user_id'=>$user['id'],'uniacid'=>$_W['uniacid'],'status'=>0,'shopping_cart'=>1));
 		foreach ($orders as $key => $order) {
 			$template_sub_id=pdo_get('ly_photobook_order_sub',array('main_id'=>$order['id']),array('template_id'))['template_id'];
 			$template_id=pdo_get('ly_photobook_template_sub',array('id'=>$template_sub_id),array('template_id'));

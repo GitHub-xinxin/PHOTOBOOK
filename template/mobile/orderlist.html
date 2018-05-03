@@ -42,16 +42,16 @@
 										{$order['template']['name']}
 									</div>
 									<div>
-										<p>制作时间：{php echo date('Y-m-d H:m',$order['createtime'])}</p>
-										<p>快递公司：</p>
-										<p>快递单号：</p>
+										<p>制作时间：</p>
+										<p>{php echo date('Y-m-d H:m',$order['createtime'])}</p>
+										<p>快递公司：{$order['express']}</p>
+										<p>快递单号：{$order['express_id']}</p>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="mui-col-sm-2 mui-col-xs-2">
-							<p>{$order['template']['price']}</p>
-							<p>X{$order['count']}</p>
+							<p>{$order['template']['price']}&nbsp;X&nbsp;{$order['count']}</p>
 						</div>
 						<div class="mui-col-sm-12 mui-col-xs-12">
 							<div class="mui-row">

@@ -33,7 +33,7 @@
 							</li>
 						</ul>
 						<div class="mui-col-sm-12 mui-col-xs-12">
-							<form class="mui-input-group" action="" method="post">
+							<form class="mui-input-group" action="" method="post" onsubmit="return check()">
 								
 								<div class="mui-input-row">
 									<label>宝贝数量:</label>
@@ -72,10 +72,11 @@
 								</div>
 								<div class="mui-input-row">
 									<label>加入购物车</label>
-									<div class="mui-switch">
+									<div id="car"class="mui-switch">
 									  <div class="mui-switch-handle"></div>
 									</div>
 								</div>
+								<input type="hidden" name="shopping_cart">
 								<div class="mui-input-row">
 									<label>邮政快递</label>
 									<div class="mui-switch mui-switch-blue">
@@ -93,11 +94,11 @@
 								</div>
 								<div class="mui-input-row mui-radio mui-left">
 									<label>我同意 <span style="color:#0062CC;">免责条款</span></label>
-									<input name="radio1" type="radio">
+									<input id="agree" name="radio1" type="radio">
 								</div> 
 								<div class="mui-button-row">
 									<input type="hidden" name="token" value="{$_W['token']}">
-								<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-primary" style="width: 100%;">确认</button>
+								<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-primary" style="width: 100%;">提交订单</button>
 								</div>
 							</form>
 						</div>
@@ -106,4 +107,16 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			document.getElementById("car").addEventListener("toggle",function(event){
+				if(event.detail.isActive){
+					document.getElementsByName('shopping_cart')[0].value = 1;
+				}else{
+					document.getElementsByName('shopping_cart')[0].value = 0;
+				}
+			})
+			  function check(){
+					
+				}
+		</script>
 {template 'footer'}
