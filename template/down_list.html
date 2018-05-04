@@ -1,0 +1,67 @@
+{template 'common/header'}
+<style>
+    tr,td,th{
+        text-align: center;
+    }
+</style>
+<div class="panel panel-default">
+    <div class='panel-heading'>
+      照片书--{$_GPC['order_id']}
+    </div>
+        <div class="panel-body" style="text-align: center;">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                    <tr>
+                        <th>编号</th>
+                        <th>文件名</th>
+                        <th style="width: 270px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="table_content">
+                    {loop $list $l}
+                        <tr>
+                            <td>{$l['id']}</td>
+                            <td>{php echo str_replace("_thum","",$l['img_path'])}</td>
+                            <td>         
+                                <!-- <a href="{php echo $this->createWebUrl('down_list',array('one_id'=>$l['id'],'op'=>'down'))}" class="btn btn-primary">打印列表</a> -->
+                                {if empty($l['down_img'])}
+                                    <button class="btn btn-primary" id="d{$l['id']}" data-id="{$l['id']}">打印下载</button>
+                                {else}
+                                    <button class="btn btn-danger" id="d{$l['id']}" data-id="{$l['id']}">下载完成</button>
+                                {/if}
+                                <div style="display:none">
+                                    <a href="" id="kk" download></a> 
+                                </div>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        {$pager}
+    </div>
+</div>
+<script>
+    $(function(){
+        $('button').click(function(){
+            var id = $(this).data('id')
+            $(this).text('正在下载').removeClass('btn-primary').addClass('btn-danger')
+            $.ajax({
+                url:'{php echo $this->createWebUrl("down_list")}',
+                data:{
+                    op:'down',
+                    one_id:id
+                },
+                type:'post',
+                dataType:'json',
+                success:function(res){
+                    if(res.code == 0){
+                        $("#kk").attr("href","https://demo-photo.oss-cn-beijing.aliyuncs.com/"+res.file); 
+                        $('#kk')[0].click()
+                        $('#d'+res.id).attr('disabled', 'disabled').text('下载完成')     
+                    }
+                }
+            })
+        })
+    })
+</script>
+{template 'common/footer'}

@@ -8,50 +8,179 @@
 defined('IN_IA') or exit('Access Denied');
 define('M_PATH', IA_ROOT . '/addons/photobook');
 include 'tools/delete.class.php';
-require_once 'aliyun-oss-php-sdk-2.3.0/autoload.php';
-use OSS\OssClient;
-use OSS\Core\OssException;
 class PhotobookModuleSite extends WeModuleSite {
 	//测试
 	public function doMobilettt(){
 		return 1;
 	}
-	/**
-	 * OSS下载图片到本地服务器
-	 */
-	public function download($order_id){
+	public function doWebDown_list(){
 		global $_W,$_GPC;
-
-		$accessKeyId = "LTAIZlNllu4E2j6U";
-		$accessKeySecret = "S34tVsxyY0cucviwEgKwEBVLjUVNDc";
-		$endpoint = "http://oss-cn-beijing.aliyuncs.com";
-		try {
-			$ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
-		} catch (OssException $e) {
-			print $e->getMessage();
-		}
-		mkdir(ATTACHMENT_ROOT."BOOKS/temp_book_".$order_id);
-		/**
-		 * 从oss上下载所有的照片
-		 */
-
-		$photos = pdo_getall('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'main_id'=>$order_id));
-		foreach($photos as $index=>$row){
-			$object = $row['img_path'];
-			$localfile = ATTACHMENT_ROOT."BOOKS/temp_book_".$order_id."/".$object;
-			$options = array(
-				OssClient::OSS_FILE_DOWNLOAD => $localfile,
-			);
-			try{
-				$ossClient->getObject('demo-photo', $object, $options);
-			} catch(OssException $e) {
-				printf(__FUNCTION__ . ": FAILED\n");
-				printf($e->getMessage() . "\n");
-				return;
+		
+		if($_GPC['op'] == 'down'){
+			$value = pdo_get('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['one_id']));
+			// $value为order_sub的一条记录
+			$trim = $value['trim'];
+			//修剪信息
+			$trimarray=json_decode($trim,true);
+			// 获取模板
+			$sql1="SELECT * FROM ims_ly_photobook_template_sub WHERE id = ".$value['template_id']." ORDER BY id limit 1";
+			$res1=pdo_fetch($sql1);
+			//模板图原图
+			$T_photo=$res1['original'];
+			// 筐的位置尺寸
+			$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
+			if(empty($value['down_img']))
+				$this->Compound_org($trimarray,$data,$T_photo,$value['id']);
+			$value = pdo_get('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['one_id']));
+			/**
+			 * 检查订单中是否全部下载完 如果全部下载完 状态改为打印中
+			 */
+			$all_order = pdo_getall('ly_photobook_order_sub',array('uniacid'=>$W['uniacid'],'main_id'=>$value['main_id']));
+			$is_done = 0;
+			foreach($all_order as $index=>$row){
+				if(empty($row['down_img']))
+					$is_done++;
 			}
-		}	
+			if($is_done == 0){
+				pdo_update('ly_photobook_order_main',array('status'=>2),array('status'=>1,'id'=>$value['main_id']));
+			}
+			$resArr['code']=0;
+			$resArr['id']=$_GPC['one_id'];
+			$resArr['file']=$value['down_img'];
+			echo json_encode($resArr);exit;			
+		}else{
+			$list = pdo_getall('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'main_id'=>$_GPC['order_id']));
+		}
+		include $this->template('down_list');
 	}
+	/**
+	 * 合成原图,提供下载打印
+	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板原图 $ordersub_id:订单页ID
+	 */
+	// $trimarray,$data,$T_photo,$ordersub_id
+	public function Compound_org($trimarray,$data,$T_photo,$ordersub_id){
+		global $_W,$_GPC;
+		/**
+		 * 获取模板原图的信息
+		 */
+		$org_info = ihttp_get('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process=image/info');
+		$de_org_info =json_decode($org_info['content'],true);
+		/**
+		 * 模板原图宽高
+		 */
+		$org_h = $de_org_info['ImageHeight']['value'];
+		$org_w = $de_org_info['ImageWidth']['value'];
+		/**
+		 * 先生成模板图的副本
+		 */
+		// if($org_w >4096)
+		// 	$org_w = 4096;
+		$template_thumb = $ordersub_id.$T_photo;
+		$send_data ='x-oss-process=image/resize,p_100|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
+		
+		foreach ($data as $key => $frame){
+			
+			/**
+			 * 判断是否为图片 生成临时
+			 */
+			if($frame['type'] == 'img'){
+				//创建原图的副本
+				
+				$org =str_replace("_thum","",$trimarray[$key]['imgurl']);
+				$thumb_img = "roate_".$org; 
+				
+				if($trimarray[$key]['roate']==90 || $trimarray[$key]['roate']==-270){
+					$send_data ='x-oss-process=image/rotate,90|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
+				}elseif($trimarray[$key]['roate']==180 || $trimarray[$key]['roate']==-180){
+					$send_data ='x-oss-process=image/rotate,180|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
+				}elseif($trimarray[$key]['roate']==270 || $trimarray[$key]['roate']==-90){
+					$send_data ='x-oss-process=image/rotate,270|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
+				}else{
+					$send_data ='x-oss-process=image/resize,p_100|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
+				}
+				//在原图基础上,是否进行旋转
+				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$org.'?x-oss-process', $send_data);
+		
+				
+				/**
+				 * 获取图片的信息
+				 */
+				$img_info = ihttp_get('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process=image/info');
+				$de_info =json_decode($img_info['content'],true);
+				/**
+				 * 原图宽高
+				 */
+				$img_h = $de_info['ImageHeight']['value'];
+				$img_w = $de_info['ImageWidth']['value'];
+				
+				/**
+				 * 框的宽高
+				 */
+				$coefficient = $org_w / 360;
+				$frame_w = trim($frame['width'],'px') * $coefficient;
+				$frame_h = trim($frame['height'],'px') * $coefficient;
+				$frame_top = trim($frame['top'],'px') * $coefficient;
+				$frame_left = trim($frame['left'],'px') * $coefficient;
+			
+				/**
+				 * 计算缩放那一边
+				 */
+				if($frame_w / $frame_h > $img_w / $img_h){
+					$thumb_type = 'w'; 
+					$thumb_value = $frame_w; 
+				}else{
+					$thumb_type = 'h'; 
+					$thumb_value = $frame_h; 
+				}
+				/**
+				 * 如果是新生成的缩略图
+				 */
+				if($trimarray[$key]['Xtop'] =='' && $trimarray[$key]['Xleft']==''){
+					if($thumb_type == 'w'){
+						$tailor_x = 0;
+						$tailor_y = (($thumb_value / $img_w * $img_h)-$frame_h)/2;
+					}elseif($thumb_type == 'h'){
+						$tailor_x = (($thumb_value / $img_h * $img_w)-$frame_w)/2;
+						$tailor_y = 0;
+					}
+				}else{
+					$tailor_x = abs(trim($trimarray[$key]['Xleft'],'px')) * $coefficient;
+					$tailor_y = abs(trim($trimarray[$key]['Xtop'],'px')) * $coefficient;
+				}
+				/**
+				 * 缩放与裁剪
+				 */ 
+				$tailor_data = ',limit_0/crop,x_'.round($tailor_x).',y_'.round($tailor_y).',w_'.round($frame_w).',h_'.round($frame_h);
+				$send_data ='x-oss-process=image/resize,'.$thumb_type.'_'.round($thumb_value).$tailor_data.'|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
+				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process', $send_data);
+				
+				/**
+				 * 合成模板
+				 */
+				// var_dump('frame.top=='.$frame_top.' frame.left=='.$frame_left); 
+				$compound_data =base64_encode($thumb_img);
+				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
+				
+				/**
+				 * 删除上传的临时图片
+				 */
+			}
+			$clear = new commonFunction();
+			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
+		}
+		/**
+		 * png覆盖
+		 */
+		$send_data ='x-oss-process=image/watermark,image_'.base64_encode($T_photo).',g_nw,x_0,y_0|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
+		/**
+		 * 更新数据表
+		 */
+		pdo_update('ly_photobook_order_sub',array('down_img'=>$template_thumb),array('id'=>$ordersub_id));
 	
+	}
 	/**
 	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板图 $ordersub_id:订单页ID
 	 */
@@ -61,8 +190,6 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_thumb = $ordersub_id.$T_photo;
 		$send_data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
-		load()->func('logging');
-		logging_run('进入函数'.json_encode($trimarray),'info','compound');
 		foreach ($data as $key => $frame){
 			
 			/**
@@ -234,63 +361,6 @@ class PhotobookModuleSite extends WeModuleSite {
         include $file;
         exit;
     }
-
-
-	// ajax方法合成并下载
-	public function doWebPrintBook(){
-		global $_W,$_GPC;
-		$bookid=$_GPC['id'];
-		if($_W['isajax']){
-			set_time_limit(0);
-			$order=pdo_get('ly_photobook_order_main',array('id'=>$bookid),array('zip_url'));
-			// if(is_file($order['zip_url'])){
-			// 	return json_encode(array('status'=>1,'filename'=>'photobook_'.$bookid.'.zip'));
-			// }else{
-				$this->download($bookid);
-	// 			mkdir(ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid);
-	// 			$sql="SELECT * FROM ims_ly_photobook_order_sub WHERE main_id={$bookid} ORDER BY id";
-	// 			$res=pdo_fetchall($sql);
-	// 			$list=array();
-	// 			include "tools/posterTools.php";
-	// 			$list=array();
-				
-	// 			foreach ($res as $key => $value) {
-	// 				// $value为order_sub的一条记录
-	// 				$trim=$value['trim'];
-	// 				$trimarray=json_decode($trim,true);
-	// 				// 获取模板
-	// 				$sql1="SELECT * FROM ims_ly_photobook_template_sub WHERE id={$value['template_id']} ORDER BY id limit 1";
-	// 				$res1=pdo_fetch($sql1);
-	// 				// echo '生成'.$value['id'].'图';
-	// 				// var_dump($res1);
-	// 				$T_photo=$res1['original'];
-	// 				// 筐的位置尺寸
-	// 				$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
-	// 				// 合成图片的位置
-	// 				$img = ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid.'/original_'.$bookid.'_'.$value['id'].".png";
-				
-	// 				createzLeafWeb($trimarray,$data,$T_photo,$img);
-	// /*				$timg=str_replace("www/web/huilife/public_html/","",$img);
-	// 				$list[]=array('img'=>$timg,'id'=>$value['id']);*/
-	// 			}
-				$filename=ATTACHMENT_ROOT.'photobook_'.$bookid.'.zip';
-		        exec('zip -r '.$filename.' '.ATTACHMENT_ROOT."BOOKS/temp_book_".$bookid);
-		        // 更新zip_url
-		        pdo_update('ly_photobook_order_main',array('zip_url'=>$filename),array('id'=>$bookid));
-				return json_encode(array('status'=>1,'filename'=>'photobook_'.$bookid.'.zip'));	
-			// }
-		}else{
-			$filename=ATTACHMENT_ROOT.$_GPC['filename'];
-            header("Cache-Control: public"); 
-            header("Content-Description: File Transfer"); 
-            header('Content-disposition: attachment; filename='.basename($filename)); //文件名  
-            header("Content-Type: application/zip"); //zip格式的  
-            header("Content-Transfer-Encoding: binary"); //告诉浏览器，这是二进制文件  
-            header('Content-Length: '. filesize($filename)); //告诉浏览器，文件大小  
-            @readfile($filename);
-		}
-		
-	}
 	//首页
 	public function doMobileHomea(){
 		global $_W,$_GPC;
@@ -310,6 +380,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	////////
 	public function doWebBook_order(){
 		global $_W,$_GPC;
+		
 		if(checksubmit()){
 			// 填写快递信息
 			$update=array('express'=>$_GPC['express'],'express_id'=>$_GPC['express_id'],'status'=>3);

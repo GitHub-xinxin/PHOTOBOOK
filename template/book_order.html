@@ -21,7 +21,7 @@ td{
 
     <li {if $_GPC['status']==2}
     class="active"
-    {/if}><a href="{php echo $this->createWebUrl('book_order',array('status'=>2))}">已打印</a></li>
+    {/if}><a href="{php echo $this->createWebUrl('book_order',array('status'=>2))}">打印中</a></li>
 
     <li {if $_GPC['status']==3}
     class="active"
@@ -58,12 +58,12 @@ td{
             <tbody id="table_content">
                 {loop $list $l}
                     <tr>
-                        <td>{$l['order_id']}</td>
+                        <td>{$l['id']}</td>
                         <td>{$l['userInfo']['nickname']}</td>
                         <td>{if $l['status']==1}
                             <span class="label label-success">未打印</span>
                             {else if $l['status']==2}
-                            <span class="label label-danger">已打印</span>
+                            <span class="label label-danger">制作中</span>
                             {else if $l['status']==3}
                             <span class="label label-danger">已发货</span>
                             {else if $l['status']==4}
@@ -74,7 +74,8 @@ td{
                         <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
                         <td>
                         <button class="btn btn-warning" onclick="sdfghdf({$l['id']})">发货</button>
-                        <button class="btn btn-primary" onclick="create(this,{$l['id']})">下载打印</button>
+                        <!-- <button class="btn btn-primary" onclick="create(this,{$l['id']})">下载打印</button> -->
+                        <a href="{php echo $this->createWebUrl('down_list',array('order_id'=>$l['id']))}" class="btn btn-primary">打印列表</a>
                         <a href="{php echo $this->createWebUrl('book_order_detail',array('id'=>$l['id']))}" class="btn btn-info"> 详情</a>
                         </td>
                     </tr>
