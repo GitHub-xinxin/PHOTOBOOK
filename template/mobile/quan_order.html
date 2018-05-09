@@ -24,7 +24,7 @@
 							</li>
 						</ul>
 						<div class="mui-col-sm-12 mui-col-xs-12">
-							<form class="mui-input-group" action="" method="post">
+							<form class="mui-input-group" action="" method="post" onsubmit="return is_agent()">
 								<div class="mui-input-row">
 									<label>宝贝数量:</label>
 									<div class="mui-numbox" data-numbox-min="1">
@@ -45,4 +45,12 @@
 				</div>
 			</div>
 		</div>
+		<script>	
+			function is_agent(){			
+				if({$is_agent} == -1){
+					alert('亲,只有代理商才能购买哦')
+					return false;
+				}
+			}
+		</script>
 {template 'footer'}

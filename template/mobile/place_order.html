@@ -1,4 +1,13 @@
+
 {template 'header'}
+<style>
+	.mui-input-group{
+		font-size: 0.8em
+	}
+	.mui-input-row select{
+		font-size: 0.9em
+	}
+</style>
 				<div id="scroll" class="mui-content mui-scroll-wrapper">
 					<div class="mui-scroll">
 						<ul class="mui-table-view" style="margin: 0.5em;">
@@ -54,7 +63,10 @@
 										{/loop}
 										</select>
 									{/if}
-									
+								</div>
+								<div class="mui-input-row">
+									<label>联系电话</label>
+									<input type="text" style="font-size:0.9em" name="phone" placeholder="请务必填写正确手机号码">
 								</div>
 								<div class="mui-input-row">
 									<label>配送方式</label>
@@ -65,9 +77,21 @@
 								</div>
 								<div class="mui-input-row">
 									<label>使用卡券</label>
-									<select name="card">
+									<select name="card" id="card">
 									  <option value ="0">不使用</option>
 									  <option value ="1">使用</option>
+									</select>
+								</div>
+								<div class="mui-input-row" id="card_list">
+									<label>选择卡卷</label>
+									<select name="select_card" id="select_card" style="color:red">
+										{if !empty($card_list)}
+											{loop $card_list $row}
+												<option value="{$row['id']}">- {$row['list_price']}元</option>
+											{/loop}
+										{else}
+											<option value="0">无可用卡卷</option>
+										{/if}
 									</select>
 								</div>
 								<div class="mui-input-row">
@@ -83,7 +107,7 @@
 									  <div class="mui-switch-handle"></div>
 									</div>
 								</div>
-								<div style="margin: 1em;color: #95a5a6;line-height: 1.5em;">
+								<div style="margin: 1em;color: #95a5a6;line-height: 1.5em; font-size: 0.8em">
 									特别说明:该快递选项只对杂志册类照片书(平台标价58元一本)的产品有效，当中通无法到达的地区，您可以选择使用邮政快递发货，其他类型产品选项无效。
 								</div>
 								<div class="mui-input-row">
@@ -94,7 +118,7 @@
 								</div>
 								<div class="mui-input-row mui-radio mui-left">
 									<label>我同意 <span style="color:#0062CC;">免责条款</span></label>
-									<input id="agree" name="radio1" type="radio">
+									<input id="agree" type="radio">
 								</div> 
 								<div class="mui-button-row">
 									<input type="hidden" name="token" value="{$_W['token']}">
@@ -107,6 +131,7 @@
 				</div>
 			</div>
 		</div>
+		<script src="../addons/photobook/template/js/jquery.min.js"></script>
 		<script>
 			document.getElementById("car").addEventListener("toggle",function(event){
 				if(event.detail.isActive){
@@ -115,8 +140,26 @@
 					document.getElementsByName('shopping_cart')[0].value = 0;
 				}
 			})
-			  function check(){
-					
+			function check(){		
+				var val = document.getElementById('agree').checked;
+				if(val == false){
+						alert("请同意免责条款");
+						return false;
 				}
+				var phone =document.getElementsByName('phone')[0].value;
+				if(!(/^1[34578]\d{9}$/.test(phone))){ 
+					alert("请填写正确的11位电话号码,请重填");  
+					return false; 
+				} 
+			}
+			$(function(){
+				$('#card_list').hide();
+				$('#card').change(function(){
+					if($(this).val() == 1)
+						$('#card_list').show();
+					else
+						$('#card_list').hide();
+				})
+			})
 		</script>
 {template 'footer'}

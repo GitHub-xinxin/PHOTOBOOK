@@ -2,23 +2,38 @@
 
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>OSS web直传</title>
+	<title>多照片上传</title>
 	<link rel="stylesheet" type="text/css" href="../addons/photobook/template/css/style.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="../addons/photobook/template/css/layui.css">
+	<link rel="stylesheet" href="../addons/photobook/template/mobile/css/mui.min.css">
 </head>
 
-<body>
-	<h2 style="text-align:center">照片书上传</h2>
-	<h4>您所选择的文件列表：</h4>
-	<div id="ossfile">你的浏览器不支持flash,Silverlight或者HTML5！</div>
-
-	<br/>
-	<input type="hidden" name="tid" value="{$tid}">
-	<div id="container">
-		<a id="selectfiles" href="javascript:void(0);" class='btn'>选择文件</a>
-		<a id="postfiles" href="javascript:void(0);" class='btn'>开始上传</a>
-		<!-- <button id="delete" class="btn">删除测试</button> -->
+<body style="background-color: white">
+	<div id="container" style="margin-top:1.5em;text-align: center">
+		<a id="selectfiles" href="javascript:void(0);" class='layui-btn layui-btn-danger'>选择文件</a>
+		<a id="postfiles" href="javascript:void(0);" class='layui-btn layui-btn-danger'>开始上传</a>
 	</div>
+	<div style="background-color: white;padding: 1em;">
+		<p style="font-size: 12px">
+			为了照片的完整性，照片的四周5mm内不要留有重要信息，以免被裁掉。
+		</p>
+		<p style="font-size: 12px">
+			<span class="mui-icon mui-icon-info" style="color: red"></span>
+			表示图片的尺寸不符合要求，可能会影响印刷出来的效果，不建议您使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+		</p>
+		<p style="font-size: 12px">
+			<span class="mui-icon mui-icon-info" style="color: #f3b717"></span>
+			表示图片尺寸太小，印刷出来的效果很差，强烈建议您不要使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+		</p>
+	</div>
+	<p style="margin-top:0.5em;font-size: 12px" >	
+		<span>您所选择的文件列表:</span>
+	</p>
+	<div id="ossfile" style="margin-top: 1em">你的浏览器不支持flash,Silverlight或者HTML5！</div>
+	<br/> 
+	<input type="hidden" name="tid" value="{$tid}">
+
 	<pre id="console"></pre>
 	<p>&nbsp;</p>
 

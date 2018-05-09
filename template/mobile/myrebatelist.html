@@ -18,8 +18,8 @@
 				<h4>{$allmoney}元</h4>
 			</div>
 			<div class="mui-card-footer">
-					<button type="button" onclick="applyrebate()" style="width: 100%;margin-top: 10px" class="mui-btn mui-btn-warning">申请提现</button>
-				</div>
+				<button type="button" onclick="applyrebate()" style="width: 100%;margin-top: 10px" class="mui-btn mui-btn-warning">申请提现</button>
+			</div>
 		</div>
 			<div style="width: 100%;text-align: center;margin-top: 10px;font-size: 28px">
 				
@@ -54,9 +54,14 @@
 <script type="text/javascript" src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 	function applyrebate(){
+		if({$allmoney} == 0){
+			alert('无可提现金额');
+			return false;
+		}
 		$.post('{php echo $this->createMobileUrl("applyrebate")}', {param1: 'value1'}, function(res, textStatus, xhr) {
 			if(res){
-				alert('申请成功');
+				alert('申请成功,等待审核');
+				location.reload();
 			}else{
 				alert('申请失败');
 			}

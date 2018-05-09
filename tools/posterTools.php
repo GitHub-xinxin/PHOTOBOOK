@@ -581,16 +581,16 @@ function createMPoster($fans,$poster,$modulename,$parentid){
 	recordlog('createMPoster: share===>'.json_encode($share));
 	if (empty($share)){//新建分享人记录
 		$idata=array(
-						'openid'=>$openid,
-						'nickname'=>$fans['nickname'],
-						'avatar'=>$fans['avatar'],
-						'posterid'=>$posterid,
-						'createtime'=>time(),
-						'parentid'=>$parentid,
-						'image_url'=>'',
-						'ticketid'=>'',
-						'uniacid'=>$_W['uniacid']
-				);
+			'openid'=>$openid,
+			'nickname'=>$fans['nickname'],
+			'avatar'=>$fans['avatar'],
+			'posterid'=>$posterid,
+			'createtime'=>time(),
+			'parentid'=>$parentid,
+			'image_url'=>'',
+			'ticketid'=>'',
+			'uniacid'=>$_W['uniacid']
+		);
 		pdo_insert($modulename."_share",$idata);
 		$share['id'] = pdo_insertid();
 		$share = pdo_fetch('select * from '.tablename($modulename."_share")." where id='{$share['id']}'");
@@ -637,7 +637,8 @@ function createMPoster($fans,$poster,$modulename,$parentid){
 			$img = saveImage($fans['avatar']);
 			mergeImage($target,$img,array('left'=>$value['left'],'top'=>$value['top'],'width'=>$value['width'],'height'=>$value['height']));
 			@unlink($img);
-		}elseif ($value['type'] == 'name') mergeText($modulename,$target,$fans['nickname'],array('size'=>$value['size'],'color'=>$value['color'],'left'=>$value['left'],'top'=>$value['top']));
+		}elseif ($value['type'] == 'name') 
+			mergeText($modulename,$target,$fans['nickname'],array('size'=>$value['size'],'color'=>$value['color'],'left'=>$value['left'],'top'=>$value['top']));
 	}
 	imagejpeg($target, $qrcode);
 	imagedestroy($target);

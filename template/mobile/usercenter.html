@@ -69,7 +69,11 @@
 											<div class="mui-col-sm-6 mui-col-xs-6">
 												<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('myrebatelist')}">
 													<div style="text-align: center;">
-														0
+														{if empty($money_count)}
+															0
+														{else}
+															{$money_count}
+														{/if}
 													</div>
 													<div style="text-align: center;">
 														可提现金额
@@ -79,7 +83,7 @@
 											<div class="mui-col-sm-6 mui-col-xs-6">
 												<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('agentcardlist')}">
 													<div style="text-align: center;">
-														0
+														{$card_count}
 													</div>
 													<div style="text-align: center;">
 														优惠券
@@ -118,7 +122,7 @@
 										</a>
 									</li>
 									<li class="mui-table-view-cell">
-										<a class="mui-navigate-right">
+										<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('ShoppingCart')}">
 											<span class="mui-icon-extra mui-icon-extra-cart"></span> 我的购物车
 										</a>
 									</li>

@@ -23,10 +23,10 @@
 				return false;
 			}
 			$.post('{php echo $this->createMobileUrl("giveHeCard")}', {number:count,openid: openid,coid:coid}, function(data, textStatus, xhr) {
-				if(data){
+				if(data == 1){
 					alert('操作成功');
 				}else{
-					alert('操作成功');
+					alert('操作失败');
 				}
 			});
 		}
