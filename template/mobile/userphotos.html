@@ -48,7 +48,8 @@
 		height: 5em
 	}
 	.mui-scroll-wrapper li{
-		height: auto
+		height: auto;
+		font-size: 0.7em
 	}
 	.queding{
 
@@ -72,31 +73,34 @@
 					</div>
 					<ul class="mui-table-view cebians">
 						<li class="mui-table-view-cell">
-							<span class="mui-icon "></span> 首页
+							<a href="{php echo $this->createMobileUrl('homea')}">
+								<span class="mui-icon mui-icon-image"></span> 首页
+							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-star"></span> 产品专区
+							<a href="{php echo $this->createMobileUrl('MyWork')}">
+								<span class="mui-icon mui-icon-starhalf"></span> 我的作品
+							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-image"></span> 照片书
+							<a href="{php echo $this->createMobileUrl('OrderList')}">
+								<span class="mui-icon mui-icon-extra mui-icon-extra-regist"></span>我的订单
+							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-extra mui-icon-extra-notice"></span> 活动专区
+							<a href="{php echo $this->createMobileUrl('usercenter')}">
+								<span class="mui-icon mui-icon-person"></span> 个人中心
+							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-starhalf"></span> 我的作品
+							<a href="{php echo $this->createMobileUrl('userphotos')}&op=del">
+								<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 照片库
+							</a>
 						</li>
 						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-extra mui-icon-extra-regist"></span> 我的订单
-						</li>
-						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-person"></span> 个人中心
-						</li>
-						<li class="mui-table-view-cell">
-							<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 我的照片库
-						</li>
-						<li class="mui-table-view-cell">
-							<span class="mui-icon "></span> 客服中心
+						<a href="{php echo $this->createMobileUrl('service')}">
+							<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 客服中心
+							</a>
 						</li>
 					</ul>
 				</div>
@@ -282,22 +286,22 @@
 					font-family: "微软雅黑";
 				}
 			</style>
-			<div class="mui-row" id="items" style="height: 500px;overflow: hidden;">
+			<div class="mui-row" id="items">
 			</div>
 		</ul>
 		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer2">
-			<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;">
+			<!-- <a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;">
 				<button type="button" class="mui-btn mui-btn-success" id="xiangshang">↑向上</button>
-			</a>
+			</a> -->
 			<a class="mui-tab-item" href="#tabbar-with-chat" style="color: palevioletred;">
 				<button type="button" class="mui-btn " id="fanhui">返回</button>
 			</a>
 			<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
 				<button type="button" class="mui-btn  mui-btn-warning" id="baocun">生成</button>
 			</a>
-			<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
+			<!-- <a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
 				<button type="button" class="mui-btn  mui-btn-primary" id="xiangxia">↓向下</button>
-			</a>
+			</a> -->
 		</nav>
 	</div>
 	<script type="text/javascript" src="../addons/photobook/template/mobile/js/app.js"></script>
@@ -405,7 +409,8 @@
 		}
 		$("#queding").bind('tap',function(e) {
 			var dangqianimgid=sessionStorage.getItem("dangqianimgid");
-			if(dangqianimgid==0){
+			
+			if(dangqianimgid == 0){
 				mui.toast("请选择一张图片",{ duration:'short', type:'div' })
 			}else{
 				$.post('{$url_ONE}',
@@ -426,13 +431,16 @@
 					var jsonarr=sessionStorage.getItem("jsonarr");//框的数据
 					var arrimgtstr=sessionStorage.getItem("arrimgt");//图片尺寸的数据
 					var Source_of_change=sessionStorage.getItem("Source_of_change");//框的序列位置
+					
 					var order=JSON.parse(zhengze(jsonarr));
 					var arrimgt=JSON.parse(zhengze(arrimgtstr));
+	
 					// alert(Source_of_change)
 					// console.log(Source_of_change)
 					var bi;
 					var differ=5-order.length
-					if(differ>=1){
+					
+					if(differ >= 1){
 						for(bi=0;bi<differ;bi++){
 							order.push({
 								"imgurl":"",
@@ -448,6 +456,7 @@
 							})
 						}
 					}
+			
 					order[Source_of_change].imgurl=data.img.thumb;
 					order[Source_of_change].type="img";
 					order[Source_of_change].width=data.img.width;
@@ -504,12 +513,18 @@
 		$("#jing1").show(300);
 		$("#footer").show(300);
 	})
-	document.getElementById("xiangshang").addEventListener("tap",function(){
-		$(document).scrollTop(-400); 
-	})
-	document.getElementById("xiangxia").addEventListener("tap",function(){
-		$(document).scrollTop(400); 
-	})
+	// var offset =0;
+	// document.getElementById("xiangshang").addEventListener("tap",function(){
+	// 	offset -=200;
+	// 	if(offset < 0)
+	// 		offset =0;
+	// 	$('#items').scrollTop(offset); 
+	// })
+	// document.getElementById("xiangxia").addEventListener("tap",function(){
+	// 	alert($('#items').height())
+	// 	offset +=200;
+	// 	$("#items").scrollTop(offset); 
+	// })
 	//--------------------------
 	var tijiao=function(arr){
 		var tid=$("#tid").val()
@@ -544,9 +559,11 @@
 			$("#items").children().children().each(function(ix,val){
 				var pid=val.id.replace("lik","card_");
 				var img=$(val).parent().data('img_url');
+				var img_name =$(val).parent().data('img_name');
 				pdatas.push({
 					pid:pid,
-					img:img
+					img:img,
+					img_name:img_name
 				})
 			})
 			tijiao(pdatas)
@@ -670,6 +687,7 @@
 			$thiskuai=$('<div class="mui-col-sm-3 mui-col-xs-3"><li class="mui-table-view-cell" id='+val.pid.replace("card_","lik")+' style="background-image: url('+val.img+');"><label class="thislabel"></label></li></div>')
 			$("#items").append($thiskuai)
 			$thiskuai.data("img_url",val.img)
+			$thiskuai.data("img_name",val.img_name)
 		})
 		syc_idnum();
 	}

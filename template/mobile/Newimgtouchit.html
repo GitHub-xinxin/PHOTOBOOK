@@ -623,7 +623,7 @@
 				console.log(canvas)
 				var rotatedImg=canvas.toDataURL("image/png");
 				
-				console.log("canvasRotate中，旋转后的图片:"+rotatedImg);
+				//console.log("canvasRotate中，旋转后的图片:"+rotatedImg);
 				$(imgId).attr('src',rotatedImg);
 			}
 			
@@ -669,7 +669,7 @@
 			}
 		})
 		template.forEach(function(val,index,arr) {
-			if(val.type=='img'){
+			if(val.type =='img'){
 				$newkuang = $("<div></div>");//其内部不嵌套图片，是外边那个参照框（黑色border）
 				$("#carcount").append($newkuang);
 				$newkuang.css({
@@ -751,13 +751,13 @@
 							console.log('imgurl在onload内：'+order[I].imgurl);
 							//注意此处图片真正显示的宽度和高度，位置，是filter_img处理过的，角度未在此赋值
 							$imgs.attr({
-								id:"I"+order[I].imageId,
+								id:I+"I"+order[I].imageId,
 								class:"thisimgid",								
 								width:Number(areimg.width)+"px",
 								height:Number(areimg.height)+"px",
 							});
 							//在旋转函数里，给该img赋值过了
-							canvasRotate(order[I].imgurl,areimg.width,areimg.height,order[I].roate,"#I"+order[I].imageId);
+							canvasRotate(order[I].imgurl,areimg.width,areimg.height,order[I].roate,"#"+I+"I"+order[I].imageId);
 
 							$imgs.css({
 								top:Number(areimg.top)+"px",
