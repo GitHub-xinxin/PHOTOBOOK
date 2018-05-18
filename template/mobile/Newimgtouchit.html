@@ -148,7 +148,7 @@
 			width:Number(firimg.width)+"px",
 			height:Number(firimg.height)+"px",
 		});
-		canvasRotate(img.data("imgurl"),firimg.width,firimg.height,degs,"#I"+img.data("imgid"));
+		canvasRotate(img.data("imgurl"),firimg.width,firimg.height,degs,"#"+img.data("id"));
 
 		console.log("旋转后 width==="+firimg.width+" height=="+firimg.height)
 		img.css({
@@ -678,9 +678,9 @@
 					"left":val.left*ratio+"px",
 					"height":val.height*ratio+"px",
 					"width":val.width*ratio+"px",
-					"z-index":"3",
-					"border-style":"solid",
-					'color':'red'
+					"z-index":"3"
+					//"border-style":"solid",
+					//'color':'red'
 				});
 				var	wk={
 					width:val.width*ratio,
@@ -708,7 +708,7 @@
 								"width":val.width*ratio+"px",
 								"overflow":"hidden",
 								"z-index":"1",
-								"border-style":"solid"
+								//"border-style":"solid"
 							});
 							$imgs=$("<img/>")
 							$newkuang2.append($imgs);
@@ -747,7 +747,7 @@
 							$imgs.data("rou",order[I].roate);
 							$imgs.data("begin_width",order[I].width);
 							$imgs.data("begin_height",order[I].height);
-							
+							$imgs.data("id",I+'I'+order[I].imageId);
 							console.log('imgurl在onload内：'+order[I].imgurl);
 							//注意此处图片真正显示的宽度和高度，位置，是filter_img处理过的，角度未在此赋值
 							$imgs.attr({

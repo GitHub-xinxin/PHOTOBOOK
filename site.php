@@ -31,7 +31,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			// 筐的位置尺寸
 			$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
 			if(empty($value['down_img']))
-				$this->Compound_org($trimarray,$data,$T_photo,$value['id']);
+				$this->Compound_org($trimarray,$data,$T_photo,$value['id'],$_GPC['index']);
 			$value = pdo_get('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['one_id']));
 			/**
 			 * 检查订单中是否全部下载完 如果全部下载完 状态改为打印中
@@ -51,6 +51,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			echo json_encode($resArr);exit;			
 		}else{
 			$list = pdo_getall('ly_photobook_order_sub',array('uniacid'=>$_W['uniacid'],'main_id'=>$_GPC['order_id']));
+			$count = count($list);
 		}
 		include $this->template('down_list');
 	}
@@ -59,7 +60,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板原图 $ordersub_id:订单页ID
 	 */
 	// $trimarray,$data,$T_photo,$ordersub_id
-	public function Compound_org($trimarray,$data,$T_photo,$ordersub_id){
+	public function Compound_org($trimarray,$data,$T_photo,$ordersub_id,$index){
 		global $_W,$_GPC;
 		/**
 		 * 获取模板原图的信息
@@ -76,7 +77,9 @@ class PhotobookModuleSite extends WeModuleSite {
 		 */
 		// if($org_w >4096)
 		// 	$org_w = 4096;
-		$template_thumb = $ordersub_id.$T_photo;
+		$temp =explode('.',$T_photo);
+		$index++;
+		$template_thumb = $ordersub_id."_".$index.'.'.$temp[1];
 		$send_data ='x-oss-process=image/resize,p_100|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
 		
@@ -1178,6 +1181,7 @@ class PhotobookModuleSite extends WeModuleSite {
 					"template_id"=>$_GPC['t_id'],
 					"type"=>$_GPC['type'],
 				);
+				
 				if(empty($feng)){
 					pdo_insert("ly_photobook_template_sub",$data);	
 				}else{
@@ -1194,7 +1198,7 @@ class PhotobookModuleSite extends WeModuleSite {
 					'uniacid'=>$_W['uniacid'],
 					'data' => htmlspecialchars_decode($_GPC ['data'])
 				);
-				
+		
 			pdo_update('ly_photobook_template_sub',$data,array('id'=>$_GPC['id']));
 			message('修改成功',$this->createWebUrl('edittemplateimage',array("t_id"=>$_GPC['t_id'])),'success');
 			exit;

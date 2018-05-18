@@ -1,4 +1,5 @@
 {template 'common/header'}
+<SCRIPT src="http://www.jb51.net/js/thunderhref.js"></SCRIPT>
 <style>
     tr,td,th{
         text-align: center;
@@ -40,27 +41,76 @@
         {$pager}
     </div>
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+                </a>
+				<h4 class="modal-title" id="myModalLabel">
+                        
+					文件列表<span style="font-size:0.7em;padding-left:2em;padding-right: 2em"><span style="color: red">*</span>请手动全部复制文件到<a oncontextmenu=ThunderNetwork_SetHref(this) class=aThunder onclick="return OnDownloadClick_Simple(this)" href="thunder://" style="color:blue" thunderResTitle="迅雷下载" thunderType="04" thunderPid="00008">迅雷</a>新建任务完成自动下载</span><span id="done" style="color:red">0</span><span>/{$count}张</span>
+				</h4>
+			</div>
+			<div class="modal-body">
+				
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-success" data-dismiss="modal">关闭</a>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+<script src="../addons/photobook/template/js/lib.js"></script>
 <script>
     $(function(){
         $('button').click(function(){
-            var id = $(this).data('id')
-            $(this).text('正在下载').removeClass('btn-primary').addClass('btn-danger')
-            $.ajax({
-                url:'{php echo $this->createWebUrl("down_list")}',
-                data:{
-                    op:'down',
-                    one_id:id
-                },
-                type:'post',
-                dataType:'json',
-                success:function(res){
-                    if(res.code == 0){
-                        $("#kk").attr("href","https://demo-photo.oss-cn-beijing.aliyuncs.com/"+res.file); 
-                        $('#kk')[0].click()
-                        $('#d'+res.id).attr('disabled', 'disabled').text('下载完成')     
+            $('button').each(function(index,e){
+               $(this).text('正在下载')
+                var id = $(this).data('id')
+                $.ajax({
+                    url:'{php echo $this->createWebUrl("down_list")}',
+                    data:{
+                        op:'down',
+                        one_id:id,
+                        index:index
+                    },
+                    type:'post',
+                    dataType:'json',
+                    success:function(res){
+                        if(res.code == 0){
+                            var img = $('<div></div>');
+                            img.text('https://demo-photo.oss-cn-beijing.aliyuncs.com/'+res.file);
+                            $('.modal-body').append(img)
+                            $('#done').text(parseInt($('#done').text())+1)
+                            $('#d'+res.id).attr('disabled', 'disabled').text('下载完成').removeClass('btn-primary').addClass('btn-danger') 
+                        }
                     }
-                }
+                })
             })
+           
+            $('#myModal').modal('toggle')
+
+            // var id = $(this).data('id')
+            // $(this).text('正在下载').removeClass('btn-primary').addClass('btn-danger')
+            // $.ajax({
+            //     url:'{php echo $this->createWebUrl("down_list")}',
+            //     data:{
+            //         op:'down',
+            //         one_id:id
+            //     },
+            //     type:'post',
+            //     dataType:'json',
+            //     success:function(res){
+            //         if(res.code == 0){
+            //             $("#kk").attr("href","https://demo-photo.oss-cn-beijing.aliyuncs.com/"+res.file); 
+            //             $('#kk')[0].click()
+            //             $('#d'+res.id).attr('disabled', 'disabled').text('下载完成')     
+            //         }
+            //     }
+            // })
         })
     })
 </script>

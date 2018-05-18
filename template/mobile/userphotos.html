@@ -65,54 +65,14 @@
 	<input type="hidden" value="{$tid}" name="tid" id="tid" >
 	<!-- 侧滑导航根容器 -->
 	<div class="mui-off-canvas-wrap mui-draggable" id="jing1">
-		<!-- 菜单容器 -->
-		<aside class="mui-off-canvas-left" style="width: 40%;">
-			<div class="mui-scroll-wrapper">
-				<div class="mui-scroll">
-					<div class="mui-row touxiang">
-					</div>
-					<ul class="mui-table-view cebians">
-						<li class="mui-table-view-cell">
-							<a href="{php echo $this->createMobileUrl('homea')}">
-								<span class="mui-icon mui-icon-image"></span> 首页
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a href="{php echo $this->createMobileUrl('MyWork')}">
-								<span class="mui-icon mui-icon-starhalf"></span> 我的作品
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a href="{php echo $this->createMobileUrl('OrderList')}">
-								<span class="mui-icon mui-icon-extra mui-icon-extra-regist"></span>我的订单
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a href="{php echo $this->createMobileUrl('usercenter')}">
-								<span class="mui-icon mui-icon-person"></span> 个人中心
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a href="{php echo $this->createMobileUrl('userphotos')}&op=del">
-								<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 照片库
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-						<a href="{php echo $this->createMobileUrl('service')}">
-							<span class="mui-icon mui-icon-extra mui-icon-extra-dictionary"></span> 客服中心
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</aside>
+		
 		<!-- 主页面容器 -->
 		<div class="mui-inner-wrap">
 			<!-- 主页面标题 -->
 			<header class="mui-bar mui-bar-nav">
 				<div class="mui-row">
 					<div class="mui-col-sm-2 mui-col-xs-2">
-						<span class="mui-icon mui-action-menu mui-icon-bars mui-pull-left" id="cebian_but"></span>
+						<span  id="cebian_but"></span>
 					</div>
 					<div class="mui-col-sm-10 mui-col-xs-10">
 						{if $_GPC['op'] !='del'}
@@ -185,7 +145,7 @@
 											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height: auto;" />
+										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:6em;" />
 									</div>
 								</div>
 							</div>
@@ -209,7 +169,7 @@
 											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height: auto;" />
+										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:6em;" />
 									</div>
 								</div>
 							</div>
@@ -233,7 +193,7 @@
 											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}"  alt="" style="width: 100%;height: auto;" />
+										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}"  alt="" style="width: 100%;height:6em;" />
 									</div>
 								</div>
 							</div>
@@ -678,13 +638,14 @@
 			}
 		})
 	})
+	
 </script>
 <script src="../addons/photobook/template/mobile/js/Sortable.min.js"></script>
 <script type="text/javascript">
 	var syc_photo=function(){
 		$("#items").html("")
 		js_data.forEach(function(val,index,arr){
-			$thiskuai=$('<div class="mui-col-sm-3 mui-col-xs-3"><li class="mui-table-view-cell" id='+val.pid.replace("card_","lik")+' style="background-image: url('+val.img+');"><label class="thislabel"></label></li></div>')
+			$thiskuai=$('<div class="mui-col-sm-3 mui-col-xs-3"><li class="mui-table-view-cell" id='+val.pid.replace("card_","lik")+' style="background-image: url('+val.img+');background-size:100% 100%;"><label class="thislabel"></label></li></div>')
 			$("#items").append($thiskuai)
 			$thiskuai.data("img_url",val.img)
 			$thiskuai.data("img_name",val.img_name)
@@ -698,14 +659,17 @@
 		})
 	}
 	var el = document.getElementById('items');
-	new Sortable(el,{
+	Sortable.create(el,{
 				sort:true, 
+				animation: 150,
 				onEnd: function (/**Event*/evt) { // 拖拽结束
+					$('#footer2').show()
 					syc_idnum()
-				} 
-//				onUpdate: function (/**Event*/evt) { 
-//				console.log(evt)
-//				}
-});
+				},
+				onStart:function(){	
+					$('#footer2').hide()
+				}
+
+	});
 </script>
 </html>

@@ -27,7 +27,11 @@
 		var uploader = new plupload.Uploader({
 			runtimes : 'html5,flash,silverlight,html4',
 			browse_button : 'selectfiles', 
-			//runtimes : 'flash',
+			filters: {
+				mime_types : [ //只允许上传图片和zip文件
+				{ title : "Image files", extensions : "jpg,gif,png,jpeg,bmp" }, 
+				],
+			},
 			container: document.getElementById('container'),
 			flash_swf_url : 'lib/plupload-2.1.2/js/Moxie.swf',
 			silverlight_xap_url : 'lib/plupload-2.1.2/js/Moxie.xap',
