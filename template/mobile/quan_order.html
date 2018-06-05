@@ -10,7 +10,7 @@
 										</div>
 										<div class="mui-col-sm-6 mui-col-xs-6" style="padding-left: 1em;">
 											<div style="color: #2c3e50;">
-												代理注册码
+												{$code['name']}
 												<p>
 													（包含照片书专用券一张）
 												</p>
@@ -47,7 +47,7 @@
 		</div>
 		<script>	
 			function is_agent(){			
-				if({$is_agent} == -1){
+				if({$is_agent} < 0){
 					alert('亲,只有代理商才能购买哦')
 					return false;
 				}

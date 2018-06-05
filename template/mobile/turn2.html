@@ -4,7 +4,8 @@
 		<meta name="viewport" content="width=device-width,user-scalable = no" />
 		<!-- <meta name="viewport" content="width = 1050, user-scalable = no" /> -->
 		<meta charset="utf-8" />
-		<script type="text/javascript" src="../addons/photobook/template/mobile/turn/extras/jquery.min.1.7.js"></script>
+		<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+		<script src="../addons/photobook/template/mobile/layer/layer.js"></script>
 		<script type="text/javascript" src="../addons/photobook/template/mobile/turn/extras/modernizr.2.5.3.min.js"></script>
 		<link href="../addons/photobook/template/mobile/css/mui.min.css" rel="stylesheet" />
 		<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
@@ -84,22 +85,38 @@
 		</div>
 </div>
 		<nav class="mui-bar mui-bar-tab">
-			<a class="mui-tab-item mui-active" href="#tabbar">
+			<a class="mui-tab-item mui-active" href="{php echo $this->createMobileUrl('homea')}">
 				<span class="mui-icon mui-icon-extra mui-icon-extra-find"></span>
 				<span class="mui-tab-label">首页</span>
 			</a>
-			<a class="mui-tab-item" href="{php echo $this->createMobileUrl('ShoppingCart')}">
+			<span class="mui-tab-item" id="car">
 				<span class="mui-icon mui-icon-extra mui-icon-extra-cart"></span>
-				<span class="mui-tab-label">购物车</span>
-			</a>
+				<span class="mui-tab-label" style="padding-left: 0.35em">加入购物车</span>
+			</span>
 			<a class="mui-tab-item" href="#tabbar-with-map">
 				
 			</a>
-			<a class="mui-tab-item" href="{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid']))}" style="background: #e74c3c;color: #fff;font-weight: bold;">
+			<a class="mui-tab-item" href="{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid'],'op'=>$_GPC['op']))}" style="background: #e74c3c;color: #fff;font-weight: bold;">
 				下单购买
 			</a>
 		</nav>
 		<script type="text/javascript">
+			$(function(){
+				$('#car').click(function(){
+					$.post("{php echo $this->createMobileUrl('turn')}",
+					{order_id:"{$_GET['tid']}",op:"{$_GPC['op']}"},
+					function(res){
+						if(res.code == 0)
+							layer.msg('成功加入购物车')
+						else if(res.code ==1)
+							layer.msg('加入购物车失败')
+						else if(res.code ==2)
+							layer.msg('已经加入购物车了')
+						else if(res.code ==3)
+							layer.msg('不能加入购物车，该订单已经支付了,如想再次购买，请直接点下单购买哦')
+					},'json')
+				})
+			})
 			window.onload=function(){
 				var windows_width= $(window).width()
 				$("#alls").css({

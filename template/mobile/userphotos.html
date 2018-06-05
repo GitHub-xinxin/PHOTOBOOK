@@ -13,6 +13,7 @@
 	<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
 	<link href="../addons/photobook/template/mobile/css/animate.css" rel="stylesheet">
 	<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+	<script src="../addons/photobook/template/mobile/js/jquery.dragsort-0.5.2.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
 	</script>
@@ -320,53 +321,66 @@
 	$(".cardspan").hide()
 	var js_data=new Array;
 	var index=1;
+	var limit =null;
 	var muicard=document.getElementsByClassName("mui-card")
 	var func=function() {
+			
 		var thisid="#"+this.id;
 		$this_span=$(thisid).find('span')
 		console.log($this_span[0])
 		var imgs=$(thisid).find('img').attr("src")
-		if($this_span.text()==0){
-				//第一次选定图片
-				var pid=this.id
-				var img_name = $(thisid).find('img').attr('data-name')
-				js_data.push({
-					pid:pid,
-					img:imgs,
-					img_name:img_name
-				})
-				
-				$(thisid).addClass("imgselected")
-				$this_span.text(index)
-				$this_span.show()
-				$("#yixuan").text(index)
-				index=index+1
-			}else{
-			    var pid=this.id
-			    $order=$this_span.text()
-			    console.log($order)
-			    js_data.splice($order-1,1);
-			    $(".imgselected").each(function(ind,obj){
-			    	$tspan=$(obj).find('span')
-			    	var tspanval=$tspan.text();
-			    	if(tspanval>0){
-			    		if(tspanval==$order){
-			    			index=index-1
-			    			$("#yixuan").text(index-1)
-			    			$this_span.text(0)
-			    			$this_span.hide()
-			    		}
-			    		if(parseInt(tspanval)>$order){
-			    			console.log('-')
-					    	console.log(tspanval)
-					    	console.log($order)
-					    	console.log('-')
-			    			$tspan.text(tspanval-1)
-			    		}
-			    	}
-			    })
+		if($this_span.text() == 0){
+			if("{$imgshell}" == 0)
+				limit = 69;
+			else if("{$imgshell}" == 1 || "{$imgshell}" == 2)
+				limit = 51;
+			if(index == limit){
+				layer.msg('该模板,你最多能选取'+(limit-1)+'张照片',{icon:5})
+				return
 			}
+			//第一次选定图片
+			var pid=this.id
+			var img_name = $(thisid).find('img').attr('data-name')
+			js_data.push({
+				pid:pid,
+				img:imgs,
+				img_name:img_name
+			})
+			
+			$(thisid).addClass("imgselected")
+			$this_span.text(index)
+			$this_span.show()
+			$("#yixuan").text(index)
+			index=index+1
+		}else{
+			
+			
+			var pid=this.id
+			$order=$this_span.text()
+			console.log($order)
+			js_data.splice($order-1,1);
+			$(".imgselected").each(function(ind,obj){
+				$tspan=$(obj).find('span')
+				var tspanval=$tspan.text();
+				if(tspanval>0){
+					if(tspanval==$order){
+						index=index-1
+						$("#yixuan").text(index-1)
+						$this_span.text(0)
+						$this_span.hide()
+					}
+					if(parseInt(tspanval)>$order){
+						console.log('-')
+						console.log(tspanval)
+						console.log($order)
+						console.log('-')
+						
+						$tspan.text(tspanval-1)
+					}
+				}
+			})
 		}
+	}
 		$("#queding").bind('tap',function(e) {
 			var dangqianimgid=sessionStorage.getItem("dangqianimgid");
 			
@@ -394,7 +408,7 @@
 					
 					var order=JSON.parse(zhengze(jsonarr));
 					var arrimgt=JSON.parse(zhengze(arrimgtstr));
-	
+
 					// alert(Source_of_change)
 					// console.log(Source_of_change)
 					var bi;
@@ -500,7 +514,7 @@
 				if(data.errors==0){
 					mui.toast("提交成功",{ duration:'short', type:'div' });
 					//alert("将进入turn,mainid:"+data.mainid+",wid:"+wid);
-					turnurl="{$url_Turn}&tid="+data.mainid+"&wid="+wid+"&time="+Date.parse( new Date());
+					turnurl="{$url_Turn}&tid="+data.mainid+"&wid="+wid+"&time="+Date.parse( new Date())+"&op={$_GPC['op']}";
 					//alert(turnurl);
 					mui.openWindow({  
 						url:turnurl
@@ -538,7 +552,7 @@
 			})
 			//上传照片
 			document.getElementById("upload_pic").addEventListener("tap",function(){
-				window.location.href="{php echo $this->createMobileUrl('upload_user_photo')}"+'&tid='+"{$tid}"
+				window.location.href="{php echo $this->createMobileUrl('upload_user_photo')}"+'&tid='+"{$tid}"+"&op={$_GPC['op']}"
 			})
 			document.getElementById("del").addEventListener("tap",function(){
 				if(js_data.length == 0){
@@ -638,10 +652,10 @@
 			}
 		})
 	})
-	
-</script>
-<script src="../addons/photobook/template/mobile/js/Sortable.min.js"></script>
-<script type="text/javascript">
+
+	</script>
+	<script src="../addons/photobook/template/mobile/js/Sortable.min.js"></script>
+	<script type="text/javascript">
 	var syc_photo=function(){
 		$("#items").html("")
 		js_data.forEach(function(val,index,arr){
@@ -659,17 +673,29 @@
 		})
 	}
 	var el = document.getElementById('items');
-	Sortable.create(el,{
-				sort:true, 
-				animation: 150,
-				onEnd: function (/**Event*/evt) { // 拖拽结束
-					$('#footer2').show()
-					syc_idnum()
-				},
-				onStart:function(){	
-					$('#footer2').hide()
-				}
+	// $('#items').on('ondrag','li',function(){
 
+	// })
+	// el.dragsort({
+	// 	dragSelector: "li",
+	// 	dragBetween: true,
+	// 	dragEnd: syc_idnum, //拖拽完成后回调函数
+	// 	placeHolderTemplate: "<li class='placeHolder'><div></div></li>" //拖动是阴影
+	// });
+	Sortable.create(el,{
+		sort:true, 
+		animation: 150,
+		onEnd: function (/**Event*/evt) { // 拖拽结束
+			$('#footer2').show()
+			syc_idnum()
+		},
+		onStart:function(){	
+			//alert('start')
+			$('#footer2').hide()
+		},
+		onMove:function(){
+			
+		}
 	});
 </script>
 </html>

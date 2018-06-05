@@ -1,0 +1,72 @@
+{template 'header'}
+<style>
+	.facewrapper {
+		position: absolute;
+		z-index: 999;
+		background: #fff;
+		width: 19pc;
+		height: 20pc;
+		overflow: scroll;
+		border: solid 1px #ccc;
+		margin-top: -20pc;
+		/* display: none; */
+	}
+	
+	.facewrapper .faceitem {
+		display: block;
+		width: 2.5pc;
+		height: 2.5pc;
+		float: left;
+		padding: 0.45pc;
+		cursor: pointer;
+	}
+
+</style>
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div style="text-align: center;margin-top: 1.5em">
+		<textarea style="width: 90%" name="" id="comment" cols="10" rows="10"></textarea>
+	</div>
+	<div class="facewrapper">
+		<?php 
+			for($i=1;$i<=75;$i++){
+				echo '<img class="faceitem" src="../addons/photobook/template/images/arclist/'.$i.'.gif" data-emstr="[em_'.$i.']" />';
+			}
+		?>
+	</div>
+	<button class="qqface" style="margin-left: 5em">表情</button>
+
+	<button style="margin-left: 7em;display: inline;" id="submitt">发表评论</button>
+</div>
+<script>
+	$(function(){
+		$(".facewrapper").hide();
+		$(".qqface").click(function() {
+			$(".facewrapper").toggle();
+		});
+		$(".facewrapper").on('tap','img',function() {
+			$("#comment").val($("#comment").val() + $(this).attr("data-emstr"));
+			$(".facewrapper").hide();
+		});
+		$('#submitt').click(function(){
+			var comment = $("#comment").val()
+			var url= "{php echo $this->createMobileUrl('comment')}";
+
+			$.post(url,
+			{order_id:"{$_GPC['order_id']}",comment:comment},
+			function(res){
+				if(res.code == 0){
+					layer.msg('评论成功')
+					window.location.href = "{php echo $this->createMobileUrl('order_comment')}"
+				}	
+				else if(res.code ==1){
+					layer.msg('评论失败了哦',{icon:5})
+				}
+			},'json')
+		})
+		$('.facewrapper').scroll(function(){
+			layer.msg('dd')
+		})
+	})
+	
+</script>
+{template 'footer'}

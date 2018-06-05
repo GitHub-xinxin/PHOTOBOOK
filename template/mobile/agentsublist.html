@@ -25,12 +25,13 @@
 			$.post('{php echo $this->createMobileUrl("giveHeCard")}', {number:count,openid: openid,coid:coid}, function(data, textStatus, xhr) {
 				if(data == 1){
 					alert('操作成功');
+					window.location.href = "{php echo $this->createMobileUrl('AgentCardList')}"
 				}else{
-					alert('操作失败');
+					alert('操作失败,卡卷数量不足');
+					window.location.href = "{php echo $this->createMobileUrl('AgentCardList')}"
 				}
 			});
-		}
-		
+		}	
 	}
 </script>
 {template 'footer'}

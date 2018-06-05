@@ -6,19 +6,18 @@
 			 <ul class="mui-table-view"> 
 			 	{loop $cards $k $c}
 		        <li class="mui-table-view-cell mui-collapse">
-		            <a class="mui-navigate-right" href="#">代金券<?php echo $k+1;?></a>
+		            <a class="mui-navigate-right" href="#">{$c['name']}</a>
 		            <div class="mui-collapse-content">
 		                <p>数量：{$c['number']}</p>
 		                <p>代理商价：{$c['dealer_price']}</p>
 						<p>零售价：{$c['list_price']}</p>
 						{if $user['dealer'] != -1}
 							<div style="text-align: center">	
-								<a href="{php echo $this->createMobileUrl('agentsublist',array('cid'=>$c['id'],'cnum'=>$c['number']))}" class="mui-btn mui-btn-primary" style="width: 45%">转卖</a>
-								<a href="{php echo $this->createMobileUrl('homea')}" class="mui-btn mui-btn-primary" style="width: 45%">使用</a>
-							</div>
-							
+								<a href="{php echo $this->createMobileUrl('agentsublist',array('cid'=>$c['id'],'cnum'=>$c['number']))}" class="mui-btn mui-btn-danger" style="width: 45%">分享</a>
+								<a href="{php echo $this->createMobileUrl('usable',array('price'=>$c['list_price']))}" class="mui-btn mui-btn-success" style="width: 45%">使用</a>
+							</div>	
 						{elseif $user['dealer'] == -1}
-							<a href="{php echo $this->createMobileUrl('homea')}" class="mui-btn mui-btn-primary" style="width: 100%">使用</a>
+							<a href="{php echo $this->createMobileUrl('usable',array('price'=>$c['list_price']))}" class="mui-btn mui-btn-success" style="width: 100%">使用</a>
 						{/if}
 						</div>
 		        </li>

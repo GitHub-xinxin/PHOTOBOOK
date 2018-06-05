@@ -37,33 +37,17 @@
 				<div class="mui-card-content" id="pingjiaX">
 					<div>
 						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:;">
-									<img class="mui-media-object mui-pull-left" src="../addons/photobook/template/mobile/img/quan.png">
-									<div class="mui-media-body">
-										昵称
-										<p class='mui-ellipsis'>真心不错</p>
-									</div>
-								</a>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:;">
-									<img class="mui-media-object mui-pull-left" src="../addons/photobook/template/mobile/img/quan.png">
-									<div class="mui-media-body">
-										昵称
-										<p class='mui-ellipsis'>真心不错</p>
-									</div>
-								</a>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a href="javascript:;">
-									<img class="mui-media-object mui-pull-left" src="../addons/photobook/template/mobile/img/quan.png">
-									<div class="mui-media-body">
-										昵称
-										<p class='mui-ellipsis'>真心不错</p>
-									</div>
-								</a>
-							</li>
+							{loop $template_comment $row}
+								<li class="mui-table-view-cell mui-media">
+									<a href="javascript:;">
+										<img class="mui-media-object mui-pull-left" style="border-radius: 50%" src="{$row['headimgurl']}">
+										<div class="mui-media-body">
+											{$row['nickname']}
+											<p class='mui-ellipsis'>{$row['comment']}</p>
+										</div>
+									</a>
+								</li>
+							{/loop}
 						</ul>
 					</div>
 					<div style="height: 4em;"></div>
@@ -72,7 +56,7 @@
 		</div>
 	</div>
 </div>
-<a href="{php echo $this->createMobileUrl('userphotos',array('tid'=>$tid))}" style="color: #fff">
+<a href="{php echo $this->createMobileUrl('userphotos',array('tid'=>$tid,'op'=>$_GPC['op']))}" style="color: #fff">
 	<nav class="mui-bar mui-bar-tab" style="text-align: center;padding-top: 1em;background-color: #f39c12;box-shadow: 0px -5px 5px #888888;">
 		<span>开始定制</span>
 	</nav>

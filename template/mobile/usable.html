@@ -1,0 +1,38 @@
+{template 'header'}
+
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div style="font-size: 12px;font-family: '微软雅黑';">
+			<span class="mui-icon mui-icon-arrowdown"></span>
+			照片书
+		</div>
+		<div class="mui-row">
+		{loop $list $l}
+			<div class="mui-col-sm-6 mui-col-xs-6">
+				<a href="{php echo $this->createMobileUrl('detail',array('id'=>$l['id'],'op'=>'card'))}">
+				<div class="mui-card">
+					<div class="mui-card-content" style="overflow: hidden;">
+						<img src="{media $l['thumb']}" style="width: 100%;" /></div>
+					<div class="mui-row">
+					</div>
+					<div>
+						{$l['name']}
+					</div>
+					<div class="mui-row">
+						<div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;">
+							{$l['price']}￥
+						</div>
+						<div class="mui-col-sm-6 mui-col-xs-6">
+							销量：{$l['sales']}
+						</div>
+					</div>
+				</div>
+				</a>
+			</div>
+			{/loop}
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+
+{template 'footer'}

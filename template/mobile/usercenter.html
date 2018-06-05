@@ -36,28 +36,34 @@
 								<li class="mui-table-view-cell">
 									<div class="mui-row">
 										<div class="mui-col-sm-4 mui-col-xs-4">
-											<div style="text-align: center;">
-												{$pay_count}
-											</div>
-											<div style="text-align: center;">
-												未支付
-											</div>
+											<a style="color: black" href="{php echo $this->createMobileUrl('order_not_pay')}">
+												<div style="text-align: center;">
+													{$pay_count}
+												</div>
+												<div style="text-align: center;">
+													未支付
+												</div>
+											</a>
 										</div>
 										<div class="mui-col-sm-4 mui-col-xs-4">
-											<div style="text-align: center;">
-												{$warting_count}
-											</div>
-											<div style="text-align: center;">
-												待收货
-											</div>
+											<a style="color: black"  href="{php echo $this->createMobileUrl('order_take')}">
+												<div style="text-align: center;">
+													{$warting_count}
+												</div>
+												<div style="text-align: center;">
+													待收货
+												</div>
+											</a>
 										</div>
 										<div class="mui-col-sm-4 mui-col-xs-4">
-											<div style="text-align: center;">
-												{$comment_count}
-											</div>
-											<div style="text-align: center;">
-												待评价
-											</div>
+											<a style="color: black"  href="{php echo $this->createMobileUrl('order_comment')}">
+												<div style="text-align: center;">
+													{$comment_count}
+												</div>
+												<div style="text-align: center;">
+													待评价
+												</div>
+											</a>	
 										</div>
 									</div>
 								</li>

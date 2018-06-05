@@ -44,8 +44,10 @@
 									<div>
 										<p>制作时间：</p>
 										<p>{php echo date('Y-m-d H:m',$order['createtime'])}</p>
-										<p>快递公司：{$order['express']}</p>
-										<p>快递单号：{$order['express_id']}</p>
+										{if $Atitle != '未支付订单'}
+											<p>快递公司：{$order['express']}</p>
+											<p>快递单号：{$order['express_id']}</p>
+										{/if}
 									</div>
 								</div>
 							</div>
@@ -54,19 +56,32 @@
 							<p>{$order['template']['price']}&nbsp;X&nbsp;{$order['count']}</p>
 						</div>
 						<div class="mui-col-sm-12 mui-col-xs-12">
-							<div class="mui-row">
-								<div class="mui-col-sm-3 mui-col-xs-3">
-								</div>
+							<div class="mui-row">	
 								<div class="mui-col-sm-9 mui-col-xs-9">
 									<button type="button" data-id="{$order['id']}" class="mui-btn mui-btn-success mui-btn-outlined Order_details">订单详情</button>
 									<button type="button" data-id="{$order['id']}" class="mui-btn mui-btn-success mui-btn-outlined Preview_of_works">作品预览</button>
-									{if $order['status']==0}
-									<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order['id']))}">
+									
+									{if $order['status'] == 0}
+									<a href="{php echo $this->createMobileUrl('Place_order',array('order_id'=>$order['id']))}">
 										<button type="button" class="mui-btn mui-btn-success mui-btn-outlined">去支付</button>
 									</a>
-									{/if}
+									{/if}			
 								</div>
-							</div>
+								{if $order['status'] ==3}
+									<div class="mui-col-sm-3 mui-col-xs-3">
+										<button type="button" data-id="{$order['id']}" class="mui-btn mui-btn-warning mui-btn-outlined take">确认收货</button>
+									</div>
+								{elseif $order['status'] ==4}
+									<div class="mui-col-sm-3 mui-col-xs-3">
+										<button type="button" data-id="{$order['id']}" class="mui-btn mui-btn-warning mui-btn-outlined comment">评论</button>
+									</div>
+								{/if}
+								{if $Atitle == "购物车"}
+									<div class="mui-col-sm-3 mui-col-xs-3">
+										<button type="button" data-id="{$order['id']}" class="mui-btn mui-btn-danger mui-btn-outlined del">删 除</button>
+									</div>
+								{/if}
+							</div>	
 						</div>
 					</div>
 				</li>
@@ -76,8 +91,52 @@
 		<div style="height: 4em;"></div>
 	</div>
 </div>
-<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+
+	$(function(){
+		$('.del').click(function(){
+			var url= "{php echo $this->createMobileUrl('ShoppingCart')}";
+			$.post(url,
+			{order_id:$(this).data("id")},
+			function(res){
+				if(res.code == 0){
+					layer.msg('删除成功')
+				}	
+				else if(res.code ==1){
+					layer.msg('删除失败')
+				}
+				location.reload()	
+			},'json')
+		})
+		$('.take').click(function(){
+			var url= "{php echo $this->createMobileUrl('order_take')}";
+			$.post(url,
+			{order_id:$(this).data("id")},
+			function(res){
+				if(res.code == 0){
+					layer.msg('确认成功,可对宝贝评论哦')
+				}	
+				else if(res.code ==1){
+					layer.msg('确认失败')
+				}
+				location.reload()	
+			},'json')
+		})
+		$('.comment').click(function(){
+			var url= "{php echo $this->createMobileUrl('order_comment')}";
+			$.post(url,
+			{order_id:$(this).data("id")},
+			function(res){
+				if(res.code == 0){
+					window.location.href = "{php echo $this->createMobileUrl('comment')}"+"&order_id= "+res.order_id;
+				}	
+				else if(res.code ==1){
+					layer.msg('你已经评论了哦')
+				}
+			},'json')
+		})
+	})
+	
 	$(".Order_details").bind("tap",function(e){
 		var orderid=$(this).data("id")
 		window.location.href="{$url_details}"+"&order_id="+orderid;
@@ -88,8 +147,6 @@
 		window.location.href="{$url_Preview}"+"&tid="+orderid;
 		console.log(orderid)
 	})
-	$(function(){
-
-	})
+	
 </script>
 {template 'footer'}

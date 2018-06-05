@@ -79,7 +79,7 @@
 									<label>使用卡券</label>
 									<select name="card" id="card">
 									  <option value ="0">不使用</option>
-									  <option value ="1">使用</option>
+									  <option value ="1" {if $_GPC['op'] == 'card' || !empty($order_info['card_id'])} selected="selected"{/if}>使用</option>
 									</select>
 								</div>
 								<div class="mui-input-row" id="card_list">
@@ -87,19 +87,14 @@
 									<select name="select_card" id="select_card" style="color:red">
 										{if !empty($card_list)}
 											{loop $card_list $row}
-												<option value="{$row['id']}">- {$row['list_price']}元</option>
+												<option value="{$row['id']}" {if $order_info['card_id'] == $row['id']} selected="selected"{/if}> {$row['name']}</option>
 											{/loop}
 										{else}
 											<option value="0">无可用卡卷</option>
 										{/if}
 									</select>
 								</div>
-								<div class="mui-input-row">
-									<label>加入购物车</label>
-									<div id="car"class="mui-switch">
-									  <div class="mui-switch-handle"></div>
-									</div>
-								</div>
+		
 								<input type="hidden" name="shopping_cart">
 								<div class="mui-input-row">
 									<label>邮政快递</label>
@@ -133,27 +128,12 @@
 		</div>
 		<script src="../addons/photobook/template/js/jquery.min.js"></script>
 		<script>
-			document.getElementById("car").addEventListener("toggle",function(event){
-				if(event.detail.isActive){
-					document.getElementsByName('shopping_cart')[0].value = 1;
-				}else{
-					document.getElementsByName('shopping_cart')[0].value = 0;
-				}
-			})
-			function check(){		
-				var val = document.getElementById('agree').checked;
-				if(val == false){
-						alert("请同意免责条款");
-						return false;
-				}
-				var phone =document.getElementsByName('phone')[0].value;
-				if(!(/^1[34578]\d{9}$/.test(phone))){ 
-					alert("请填写正确的11位电话号码,请重填");  
-					return false; 
-				} 
-			}
 			$(function(){
-				$('#card_list').hide();
+				if("{$_GPC['op']}" == 'card' || "{$order_info['card_id']}" !=0){
+					$('#card_list').show();
+				}else{
+					$('#card_list').hide();
+				}
 				$('#card').change(function(){
 					if($(this).val() == 1)
 						$('#card_list').show();
@@ -161,5 +141,17 @@
 						$('#card_list').hide();
 				})
 			})
+			function check(){		
+				var val = document.getElementById('agree').checked;
+				if(val == false){
+						alert("请仔细阅读免责条款");
+						return false;
+				}
+				var phone =document.getElementsByName('phone')[0].value;
+				if(!(/^1[34578]\d{9}$/.test(phone))){ 
+					// alert("请填写正确的11位电话号码,请重填");  
+					// return false; 
+				} 
+			}		
 		</script>
 {template 'footer'}

@@ -20,6 +20,10 @@ td{
 
 	<div class="panel-body" style="text-align: center;">
         <form class="form-inline" role="form" action="" method="post">
+            <div class="form-group">
+                <label class="sr-only" for="name">卡卷名称</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="名称">
+            </div>
           <div class="form-group">
             <label class="sr-only" for="name">数量</label>
             <input type="number" class="form-control" id="number" name="number" placeholder="数量">
@@ -55,6 +59,7 @@ td{
 
                 <tr>
                     <th>选择</th>
+                    <th>名称</th>
                     <th>数量</th>
                     <th>代理商价格</th>
                     <th>模板价格</th>
@@ -70,6 +75,7 @@ td{
                     <td>
                         <input type="checkbox" name="se[]" value="{$l['id']}"></td>
                     </td>
+                        <td>{$l['name']}</td>
                         <td>{$l['number']}</td>
                         <td>{$l['dealer_price']}</td>
                         <td>{$l['list_price']}</td>

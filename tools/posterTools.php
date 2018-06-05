@@ -470,7 +470,7 @@ function createzLeaf_2($T_img,$U_img,$inxy,$xy,$newurl,$r){
 	$h = imagesy($img);
 	//参数：目标图，原图，目标位置，原图位置，目标尺寸，原图尺寸
 	//之所以原图像在上边，那是因为源图像是png格式，要起到蒙版的效果
-	imagecopyresized($target, $img, $data['left'], $data['top'], 0, 0, $data['width'], $data['height'], $w, $h);
+	imagecopyresized($target, $img, $data['left'], $data['top'], 12, 12, $data['width'], $data['height'], $w-24, $h-24);
 	imagedestroy($img);
 	return $target;
 }

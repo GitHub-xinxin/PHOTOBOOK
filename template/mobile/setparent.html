@@ -33,9 +33,20 @@
 				</div>
 			</form>
 		</div>
+		<div style="margin-top: 0.5em">
+			<button style="width: 100%"  class="mui-btn mui-btn-success" id="join">无邀请码入口</button>
+		</div>
 		<div style="height: 4em;"></div>
 	</div>
 </div>
 </div>
 </div>
+<script>
+	$(function(){
+		$('#join').click(function(){
+			window.location.href = "{php echo $this->createMobileUrl('BecomeAgent')}"
+		})
+	})
+	
+</script>
 {template 'footer'}
