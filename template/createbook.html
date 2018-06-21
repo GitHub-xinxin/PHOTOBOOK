@@ -72,7 +72,16 @@
                             <input type="text" class="form-control" placeholder="" name="size" value="{$book['size']}">
                         </div>
                 </div> -->
-
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-1 control-label">模板类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <select name="kind" id="" class="form-control">
+                            {loop $kind_list $row}
+                                <option value="{$row['id']}" {if $row['id'] == $book['kind']} selected {/if}>{$row['name']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-xs-12 col-sm-3 col-md-1 control-label">价格</label>
                     <div class="col-sm-9 col-xs-12">

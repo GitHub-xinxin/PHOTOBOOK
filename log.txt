@@ -1,302 +1,93 @@
 
-2018-05-27 23:32:37 : 进入createMPoster
-2018-05-27 23:32:37 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:32:37 : createMPoster: share===>false
-2018-05-27 23:32:51 : 进入getQR
-2018-05-27 23:32:51 : share记录{"id":"59","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527435157"}
-2018-05-27 23:32:51 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-27 23:32:51 : 在func内，获取的最大sceneid为20051
-2018-05-27 23:32:51 : 在func内，最后sceneid为:20052
-2018-05-27 23:32:51 : 进入poster-rtype记录1
-2018-05-27 23:32:51 : 临时二维码创建返回值{"ticket":"gQFQ8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyVy1HMjBiUGxjSmgxNnpzTzFyMXcAAgSjzwpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02W-G20bPlcJh16zsO1r1w"}
-2018-05-27 23:32:51 : http://weixin.qq.com/q/02W-G20bPlcJh16zsO1r1w
-2018-05-27 23:32:51 : qrcode == Resource id #54
-2018-05-27 23:32:52 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter59.png
-2018-05-27 23:38:54 : 进入createMPoster
-2018-05-27 23:38:54 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:38:54 : createMPoster: share===>false
-2018-05-27 23:38:59 : 进入createMPoster
-2018-05-27 23:38:59 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:38:59 : createMPoster: share===>{"id":"60","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527435534"}
-2018-05-27 23:38:59 : 有这个人的share记录了
-2018-05-27 23:39:05 : 进入createMPoster
-2018-05-27 23:39:05 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:39:05 : createMPoster: share===>{"id":"60","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527435534"}
-2018-05-27 23:39:05 : 有这个人的share记录了
-2018-05-27 23:39:21 : 进入getQR
-2018-05-27 23:39:21 : share记录{"id":"60","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527435534"}
-2018-05-27 23:39:21 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-27 23:39:21 : 在func内，获取的最大sceneid为20052
-2018-05-27 23:39:21 : 在func内，最后sceneid为:20053
-2018-05-27 23:39:21 : 进入poster-rtype记录1
-2018-05-27 23:39:21 : 临时二维码创建返回值{"ticket":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s"}
-2018-05-27 23:39:21 : http://weixin.qq.com/q/02dONs0IPlcJh14FuOxr1s
-2018-05-27 23:39:21 : qrcode == Resource id #54
-2018-05-27 23:39:21 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter60.png
-2018-05-27 23:39:36 : 进入getQR
-2018-05-27 23:39:36 : share记录{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:39:36 : 进入share非空记录{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:39:36 : poster值：{"id":"11","uniacid":"2","title":"\u6d77\u62a5","data":"[{\"left\":\"162px\",\"top\":\"305px\",\"type\":\"qr\",\"width\":\"142px\",\"height\":\"147px\"},{\"left\":\"186px\",\"top\":\"30px\",\"type\":\"img\",\"width\":\"80px\",\"height\":\"80px\"},{\"left\":\"164px\",\"top\":\"181px\",\"type\":\"name\",\"width\":\"120px\",\"height\":\"89px\",\"size\":\"10px\",\"color\":\"#6fa8dc\"}]","rtype":"1","kword":"\u6d77\u62a5","winfo1":"\u6b63\u5728\u751f\u6210\u6d77\u62a5..","ftips":"\u3010#\u6635\u79f0#\u3011\u6b22\u8fce\u5173\u6ce8\uff0c\u4f60\u662f\u7531\u3010#\u4e0a\u7ea7#\u3011\u63a8\u8350","utips":"\u4f60\u7684\u670b\u53cb\u3010#\u6635\u79f0#\u3011\u5173\u6ce8\u4e86","utips2":null,"createtime":"1527429414","bg":"images\/2\/2018\/05\/kmvDLQSgLKH242vQQWHRMHQqQvs2Hk.png","rule_id":"18"}
-2018-05-27 23:39:36 : 进入临时二维码{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:39:36 : qrcode记录{"id":"74","uniacid":"2","acid":"2","type":"","extra":"0","qrcid":"20053","scene_str":"","name":"\u6d77\u62a5","keyword":"\u6d77\u62a5","model":"1","ticket":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","expire":"2592000","subnum":"0","createtime":"1527435561","status":"1"}
-2018-05-27 23:39:36 : 进入out
-2018-05-27 23:39:36 : http://weixin.qq.com/q/02dONs0IPlcJh14FuOxr1s
-2018-05-27 23:39:36 : qrcode == Resource id #55
-2018-05-27 23:39:36 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter60.png
-2018-05-27 23:39:43 : 进入getQR
-2018-05-27 23:39:43 : share记录{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:39:43 : 进入share非空记录{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:39:43 : poster值：{"id":"11","uniacid":"2","title":"\u6d77\u62a5","data":"[{\"left\":\"162px\",\"top\":\"305px\",\"type\":\"qr\",\"width\":\"142px\",\"height\":\"147px\"},{\"left\":\"186px\",\"top\":\"30px\",\"type\":\"img\",\"width\":\"80px\",\"height\":\"80px\"},{\"left\":\"164px\",\"top\":\"181px\",\"type\":\"name\",\"width\":\"120px\",\"height\":\"89px\",\"size\":\"10px\",\"color\":\"#6fa8dc\"}]","rtype":"1","kword":"\u6d77\u62a5","winfo1":"\u6b63\u5728\u751f\u6210\u6d77\u62a5..","ftips":"\u3010#\u6635\u79f0#\u3011\u6b22\u8fce\u5173\u6ce8\uff0c\u4f60\u662f\u7531\u3010#\u4e0a\u7ea7#\u3011\u63a8\u8350","utips":"\u4f60\u7684\u670b\u53cb\u3010#\u6635\u79f0#\u3011\u5173\u6ce8\u4e86","utips2":null,"createtime":"1527429414","bg":"images\/2\/2018\/05\/kmvDLQSgLKH242vQQWHRMHQqQvs2Hk.png","rule_id":"18"}
-2018-05-27 23:39:43 : 进入临时二维码{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:39:43 : qrcode记录{"id":"74","uniacid":"2","acid":"2","type":"","extra":"0","qrcid":"20053","scene_str":"","name":"\u6d77\u62a5","keyword":"\u6d77\u62a5","model":"1","ticket":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","expire":"2592000","subnum":"0","createtime":"1527435561","status":"1"}
-2018-05-27 23:39:43 : 进入out
-2018-05-27 23:39:43 : http://weixin.qq.com/q/02dONs0IPlcJh14FuOxr1s
-2018-05-27 23:39:43 : qrcode == Resource id #55
-2018-05-27 23:39:43 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter60.png
-2018-05-27 23:41:03 : 进入createMPoster
-2018-05-27 23:41:03 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:41:03 : createMPoster: share===>{"id":"60","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02dONs0IPlcJh14FuOxr1s","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20053","parentid":"0","ticketid":"gQFb8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZE9OczBJUGxjSmgxNEZ1T3hyMXMAAgQp0QpbAwQAjScA","createtime":"1527435534"}
-2018-05-27 23:41:03 : 有这个人的share记录了
-2018-05-27 23:41:03 : 没有生成海报，返回以前生成的
-2018-05-27 23:52:40 : 进入createMPoster
-2018-05-27 23:52:40 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:52:40 : createMPoster: share===>false
-2018-05-27 23:52:45 : 进入createMPoster
-2018-05-27 23:52:45 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:52:45 : createMPoster: share===>{"id":"61","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527436360"}
-2018-05-27 23:52:45 : 有这个人的share记录了
-2018-05-27 23:52:51 : 进入createMPoster
-2018-05-27 23:52:51 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:52:51 : createMPoster: share===>{"id":"61","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527436360"}
-2018-05-27 23:52:51 : 有这个人的share记录了
-2018-05-27 23:52:51 : 进入getQR
-2018-05-27 23:52:51 : share记录{"id":"61","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527436360"}
-2018-05-27 23:52:51 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-27 23:52:51 : 在func内，获取的最大sceneid为20053
-2018-05-27 23:52:51 : 在func内，最后sceneid为:20054
-2018-05-27 23:52:51 : 进入poster-rtype记录1
-2018-05-27 23:52:51 : 临时二维码创建返回值{"ticket":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l"}
-2018-05-27 23:52:51 : http://weixin.qq.com/q/02wabt18PlcJh15jxO1r1l
-2018-05-27 23:52:51 : qrcode == Resource id #54
-2018-05-27 23:52:51 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter61.png
-2018-05-27 23:53:01 : 进入createMPoster
-2018-05-27 23:53:01 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:53:01 : createMPoster: share===>{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:01 : 有这个人的share记录了
-2018-05-27 23:53:01 : 没有生成海报，返回以前生成的
-2018-05-27 23:53:06 : 进入createMPoster
-2018-05-27 23:53:06 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:53:06 : createMPoster: share===>{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:06 : 有这个人的share记录了
-2018-05-27 23:53:06 : 没有生成海报，返回以前生成的
-2018-05-27 23:53:11 : 进入createMPoster
-2018-05-27 23:53:11 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:53:11 : createMPoster: share===>{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:11 : 有这个人的share记录了
-2018-05-27 23:53:11 : 没有生成海报，返回以前生成的
-2018-05-27 23:53:15 : 进入getQR
-2018-05-27 23:53:15 : share记录{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:15 : 进入share非空记录{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:15 : poster值：{"id":"11","uniacid":"2","title":"\u6d77\u62a5","data":"[{\"left\":\"34px\",\"top\":\"100px\",\"type\":\"qr\",\"width\":\"209px\",\"height\":\"216px\"},{\"left\":\"226px\",\"top\":\"30px\",\"type\":\"img\",\"width\":\"80px\",\"height\":\"80px\"},{\"left\":\"16px\",\"top\":\"9px\",\"type\":\"name\",\"width\":\"120px\",\"height\":\"89px\",\"size\":\"10px\",\"color\":\"#6fa8dc\"}]","rtype":"1","kword":"\u6d77\u62a5","winfo1":"\u6b63\u5728\u751f\u6210\u6d77\u62a5..","ftips":"\u3010#\u6635\u79f0#\u3011\u6b22\u8fce\u5173\u6ce8\uff0c\u4f60\u662f\u7531\u3010#\u4e0a\u7ea7#\u3011\u63a8\u8350","utips":"\u4f60\u7684\u670b\u53cb\u3010#\u6635\u79f0#\u3011\u5173\u6ce8\u4e86","utips2":null,"createtime":"1527436337","bg":"images\/2\/2018\/05\/TzIVHr0053I88HnmhHn0HV82gUUNNR.png","rule_id":"18"}
-2018-05-27 23:53:15 : 进入临时二维码{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:15 : qrcode记录{"id":"75","uniacid":"2","acid":"2","type":"","extra":"0","qrcid":"20054","scene_str":"","name":"\u6d77\u62a5","keyword":"\u6d77\u62a5","model":"1","ticket":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","expire":"2592000","subnum":"0","createtime":"1527436371","status":"1"}
-2018-05-27 23:53:15 : 进入out
-2018-05-27 23:53:15 : http://weixin.qq.com/q/02wabt18PlcJh15jxO1r1l
-2018-05-27 23:53:15 : qrcode == Resource id #55
-2018-05-27 23:53:15 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter61.png
-2018-05-27 23:53:16 : 进入getQR
-2018-05-27 23:53:16 : share记录{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:16 : 进入share非空记录{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:16 : poster值：{"id":"11","uniacid":"2","title":"\u6d77\u62a5","data":"[{\"left\":\"34px\",\"top\":\"100px\",\"type\":\"qr\",\"width\":\"209px\",\"height\":\"216px\"},{\"left\":\"226px\",\"top\":\"30px\",\"type\":\"img\",\"width\":\"80px\",\"height\":\"80px\"},{\"left\":\"16px\",\"top\":\"9px\",\"type\":\"name\",\"width\":\"120px\",\"height\":\"89px\",\"size\":\"10px\",\"color\":\"#6fa8dc\"}]","rtype":"1","kword":"\u6d77\u62a5","winfo1":"\u6b63\u5728\u751f\u6210\u6d77\u62a5..","ftips":"\u3010#\u6635\u79f0#\u3011\u6b22\u8fce\u5173\u6ce8\uff0c\u4f60\u662f\u7531\u3010#\u4e0a\u7ea7#\u3011\u63a8\u8350","utips":"\u4f60\u7684\u670b\u53cb\u3010#\u6635\u79f0#\u3011\u5173\u6ce8\u4e86","utips2":null,"createtime":"1527436337","bg":"images\/2\/2018\/05\/TzIVHr0053I88HnmhHn0HV82gUUNNR.png","rule_id":"18"}
-2018-05-27 23:53:16 : 进入临时二维码{"id":"61","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"20054","parentid":"0","ticketid":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","createtime":"1527436360"}
-2018-05-27 23:53:16 : qrcode记录{"id":"75","uniacid":"2","acid":"2","type":"","extra":"0","qrcid":"20054","scene_str":"","name":"\u6d77\u62a5","keyword":"\u6d77\u62a5","model":"1","ticket":"gQEq8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2FidDE4UGxjSmgxNWp4TzFyMWwAAgRT1ApbAwQAjScA","url":"http:\/\/weixin.qq.com\/q\/02wabt18PlcJh15jxO1r1l","expire":"2592000","subnum":"0","createtime":"1527436371","status":"1"}
-2018-05-27 23:53:16 : 进入out
-2018-05-27 23:53:16 : http://weixin.qq.com/q/02wabt18PlcJh15jxO1r1l
-2018-05-27 23:53:16 : qrcode == Resource id #55
-2018-05-27 23:53:16 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter61.png
-2018-05-27 23:59:47 : 进入createMPoster
-2018-05-27 23:59:47 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-27 23:59:47 : createMPoster: share===>false
-2018-05-27 23:59:47 : 进入getQR
-2018-05-27 23:59:47 : share记录{"id":"62","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527436787"}
-2018-05-27 23:59:47 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-27 23:59:47 : 在func内，获取的最大sceneid为20054
-2018-05-27 23:59:47 : 在func内，最后sceneid为:20055
-2018-05-27 23:59:47 : 进入poster-rtype记录1
-2018-05-27 23:59:47 : 临时二维码创建返回值{"ticket":"gQF58DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZlVQVTB5UGxjSmgxN1B5T2hyMWoAAgTz1QpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02fUPU0yPlcJh17PyOhr1j"}
-2018-05-27 23:59:47 : http://weixin.qq.com/q/02fUPU0yPlcJh17PyOhr1j
-2018-05-27 23:59:47 : qrcode == Resource id #54
-2018-05-27 23:59:47 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter62.png
-2018-05-28 00:08:30 : 进入createMPoster
-2018-05-28 00:08:30 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 00:08:30 : createMPoster: share===>false
-2018-05-28 00:08:30 : 进入getQR
-2018-05-28 00:08:30 : share记录{"id":"63","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527437310"}
-2018-05-28 00:08:30 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 00:08:30 : 在func内，获取的最大sceneid为20055
-2018-05-28 00:08:30 : 在func内，最后sceneid为:20056
-2018-05-28 00:08:30 : 进入poster-rtype记录1
-2018-05-28 00:08:30 : 临时二维码创建返回值{"ticket":"gQHA8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyd2h3aTBpUGxjSmgxNy1BTzFyMVkAAgT_1wpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02whwi0iPlcJh17-AO1r1Y"}
-2018-05-28 00:08:30 : http://weixin.qq.com/q/02whwi0iPlcJh17-AO1r1Y
-2018-05-28 00:08:30 : qrcode == Resource id #54
-2018-05-28 00:08:30 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter63.png
-2018-05-28 00:12:04 : 进入createMPoster
-2018-05-28 00:12:04 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 00:12:04 : createMPoster: share===>false
-2018-05-28 00:12:05 : 进入getQR
-2018-05-28 00:12:05 : share记录{"id":"64","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527437524"}
-2018-05-28 00:12:05 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 00:12:05 : 在func内，获取的最大sceneid为20056
-2018-05-28 00:12:05 : 在func内，最后sceneid为:20057
-2018-05-28 00:12:05 : 进入poster-rtype记录1
-2018-05-28 00:12:05 : 临时二维码创建返回值{"ticket":"gQH78DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyaE5KUTBTUGxjSmgxN2xCT05yMW0AAgTV2ApbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02hNJQ0SPlcJh17lBONr1m"}
-2018-05-28 00:12:05 : http://weixin.qq.com/q/02hNJQ0SPlcJh17lBONr1m
-2018-05-28 00:12:05 : qrcode == Resource id #54
-2018-05-28 00:12:05 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter64.png
-2018-05-28 00:33:18 : 进入createMPoster
-2018-05-28 00:33:18 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 00:33:18 : createMPoster: share===>false
-2018-05-28 00:33:18 : 进入getQR
-2018-05-28 00:33:18 : share记录{"id":"65","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527438798"}
-2018-05-28 00:33:18 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 00:33:18 : 在func内，获取的最大sceneid为20057
-2018-05-28 00:33:18 : 在func内，最后sceneid为:20058
-2018-05-28 00:33:18 : 进入poster-rtype记录1
-2018-05-28 00:33:18 : 临时二维码创建返回值{"ticket":"gQHy8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyNEhyTTFsUGxjSmgxN2VHT3hyMUwAAgTO3QpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/024HrM1lPlcJh17eGOxr1L"}
-2018-05-28 00:33:18 : http://weixin.qq.com/q/024HrM1lPlcJh17eGOxr1L
-2018-05-28 00:33:18 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter65.jpg
-2018-05-28 00:35:55 : 进入createMPoster
-2018-05-28 00:35:55 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 00:35:55 : createMPoster: share===>false
-2018-05-28 00:35:55 : 进入getQR
-2018-05-28 00:35:55 : share记录{"id":"66","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527438955"}
-2018-05-28 00:35:55 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 00:35:55 : 在func内，获取的最大sceneid为20058
-2018-05-28 00:35:55 : 在func内，最后sceneid为:20059
-2018-05-28 00:35:55 : 进入poster-rtype记录1
-2018-05-28 00:35:55 : 临时二维码创建返回值{"ticket":"gQGy8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyOHJMRTFRUGxjSmgxNUhIT2hyMTcAAgRr3gpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/028rLE1QPlcJh15HHOhr17"}
-2018-05-28 00:35:55 : http://weixin.qq.com/q/028rLE1QPlcJh15HHOhr17
-2018-05-28 00:35:56 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter66.jpg
-2018-05-28 00:40:29 : 进入关注...
-2018-05-28 00:40:29 : 进入createMPoster
-2018-05-28 00:40:29 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0QeZmm_xxjYBTI9p_cvv02g' limit 1
-2018-05-28 00:40:29 : createMPoster: share===>false
-2018-05-28 00:40:30 : 进入getQR
-2018-05-28 00:40:30 : share记录{"id":"67","uniacid":"2","image_url":"","openid":"oMxUt0QeZmm_xxjYBTI9p_cvv02g","nickname":"\u6770\u6770","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXhRBp9ABoLJBQnMYFYoe7kBnk1If9sFPhP4qbmC48hbRztO3YuVnIF07gOnPpyRntqSFvrNcc5Ur\/132","posterid":"11","sceneid":"0","parentid":"66","ticketid":"","createtime":"1527439229"}
-2018-05-28 00:40:30 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 00:40:30 : 在func内，获取的最大sceneid为20059
-2018-05-28 00:40:30 : 在func内，最后sceneid为:20060
-2018-05-28 00:40:30 : 进入poster-rtype记录1
-2018-05-28 00:40:30 : 临时二维码创建返回值{"ticket":"gQGI8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyTnVCOTBWUGxjSmgxNS1JT05yMXoAAgR_3wpbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02NuB90VPlcJh15-IONr1z"}
-2018-05-28 00:40:30 : http://weixin.qq.com/q/02NuB90VPlcJh15-IONr1z
-2018-05-28 00:40:30 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter67.jpg
-2018-05-28 09:24:21 : 进入createMPoster
-2018-05-28 09:24:21 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0X371wyfgLvIX1gq6Vp46gI' limit 1
-2018-05-28 09:24:21 : createMPoster: share===>false
-2018-05-28 09:24:21 : 进入getQR
-2018-05-28 09:24:21 : share记录{"id":"1","uniacid":"2","image_url":"","openid":"oMxUt0X371wyfgLvIX1gq6Vp46gI","nickname":"\u4e50\u6447\u6211\u7684\u540d\u5b57\u5f88\u957f\u5f88\u957f\u5f88\u957f\u5f88\u957f","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/Q3auHgzwzM6P3rOUmHnpGW2Vk8a55eRg5kmJEYKWFxhQ33SRDnHPO0xqk4XIicicRhPkZu1FCNIYLgqX8akXv1HQ\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527470661"}
-2018-05-28 09:24:21 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 09:24:21 : 在func内，获取的最大sceneid为20060
-2018-05-28 09:24:21 : 在func内，最后sceneid为:20061
-2018-05-28 09:24:21 : 进入poster-rtype记录1
-2018-05-28 09:24:21 : 临时二维码创建返回值{"ticket":"gQFD8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyVEFJYTBCUGxjSmgxZDVET2hyMUMAAgRFWgtbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02TAIa0BPlcJh1d5DOhr1C"}
-2018-05-28 09:24:21 : http://weixin.qq.com/q/02TAIa0BPlcJh1d5DOhr1C
-2018-05-28 09:24:21 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter1.jpg
-2018-05-28 09:25:37 : 进入关注...
-2018-05-28 09:25:37 : 进入createMPoster
-2018-05-28 09:25:37 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 09:25:37 : createMPoster: share===>false
-2018-05-28 09:25:37 : 进入getQR
-2018-05-28 09:25:37 : share记录{"id":"2","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"1","ticketid":"","createtime":"1527470737"}
-2018-05-28 09:25:37 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 09:25:37 : 在func内，获取的最大sceneid为20061
-2018-05-28 09:25:37 : 在func内，最后sceneid为:20062
-2018-05-28 09:25:37 : 进入poster-rtype记录1
-2018-05-28 09:25:37 : 临时二维码创建返回值{"ticket":"gQGX8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyOV96WjAtUGxjSmgxZWhET05yMXEAAgSRWgtbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/029_zZ0-PlcJh1ehDONr1q"}
-2018-05-28 09:25:37 : http://weixin.qq.com/q/029_zZ0-PlcJh1ehDONr1q
-2018-05-28 09:25:37 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter2.jpg
-2018-05-28 09:32:16 : 进入关注...
-2018-05-28 09:32:17 : 进入createMPoster
-2018-05-28 09:32:17 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 09:32:17 : createMPoster: share===>false
-2018-05-28 09:32:17 : 进入getQR
-2018-05-28 09:32:17 : share记录{"id":"3","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"1","ticketid":"","createtime":"1527471137"}
-2018-05-28 09:32:17 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 09:32:17 : 在func内，获取的最大sceneid为20062
-2018-05-28 09:32:17 : 在func内，最后sceneid为:20063
-2018-05-28 09:32:17 : 进入poster-rtype记录1
-2018-05-28 09:32:17 : 临时二维码创建返回值{"ticket":"gQG17zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyYUdrWDBqUGxjSmgxY3hGT05yMXUAAgQhXAtbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02aGkX0jPlcJh1cxFONr1u"}
-2018-05-28 09:32:17 : http://weixin.qq.com/q/02aGkX0jPlcJh1cxFONr1u
-2018-05-28 09:32:17 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter3.jpg
-2018-05-28 09:34:20 : 进入关注...
-2018-05-28 09:34:21 : 进入createMPoster
-2018-05-28 09:34:21 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0cRLgLfjVx4MkWODIonP9Oc' limit 1
-2018-05-28 09:34:21 : createMPoster: share===>false
-2018-05-28 09:34:21 : 进入getQR
-2018-05-28 09:34:21 : share记录{"id":"4","uniacid":"2","image_url":"","openid":"oMxUt0cRLgLfjVx4MkWODIonP9Oc","nickname":"\u5f20\u946b\u946b","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku3icG9mRpoVIEBGloIv4c4dPOgmrOfk8eg2ev2noAVr50GcYdKIqV2OibWQCd0ZF41yVHeXf2W4Sk7YoFsbURkKdl\/132","posterid":"11","sceneid":"0","parentid":"1","ticketid":"","createtime":"1527471261"}
-2018-05-28 09:34:21 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-28 09:34:21 : 在func内，获取的最大sceneid为20063
-2018-05-28 09:34:21 : 在func内，最后sceneid为:20064
-2018-05-28 09:34:21 : 进入poster-rtype记录1
-2018-05-28 09:34:21 : 临时二维码创建返回值{"ticket":"gQF_8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyWk9rbzE3UGxjSmgxZXRGTzFyMWkAAgSdXAtbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02ZOko17PlcJh1etFO1r1i"}
-2018-05-28 09:34:21 : http://weixin.qq.com/q/02ZOko17PlcJh1etFO1r1i
-2018-05-28 09:34:21 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter4.jpg
-2018-05-29 09:28:32 : 进入createMPoster
-2018-05-29 09:28:32 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0WuG7hT8hkoVSPmgXlWFRms' limit 1
-2018-05-29 09:28:32 : createMPoster: share===>false
-2018-05-29 09:28:32 : 进入getQR
-2018-05-29 09:28:32 : share记录{"id":"5","uniacid":"2","image_url":"","openid":"oMxUt0WuG7hT8hkoVSPmgXlWFRms","nickname":"\u62bd\u98ce\u7684\u9b3c\uff5e\u7167\u7247\u4e66\u8ba2\u5236","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/ELfApfe5KOfhApy6cmzRwbeIK1P5XrgfGpAkTPRAhaYg9ic9n41P3Brq0gCibBvzQk5d2xfBwCHlguHTtR3KBZgxLVxIPCzkAq\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527557312"}
-2018-05-29 09:28:32 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-29 09:28:32 : 在func内，获取的最大sceneid为20064
-2018-05-29 09:28:32 : 在func内，最后sceneid为:20065
-2018-05-29 09:28:32 : 进入poster-rtype记录1
-2018-05-29 09:28:32 : 临时二维码创建返回值{"ticket":"gQGT8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyRS1wYzFaUGxjSmgxMzBWUTFyMV8AAgTArAxbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02E-pc1ZPlcJh130VQ1r1_"}
-2018-05-29 09:28:32 : http://weixin.qq.com/q/02E-pc1ZPlcJh130VQ1r1_
-2018-05-29 09:28:32 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter5.jpg
-2018-05-29 09:44:00 : 进入createMPoster
-2018-05-29 09:44:00 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0aUVGiMatE3PvrPiZBemsMs' limit 1
-2018-05-29 09:44:00 : createMPoster: share===>false
-2018-05-29 09:44:00 : 进入getQR
-2018-05-29 09:44:00 : share记录{"id":"6","uniacid":"2","image_url":"","openid":"oMxUt0aUVGiMatE3PvrPiZBemsMs","nickname":"\u7167\u7247\u4e66\uff0c\u66f9\u7701\u4fca","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku037Tqjj0WJnUJIy69TtNCPoQeR9s9b8n1h7SiaHOvyx6hekQMaGNyt2bsXoyiacVNI21VAXH17OAK2vWeTr7LGGm\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527558240"}
-2018-05-29 09:44:00 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-29 09:44:00 : 在func内，获取的最大sceneid为20065
-2018-05-29 09:44:00 : 在func内，最后sceneid为:20066
-2018-05-29 09:44:00 : 进入poster-rtype记录1
-2018-05-29 09:44:01 : 临时二维码创建返回值{"ticket":"gQHL8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyb04xTjEtUGxjSmgxMXdaUTFyMXAAAgRgsAxbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02oN1N1-PlcJh11wZQ1r1p"}
-2018-05-29 09:44:01 : http://weixin.qq.com/q/02oN1N1-PlcJh11wZQ1r1p
-2018-05-29 09:44:01 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter6.jpg
-2018-05-29 17:35:51 : 进入关注...
-2018-05-29 17:35:52 : 进入createMPoster
-2018-05-29 17:35:52 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0Yih9cn2REwlvTdZk7rTsw4' limit 1
-2018-05-29 17:35:52 : createMPoster: share===>false
-2018-05-29 17:35:52 : 进入getQR
-2018-05-29 17:35:52 : share记录{"id":"7","uniacid":"2","image_url":"","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"0","parentid":"4","ticketid":"","createtime":"1527586552"}
-2018-05-29 17:35:52 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-29 17:35:52 : 在func内，获取的最大sceneid为20066
-2018-05-29 17:35:52 : 在func内，最后sceneid为:20067
-2018-05-29 17:35:52 : 进入poster-rtype记录1
-2018-05-29 17:35:52 : 临时二维码创建返回值{"ticket":"gQFh8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAycnZrWjBfUGxjSmgxYlVIUTFyMTQAAgT4Hg1bAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02rvkZ0_PlcJh1bUHQ1r14"}
-2018-05-29 17:35:52 : http://weixin.qq.com/q/02rvkZ0_PlcJh1bUHQ1r14
-2018-05-29 17:35:52 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter7.jpg
-2018-05-30 16:25:56 : 进入createMPoster
-2018-05-30 16:25:56 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0ZTji0_Xrrzj6S6UdynhVk8' limit 1
-2018-05-30 16:25:56 : createMPoster: share===>false
-2018-05-30 16:25:57 : 进入getQR
-2018-05-30 16:25:57 : share记录{"id":"8","uniacid":"2","image_url":"","openid":"oMxUt0ZTji0_Xrrzj6S6UdynhVk8","nickname":"\u65f6\u5149\u5370\u738b\u4e9a\u6d32","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXlyFwToeUBjjmhQ9JzTZRDWAAGnrHzVtukwRwiaXWTU5E9GjmfspRViaIiaTxVTcaFkCXeVPI6FFxbQ\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1527668756"}
-2018-05-30 16:25:57 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
-2018-05-30 16:25:57 : 在func内，获取的最大sceneid为20067
-2018-05-30 16:25:57 : 在func内，最后sceneid为:20068
-2018-05-30 16:25:57 : 进入poster-rtype记录1
-2018-05-30 16:25:57 : 临时二维码创建返回值{"ticket":"gQHs7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZW9sUDBHUGxjSmgxY2xKUjFyMWMAAgQVYA5bAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02eolP0GPlcJh1clJR1r1c"}
-2018-05-30 16:25:57 : http://weixin.qq.com/q/02eolP0GPlcJh1clJR1r1c
-2018-05-30 16:25:57 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter8.jpg
-2018-05-30 16:29:39 : 进入createMPoster
-2018-05-30 16:29:39 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0ZTji0_Xrrzj6S6UdynhVk8' limit 1
-2018-05-30 16:29:39 : createMPoster: share===>{"id":"8","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02eolP0GPlcJh1clJR1r1c","openid":"oMxUt0ZTji0_Xrrzj6S6UdynhVk8","nickname":"\u65f6\u5149\u5370\u738b\u4e9a\u6d32","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXlyFwToeUBjjmhQ9JzTZRDWAAGnrHzVtukwRwiaXWTU5E9GjmfspRViaIiaTxVTcaFkCXeVPI6FFxbQ\/132","posterid":"11","sceneid":"20068","parentid":"0","ticketid":"gQHs7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZW9sUDBHUGxjSmgxY2xKUjFyMWMAAgQVYA5bAwQAjScA","createtime":"1527668756"}
-2018-05-30 16:29:39 : 有这个人的share记录了
-2018-05-30 16:29:39 : 没有生成海报，返回以前生成的
-2018-06-05 10:06:59 : 进入createMPoster
-2018-06-05 10:06:59 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0ZTji0_Xrrzj6S6UdynhVk8' limit 1
-2018-06-05 10:06:59 : createMPoster: share===>{"id":"8","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02eolP0GPlcJh1clJR1r1c","openid":"oMxUt0ZTji0_Xrrzj6S6UdynhVk8","nickname":"\u65f6\u5149\u5370\u738b\u4e9a\u6d32","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXlyFwToeUBjjmhQ9JzTZRDWAAGnrHzVtukwRwiaXWTU5E9GjmfspRViaIiaTxVTcaFkCXeVPI6FFxbQ\/132","posterid":"11","sceneid":"20068","parentid":"0","ticketid":"gQHs7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZW9sUDBHUGxjSmgxY2xKUjFyMWMAAgQVYA5bAwQAjScA","createtime":"1527668756"}
-2018-06-05 10:06:59 : 有这个人的share记录了
-2018-06-05 10:06:59 : 没有生成海报，返回以前生成的
+2018-06-19 14:37:57 : 进入createMPoster
+2018-06-19 14:37:57 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0Yih9cn2REwlvTdZk7rTsw4' limit 1
+2018-06-19 14:37:57 : createMPoster: share===>{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:37:57 : 有这个人的share记录了
+2018-06-19 14:37:57 : 进入getQR
+2018-06-19 14:37:57 : share记录{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:37:57 : 进入share非空记录{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:37:57 : poster值：{"id":"11","uniacid":"2","title":"\u6d77\u62a5","data":"[{\"left\":\"194px\",\"top\":\"377px\",\"type\":\"qr\",\"width\":\"118px\",\"height\":\"120px\"},{\"left\":\"243px\",\"top\":\"424px\",\"type\":\"img\",\"width\":\"23px\",\"height\":\"22px\"},{\"left\":\"27px\",\"top\":\"15px\",\"type\":\"name\",\"width\":\"272px\",\"height\":\"39px\",\"size\":\"14px\",\"color\":\"#ffffff\"}]","rtype":"1","kword":"\u6d77\u62a5","winfo1":"\u6b63\u5728\u751f\u6210\u6d77\u62a5..","ftips":"\u3010#\u6635\u79f0#\u3011\u6b22\u8fce\u5173\u6ce8\uff0c\u4f60\u662f\u7531\u3010#\u4e0a\u7ea7#\u3011\u63a8\u8350","utips":"\u4f60\u7684\u670b\u53cb\u3010#\u6635\u79f0#\u3011\u5173\u6ce8\u4e86","utips2":null,"createtime":"1527438936","bg":"images\/2\/2018\/05\/CqGQQqZ2T8SUSsXp84SsqMUEqmESRp.jpg","rule_id":"18"}
+2018-06-19 14:37:57 : 进入临时二维码{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:37:57 : qrcode记录{"id":"94","uniacid":"2","acid":"2","type":"","extra":"0","qrcid":"20073","scene_str":"","name":"\u6d77\u62a5","keyword":"\u6d77\u62a5","model":"1","ticket":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","expire":"2592000","subnum":"0","createtime":"1529389983","status":"1"}
+2018-06-19 14:37:57 : 进入out
+2018-06-19 14:37:57 : http://weixin.qq.com/q/02Qfkk1KPlcJh1ivMghr1g
+2018-06-19 14:37:57 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter13.jpg
+2018-06-19 14:37:57 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter13.jpg
+2018-06-19 14:56:37 : 进入createMPoster
+2018-06-19 14:56:37 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0Yih9cn2REwlvTdZk7rTsw4' limit 1
+2018-06-19 14:56:37 : createMPoster: share===>{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:56:37 : 有这个人的share记录了
+2018-06-19 14:56:37 : 进入getQR
+2018-06-19 14:56:37 : share记录{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:56:37 : 进入share非空记录{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:56:37 : poster值：{"id":"11","uniacid":"2","title":"\u6d77\u62a5","data":"[{\"left\":\"194px\",\"top\":\"377px\",\"type\":\"qr\",\"width\":\"118px\",\"height\":\"120px\"},{\"left\":\"243px\",\"top\":\"424px\",\"type\":\"img\",\"width\":\"22px\",\"height\":\"21px\"},{\"left\":\"27px\",\"top\":\"15px\",\"type\":\"name\",\"width\":\"272px\",\"height\":\"39px\",\"size\":\"14px\",\"color\":\"#ffffff\"}]","rtype":"1","kword":"\u6d77\u62a5","winfo1":"\u6b63\u5728\u751f\u6210\u6d77\u62a5..","ftips":"\u3010#\u6635\u79f0#\u3011\u6b22\u8fce\u5173\u6ce8\uff0c\u4f60\u662f\u7531\u3010#\u4e0a\u7ea7#\u3011\u63a8\u8350","utips":"\u4f60\u7684\u670b\u53cb\u3010#\u6635\u79f0#\u3011\u5173\u6ce8\u4e86","utips2":null,"createtime":"1529391360","bg":"images\/2\/2018\/06\/SW8XGBb38W6ZRwwgBg8QdDbZmRk2wj.jpg","rule_id":"18"}
+2018-06-19 14:56:37 : 进入临时二维码{"id":"13","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"20073","parentid":"0","ticketid":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","createtime":"1529389983"}
+2018-06-19 14:56:37 : qrcode记录{"id":"94","uniacid":"2","acid":"2","type":"","extra":"0","qrcid":"20073","scene_str":"","name":"\u6d77\u62a5","keyword":"\u6d77\u62a5","model":"1","ticket":"gQGg8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyUWZrazFLUGxjSmgxaXZNZ2hyMWcAAgSfoyhbAwQAjScA","url":"http:\/\/weixin.qq.com\/q\/02Qfkk1KPlcJh1ivMghr1g","expire":"2592000","subnum":"0","createtime":"1529389983","status":"1"}
+2018-06-19 14:56:37 : 进入out
+2018-06-19 14:56:37 : http://weixin.qq.com/q/02Qfkk1KPlcJh1ivMghr1g
+2018-06-19 14:56:37 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter13.jpg
+2018-06-19 14:56:37 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter13.jpg
+2018-06-19 14:58:42 : 进入关注...
+2018-06-19 14:58:43 : 进入createMPoster
+2018-06-19 14:58:43 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0Yih9cn2REwlvTdZk7rTsw4' limit 1
+2018-06-19 14:58:43 : createMPoster: share===>false
+2018-06-19 14:58:43 : 进入getQR
+2018-06-19 14:58:43 : share记录{"id":"14","uniacid":"2","image_url":"","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"0","parentid":"4","ticketid":"","createtime":"1529391523"}
+2018-06-19 14:58:43 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
+2018-06-19 14:58:43 : 在func内，获取的最大sceneid为20073
+2018-06-19 14:58:43 : 在func内，最后sceneid为:20074
+2018-06-19 14:58:43 : 进入poster-rtype记录1
+2018-06-19 14:58:43 : 临时二维码创建返回值{"ticket":"gQEZ8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAybDdiTDBHUGxjSmgxaXpTZ05yMTUAAgSjqShbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02l7bL0GPlcJh1izSgNr15"}
+2018-06-19 14:58:43 : http://weixin.qq.com/q/02l7bL0GPlcJh1izSgNr15
+2018-06-19 14:58:43 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter14.jpg
+2018-06-19 15:00:26 : 进入关注...
+2018-06-19 15:00:26 : 进入createMPoster
+2018-06-19 15:00:26 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0Yih9cn2REwlvTdZk7rTsw4' limit 1
+2018-06-19 15:00:26 : createMPoster: share===>false
+2018-06-19 15:00:27 : 进入getQR
+2018-06-19 15:00:27 : share记录{"id":"15","uniacid":"2","image_url":"","openid":"oMxUt0Yih9cn2REwlvTdZk7rTsw4","nickname":"\u4e50\u64472018","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXia94LqrZS95Zxgjg8CWKVJO703ibyGPf2X3QZ713yzYxC2rA0aES39zQzpxdictV4mVsV3Oxh5BrNc\/132","posterid":"11","sceneid":"0","parentid":"4","ticketid":"","createtime":"1529391626"}
+2018-06-19 15:00:27 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
+2018-06-19 15:00:27 : 在func内，获取的最大sceneid为20074
+2018-06-19 15:00:27 : 在func内，最后sceneid为:20075
+2018-06-19 15:00:27 : 进入poster-rtype记录1
+2018-06-19 15:00:27 : 临时二维码创建返回值{"ticket":"gQGe8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyX0NkUzFtUGxjSmgxZ2JUZzFyMU4AAgQLqihbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02_CdS1mPlcJh1gbTg1r1N"}
+2018-06-19 15:00:27 : http://weixin.qq.com/q/02_CdS1mPlcJh1gbTg1r1N
+2018-06-19 15:00:27 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter15.jpg
+2018-06-19 17:28:00 : 进入createMPoster
+2018-06-19 17:28:00 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0WuG7hT8hkoVSPmgXlWFRms' limit 1
+2018-06-19 17:28:00 : createMPoster: share===>{"id":"5","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02E-pc1ZPlcJh130VQ1r1_","openid":"oMxUt0WuG7hT8hkoVSPmgXlWFRms","nickname":"\u62bd\u98ce\u7684\u9b3c\uff5e\u7167\u7247\u4e66\u8ba2\u5236","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/ELfApfe5KOfhApy6cmzRwbeIK1P5XrgfGpAkTPRAhaYg9ic9n41P3Brq0gCibBvzQk5d2xfBwCHlguHTtR3KBZgxLVxIPCzkAq\/132","posterid":"11","sceneid":"20065","parentid":"0","ticketid":"gQGT8TwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyRS1wYzFaUGxjSmgxMzBWUTFyMV8AAgTArAxbAwQAjScA","createtime":"1527557312"}
+2018-06-19 17:28:00 : 有这个人的share记录了
+2018-06-19 17:28:00 : 没有生成海报，返回以前生成的
+2018-06-19 17:28:00 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter5.jpg
+2018-06-19 17:44:19 : 进入createMPoster
+2018-06-19 17:44:19 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0aUVGiMatE3PvrPiZBemsMs' limit 1
+2018-06-19 17:44:19 : createMPoster: share===>{"id":"6","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02oN1N1-PlcJh11wZQ1r1p","openid":"oMxUt0aUVGiMatE3PvrPiZBemsMs","nickname":"\u7167\u7247\u4e66\uff0c\u66f9\u7701\u4fca","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/WBpic9pdfku037Tqjj0WJnUJIy69TtNCPoQeR9s9b8n1h7SiaHOvyx6hekQMaGNyt2bsXoyiacVNI21VAXH17OAK2vWeTr7LGGm\/132","posterid":"11","sceneid":"20066","parentid":"0","ticketid":"gQHL8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyb04xTjEtUGxjSmgxMXdaUTFyMXAAAgRgsAxbAwQAjScA","createtime":"1527558240"}
+2018-06-19 17:44:19 : 有这个人的share记录了
+2018-06-19 17:44:19 : 没有生成海报，返回以前生成的
+2018-06-19 17:44:19 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter6.jpg
+2018-06-19 19:06:44 : 进入关注...
+2018-06-19 19:06:45 : 进入createMPoster
+2018-06-19 19:06:45 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0ZxzYEBFoHcywytddUkWtB0' limit 1
+2018-06-19 19:06:45 : createMPoster: share===>false
+2018-06-19 19:06:46 : 进入getQR
+2018-06-19 19:06:46 : share记录{"id":"16","uniacid":"2","image_url":"","openid":"oMxUt0ZxzYEBFoHcywytddUkWtB0","nickname":"\u5434\u4e61","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/hibLG7DlXUVshUoAXSdUr9rjmy2m8DtahtvnnHJM845GrruLNPdaicxiav3MrTKnynYDoWctRDSCqgk2vZjd6OibNkUFc86mH3iat\/132","posterid":"11","sceneid":"0","parentid":"4","ticketid":"","createtime":"1529406405"}
+2018-06-19 19:06:46 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
+2018-06-19 19:06:46 : 在func内，获取的最大sceneid为20075
+2018-06-19 19:06:46 : 在func内，最后sceneid为:20076
+2018-06-19 19:06:46 : 进入poster-rtype记录1
+2018-06-19 19:06:46 : 临时二维码创建返回值{"ticket":"gQGp8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAycEl2SzFPUGxjSmgxbjZNZ3hyMTEAAgTG4yhbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02pIvK1OPlcJh1n6Mgxr11"}
+2018-06-19 19:06:46 : http://weixin.qq.com/q/02pIvK1OPlcJh1n6Mgxr11
+2018-06-19 19:06:46 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter16.jpg
+2018-06-20 11:58:31 : 进入createMPoster
+2018-06-20 11:58:31 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0WZF8QnLkAgoUgDey22O5TE' limit 1
+2018-06-20 11:58:31 : createMPoster: share===>false
+2018-06-20 11:58:31 : 进入getQR
+2018-06-20 11:58:31 : share记录{"id":"17","uniacid":"2","image_url":"","openid":"oMxUt0WZF8QnLkAgoUgDey22O5TE","nickname":"\u79c1\u4eba\u8ba2\u5236\u738b\u8fce\u6625","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/8qrYX1wtkLEzuw3N2yPDW84oxgibhPsaJhL33y4c02cE5RaHSPQd7Zbpq5iaYsoftJjH2rP8atPYthOtWvqs2HUGEFbYXKQd78\/132","posterid":"11","sceneid":"0","parentid":"0","ticketid":"","createtime":"1529467111"}
+2018-06-20 11:58:31 : 在func内，sqlscene字符串select qrcid from `ims_qrcode` where uniacid='2' order by qrcid desc limit 1
+2018-06-20 11:58:31 : 在func内，获取的最大sceneid为20076
+2018-06-20 11:58:31 : 在func内，最后sceneid为:20077
+2018-06-20 11:58:31 : 进入poster-rtype记录1
+2018-06-20 11:58:31 : 临时二维码创建返回值{"ticket":"gQGe8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZk4zVDFtUGxjSmgxbkR0aDFyMV8AAgTn0ClbAwQAjScA","expire_seconds":2592000,"url":"http:\/\/weixin.qq.com\/q\/02fN3T1mPlcJh1nDth1r1_"}
+2018-06-20 11:58:31 : http://weixin.qq.com/q/02fN3T1mPlcJh1nDth1r1_
+2018-06-20 11:58:31 : /www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter17.jpg
+2018-06-20 11:58:31 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter17.jpg

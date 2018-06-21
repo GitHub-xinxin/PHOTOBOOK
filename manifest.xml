@@ -3,7 +3,7 @@
 	<application setting="true">
 		<name><![CDATA[照片书]]></name>
 		<identifie><![CDATA[photobook]]></identifie>
-		<version><![CDATA[1.0062]]></version>
+		<version><![CDATA[1.0063]]></version>
 		<type><![CDATA[business]]></type>
 		<ability><![CDATA[照片书等其他印刷定制类商品]]></ability>
 		<description><![CDATA[照片书等其他印刷定制类商品]]></description>
@@ -63,6 +63,7 @@
 		</rule>
 		<menu>
 			<entry title="分享海报" do="mposter" state="" direct="false" />
+			<entry title="分类管理" do="kind" state="" direct="false" />
 			<entry title="照片书管理" do="photobook" state="" direct="false" />
 			<entry title="订单管理" do="book_order" state="" direct="false" />
 			<entry title="代金券管理" do="cartlist" state="" direct="false" />

@@ -180,10 +180,42 @@ class PhotobookModuleSite extends WeModuleSite {
 		$send_data ='x-oss-process=image/watermark,image_'.base64_encode($T_photo).',g_nw,x_0,y_0|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
 		/**
+		 * 最后查找文字加上水印
+		 */
+		foreach ($data as $key => $frame){
+			
+			/**
+			 * 判断是否为图片 生成临时
+			 */
+			if($frame['type'] == 'name'){
+				load()->func('logging');
+				
+				//处理的图片进行编码
+
+				$text_data =base64_encode($trimarray[$key]['text']);
+				$size_data = round(trim($frame['size'],'px')* $coefficient) ;
+				if($frame['color'] == '#000')
+					$color_data = 000000;
+				else
+					$color_data = trim($frame['color'],'#');
+				$x_data = round($frame['left'] * $coefficient);
+				$y_data = round($frame['top']* $coefficient);
+				$send_data ='x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,text_'.$text_data.',size_'.$size_data.',color_'.$color_data.',g_nw,x_'.$x_data.',y_'.$y_data.'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
+				logging_run('id===='.json_encode($response),'info','compo333333und');
+			}
+		}
+		/**
 		 * 更新数据表
 		 */
 		pdo_update('ly_photobook_order_sub',array('down_img'=>$template_thumb),array('id'=>$ordersub_id));
 		
+	}
+	/**
+	 * 分类管理
+	 */
+	public function doWebKind(){
+		include_once 'inc/kind.php';
 	}
 	/**
 	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板图 $ordersub_id:订单页ID
@@ -293,13 +325,36 @@ class PhotobookModuleSite extends WeModuleSite {
 		$send_data ='x-oss-process=image/watermark,image_'.base64_encode($T_photo).',g_nw,x_0,y_0|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
 		/**
+		 * 最后查找文字加上水印
+		 */
+		foreach ($data as $key => $frame){
+			
+			/**
+			 * 判断是否为图片 生成临时
+			 */
+			if($frame['type'] == 'name'){
+				load()->func('logging');
+				
+				//处理的图片进行编码
+
+				$text_data =base64_encode($trimarray[$key]['text']);
+				$size_data = abs(trim($frame['size'],'px'));
+				if($frame['color'] == '#000')
+					$color_data = 000000;
+				else
+					$color_data = trim($frame['color'],'#');
+				$send_data ='x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,text_'.$text_data.',size_'.$size_data.',color_'.$color_data.',g_nw,x_'.round($frame['left']).',y_'.round($frame['top']).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
+				logging_run('id===='.json_encode($color_data),'info','compo333333und');
+			}
+		}
+		/**
 		 * 更新数据表
 		 */
 		load()->func('logging');
 		logging_run('id===='.$template_thumb,'info','compound');
 		$trim =json_encode($trimarray);
 		pdo_update('ly_photobook_order_sub',array('img_path'=>$template_thumb,'trim'=>$trim),array('id'=>$ordersub_id));
-		cache_clean();
 	}
 	//2018-4-10   新增
 	/**
@@ -404,7 +459,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	    $psize = 20;
 		$status=empty($_GPC['status'])?1:$_GPC['status'];
 		$where=array('uniacid'=>$_W['uniacid'],'status'=>$status);
-		$sql1='select * from '.tablename('ly_photobook_order_main').' where uniacid=:uniacid and status=:status ORDER BY id LIMIT '.($pindex-1)*$psize.','.$psize;
+		$sql1='select * from '.tablename('ly_photobook_order_main').' where uniacid=:uniacid and status=:status ORDER BY id DESC LIMIT '.($pindex-1)*$psize.','.$psize;
 		$list=pdo_fetchall($sql1,$where);
 		$account_api = WeAccount::create();
 		foreach ($list as $key => $li) {
@@ -1133,7 +1188,8 @@ class PhotobookModuleSite extends WeModuleSite {
 					'uniacid'=>$_W['uniacid'],
 					'max_page'=>$_GPC['max_page'],
 					'min_page'=>$_GPC['min_page'],
-					"booktype"=>$_GPC['booktype']
+					"booktype"=>$_GPC['booktype'],
+					"kind"=>$_GPC['kind']
 				);
 			if(pdo_update('ly_photobook_template_main',$data,array('id'=>$_GPC['id']))){
 				message('修改成功',$this->createWebUrl('photobook'),'success');
@@ -1144,6 +1200,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		}
 		load()->func('tpl');
 		$book=pdo_get('ly_photobook_template_main',array('id'=>$_GPC['b_id']));
+		$kind_list = pdo_getall('ly_photobook_kind',array('uniacid'=>$_W['uniacid']));
 		include $this->template('createbook');
 	}
 
@@ -1205,7 +1262,6 @@ class PhotobookModuleSite extends WeModuleSite {
 					"template_id"=>$_GPC['t_id'],
 					"type"=>$_GPC['type'],
 				);
-				
 				if(empty($feng)){
 					pdo_insert("ly_photobook_template_sub",$data);	
 				}else{
@@ -1230,12 +1286,12 @@ class PhotobookModuleSite extends WeModuleSite {
 		if(empty($_GPC['template_id'])&&!empty($_GPC['type'])&&!empty($_GPC['t_id'])){
 			
 			$image=pdo_get("ly_photobook_template_sub",array('template_id'=>$_GPC['t_id'],'type'=>$_GPC['type']));
-			$image['imagecount']=0;
+			if(empty($image))
+				$image['imagecount']=0;
 		}else{
 			$image=pdo_get('ly_photobook_template_sub',array('id'=>$_GPC['template_id']));
 		}
 		
-
 		$data = json_decode(str_replace('&quot;', "'", $image['data']), true);
 		include $this->template('editimage');
 	}
@@ -1422,16 +1478,33 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doMobileHome(){
 		global $_GPC,$_W;
 		//获取传来的参数，知道是哪个类别的。
+		if($_W['isajax']){
+			if($_GPC['kind_id'] != -1)
+				$resArr['data'] = pdo_getall('ly_photobook_template_main',array('uniacid'=>$_W['uniacid'],'kind'=>$_GPC['kind_id'],'booktype'=>$_GPC['booktype']));
+			else
+				$resArr['data'] = pdo_getall('ly_photobook_template_main',array('uniacid'=>$_W['uniacid'],'booktype'=>$_GPC['booktype']));
+			$resArr['kind_id'] = $_GPC['kind_id'];
+			foreach($resArr['data'] as $index=>$val)
+				$resArr['data'][$index]['thumb'] = tomedia($resArr['data'][$index]['thumb']);
+			if(empty($resArr['data']))
+				$resArr['code'] = 1;
+			else	
+				$resArr['code'] = 0;
+			echo json_encode($resArr);exit;
+		}
 		if(empty($_GPC['booktype'])){
 			message("无此类别，请返回");
 		}
-
+	
 		$p_title="照片书列表";
 		$m_active=1;
 		$this->check_thisUser($_W['openid'],$_W['uniacid']);
 		$sql='select id,name,price,sales,thumb from '.tablename('ly_photobook_template_main').' where uniacid=:uniacid AND booktype=:booktype';
 		$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],"booktype"=>$_GPC['booktype']));
-
+		/**
+		 * 遍历照片书的模板类型
+		 */
+		$kind_list = pdo_getall('ly_photobook_kind',array('uniacid'=>$_W['uniacid']));
 		include $this->template('index');
 	}
 	/**
@@ -1650,7 +1723,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		global $_W,$_GPC;
 		$arrs=$_GPC['pdatas'];
 		load()->func('logging');
-		//logging_run('前端返回图片的信息:'.json_encode($arrs),'info','photobook');
+		logging_run('前端返回图片的信息:'.json_encode($arrs),'info','photobook222222');
 		// 图片总数量
 		$tid=$_GPC['tid'];
 		//logging_run('tid为：'.$tid,'info','photobook');		

@@ -1,39 +1,84 @@
 {template 'header'}
 
 <div id="scroll" class="mui-content mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<div style="font-size: 12px;font-family: '微软雅黑';">
-							<span class="mui-icon mui-icon-arrowdown"></span>
-							照片书
+	<div class="mui-scroll">
+		<div style="font-size: 12px;font-family: '微软雅黑';">
+			<span class="mui-icon mui-icon-arrowdown"></span>
+			照片书
+		</div>
+		<div class="mui-row book" id="content">
+			{loop $list $l}
+			<div class="mui-col-sm-6 mui-col-xs-6">
+				<a href="{php echo $this->createMobileUrl('detail',array('id'=>$l['id']))}">
+					<div class="mui-card">
+						<div class="mui-card-content" style="overflow: hidden;">
+							<img src="{media $l['thumb']}" style="width: 100%;" />
+						</div>
+						<div style="font-size:0.8em">
+							{$l['name']}
 						</div>
 						<div class="mui-row">
-						{loop $list $l}
-							<div class="mui-col-sm-6 mui-col-xs-6">
-								<a href="{php echo $this->createMobileUrl('detail',array('id'=>$l['id']))}">
-								<div class="mui-card">
-									<div class="mui-card-content" style="overflow: hidden;">
-										<img src="{media $l['thumb']}" style="width: 100%;" /></div>
-									<div class="mui-row">
-									</div>
-									<div>
-										{$l['name']}
-									</div>
-									<div class="mui-row">
-										<div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;">
-											{$l['price']}￥
-										</div>
-										<div class="mui-col-sm-6 mui-col-xs-6">
-											销量：{$l['sales']}
-										</div>
-									</div>
-								</div>
-								</a>
+							<div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;">
+								{$l['price']}￥
 							</div>
-							{/loop}
-							
+							<div class="mui-col-sm-6 mui-col-xs-6">
+								销量：{$l['sales']}
+							</div>
 						</div>
-						<div style="height: 4em;"></div>
 					</div>
-				</div>
+				</a>
+			</div>
+			{/loop}
 
-{template 'footer'}
+		</div>
+		<div style="height: 4em;"></div>
+	</div>
+</div>
+<script>
+	document.querySelector('.mui-off-canvas-wrap').addEventListener('shown', function (event) {
+		if (mui('.mui-off-canvas-wrap').offCanvas().isShown('right'))
+			$(".book").css('width', "80%").css('margin-left', '20%').css('font-size', '0.7em')
+	})
+	document.querySelector('.mui-off-canvas-wrap').addEventListener('hidden', function (event) {
+		$(".book").css('width', "100%").css('margin-left', '0').css('font-size', '1em')
+	})
+
+	$(function () {
+		$('.kind').on('tap', 'li', function (res) {
+			//照片书类型
+			var booktype = "{$_GPC['booktype']}"
+			var kind_id = $(this).data('id')
+			$.post("{php echo $this->createMobileUrl('home')}", { kind_id: kind_id, booktype: booktype }, function (res) {
+
+				$('#content').empty()
+				if (res.code == 0) {
+					//查找类型模板成功
+					for (var x = 0; x < res.data.length; x++) {
+
+						var one = $('<div class="mui-col-sm-6 mui-col-xs-6"  style="font-size:0.8em">销量：' + res.data[x]["sales"] + '</div>')
+						var two = $('<div class="mui-row"><div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;">' + res.data[x]["price"] + '￥</div></div>')
+						two.append(one)
+						var three = $('<div class="mui-card"><div class="mui-card-content" style="overflow: hidden;"><img src="' + res.data[x]["thumb"] + '" style="width: 100%;" /></div><div style="font-size:0.8em">' + res.data[x]["name"] + '</div></div>')
+						three.append(two)
+						var four = $('<a href="{php echo $this->createMobileUrl("detail")}&id=' + res.data[x]["id"] + '"></a>')
+						four.append(three)
+						var five = $('<div class="mui-col-sm-6 mui-col-xs-6"></div>')
+						five.append(four)
+						$('#content').append(five)
+					}
+				} else {
+					var none = $('<div style="text-align:center">暂无该类型模板</div>')
+					$('#content').append(none)
+				}
+				$('.kind').children().each(function () {
+					if ($(this).data('id') == res.kind_id) {
+						$(this).children().eq(0).css('color', '#01AAED')
+						$(this).siblings().each(function () {
+							$(this).children().eq(0).css('color', 'white')
+						})
+					}
+				})
+			}, 'json')
+		})
+	})
+</script> {template 'footer'}

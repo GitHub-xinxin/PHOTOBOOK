@@ -100,7 +100,8 @@
 					}
 				},
 				Error: function(up, err) {
-					document.getElementById('console').appendChild(document.createTextNode("\nError xml:" + err.response));
+
+					document.getElementById('console').appendChild(document.createTextNode("\nError xml:"+res.code + err.response));
 				}
 			}
 		});

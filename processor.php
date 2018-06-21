@@ -12,7 +12,7 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 	public function respond() {
 		load()->func('logging');
 		logging_run("====================================");
-		logging_run($this->message);
+		logging_run($this->message,'info','kkkkkkk');
 		// 已经关注回复关键字触发的
 		if ($this->message['msgtype'] == 'text'||($this->message['msgtype'] == 'event'&&$this->message['event'] == 'CLICK')) {
 			$openid = $this->message['from'];
@@ -32,7 +32,7 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 			$this->writelog('开始做海报');
 			include 'tools/posterTools.php';
 			$img = createMPoster($mc,$poster,'ly_photobook',0);
-			// $this->recordlog('img:'.$img);
+			$this->recordlog('img:'.$img);
 			$this->writelog('做完海报');
 			$media_id = $this->uploadImage($img);
 			// $this->recordlog('media_id:'.$media_id);
