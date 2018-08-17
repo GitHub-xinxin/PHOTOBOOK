@@ -163,7 +163,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				 * 合成模板
 				 */
 				// var_dump('frame.top=='.$frame_top.' frame.left=='.$frame_left); 
-				$compound_data =base64_encode($thumb_img);
+				$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
 				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
 				
@@ -195,7 +195,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$text_data =base64_encode($trimarray[$key]['text']);
 				$size_data = round(trim($frame['size'],'px')* $coefficient) ;
 				if($frame['color'] == '#000')
-					$color_data = 000000;
+					$color_data = '000000';
 				else
 					$color_data = trim($frame['color'],'#');
 				$x_data = round($frame['left'] * $coefficient);
@@ -226,7 +226,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_thumb = $compound_name;
 		$send_data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
-		
+
 		foreach ($data as $key => $frame){
 			
 			/**
@@ -300,9 +300,12 @@ class PhotobookModuleSite extends WeModuleSite {
 				 * 合成模板
 				 */
 				// var_dump('frame.top=='.$frame_top.' frame.left=='.$frame_left); 
-				$compound_data =base64_encode($thumb_img);
-				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+				$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
+				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',t_100,g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
+				load()->func('logging');
+				//记录文本日志
+				logging_run('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process'.$send_data,'info','file---');
 				/**
 				 * 删除上传的临时图片
 				 */
@@ -317,7 +320,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			}
 		
 			$clear = new commonFunction();
-			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
+			// $clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
 		}
 		/**
 		 * png覆盖
@@ -340,12 +343,12 @@ class PhotobookModuleSite extends WeModuleSite {
 				$text_data =base64_encode($trimarray[$key]['text']);
 				$size_data = abs(trim($frame['size'],'px'));
 				if($frame['color'] == '#000')
-					$color_data = 000000;
+					$color_data = '000000';
 				else
 					$color_data = trim($frame['color'],'#');
 				$send_data ='x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,text_'.$text_data.',size_'.$size_data.',color_'.$color_data.',g_nw,x_'.round($frame['left']).',y_'.round($frame['top']).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
-				logging_run('id===='.json_encode($color_data),'info','compo333333und');
+				logging_run('id===='.json_encode($response),'info','compo333333und');
 			}
 		}
 		/**
@@ -834,7 +837,8 @@ class PhotobookModuleSite extends WeModuleSite {
 					'uniacid'=>$_W['uniacid'],
 					'min_page'=>$_GPC['min_page'],
 					'max_page'=>$_GPC['max_page'],
-					"booktype"=>$_GPC['booktype']
+					"booktype"=>$_GPC['booktype'],
+					"kind"=>$_GPC['kind']
 				);
 			if(pdo_insert('ly_photobook_template_main',$data)){
 				message('添加成功，去添加模板图',$this->createWebUrl('edittemplateimage',array('t_id'=>pdo_insertid())),'success');
@@ -844,6 +848,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			exit;
 		}
 		load()->func('tpl');
+		$kind_list = pdo_getall('ly_photobook_kind',array('uniacid'=>$_W['uniacid']));
 		include $this->template('createbook');
 	}
 	/**
@@ -1033,7 +1038,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			$HIDE=false;
 		}
 		$Cuser=$this->Oneuser($_W['openid'],$_W['uniacid']);
-		$userimg=pdo_getall('ly_photobook_user_images',array('user_id'=>$Cuser['uid'],"delete"=>0));
+		$userimg=pdo_getall('ly_photobook_user_images',array('user_id'=>$Cuser['uid'],"delete"=>0),array(),'','createtime desc');
 		$day=mktime(0,0,0,date('m'),date('d'),date('Y'));//日
 		$week=mktime(0,0,0,date('m'),date('d')-date('w')+1,date('Y'));//周
 		$month=mktime(0,0,0,date('m'),1,date('Y'));//月
@@ -1172,7 +1177,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				// 制作缩略图
 
 				$imageThumb='images/thumb/'.$fileName.'_cover.'.$fileExt;
-				new ResizeImage($imagePath, '480', '360', '0', ATTACHMENT_ROOT.$imageThumb);
+				new ResizeImage($imagePath, '360', '360', '0', ATTACHMENT_ROOT.$imageThumb);
 			}else{
 				$imageThumb=$_GPC['thumb'];
 			}
@@ -1514,7 +1519,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		global $_W,$_GPC;
 		$p_title="可使用照片书列表";
 
-		$sql='select id,name,price,sales,thumb from '.tablename('ly_photobook_template_main').' where uniacid ='.$_W['uniacid'].' AND price = '.$_GPC['price'];
+		$sql='select id,name,price,sales,thumb from '.tablename('ly_photobook_template_main').' where uniacid ='.$_W['uniacid'].' AND price = '.trim($_GPC['price']);
 		$list=pdo_fetchall($sql);
 		include $this->template('usable');
 	}
@@ -1932,6 +1937,8 @@ class PhotobookModuleSite extends WeModuleSite {
 		$account_api = WeAccount::create();
 		$userInfo = $account_api->fansQueryInfo($_W['openid']);
 		$bookid=$_GPC['tid'];
+		//该照片书信息
+		$is_buy = pdo_get('ly_photobook_order_main',array('id'=>$bookid,'uniacid'=>$_W['uniacid']))['status'];
 		//获取模板的属性
 		$template_main_id=pdo_get('ly_photobook_order_main',array('id'=>$bookid),array('template_id'))['template_id'];
 		$template_main_type=pdo_get('ly_photobook_template_main',array('id'=>$template_main_id),array('shell'))['shell'];
@@ -2233,17 +2240,35 @@ class PhotobookModuleSite extends WeModuleSite {
 			$user_id=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']),array('id'))['id'];
 			$data=array(
 				'receiver'=>$_GPC['receiver'],
-				'phone'=>$_GPC['receiver'],
-				'detail'=>$_GPC['address'].' '.$_GPC['detail'],
+				'phone'=>$_GPC['phone'],
+				'address'=>$_GPC['address'],
+				'detail'=>$_GPC['detail'],
 				'user_id'=>$user_id,
 				'uniacid'=>$_W['uniacid']
 			);
-			if(pdo_insert('ly_photobook_address',$data)){
-				message('地址添加完成','','success');
+			if(empty($_GPC['id']))
+				$res = pdo_insert('ly_photobook_address',$data);
+			else
+				$res = pdo_update('ly_photobook_address',$data,array('id'=>$_GPC['id']));
+			if($res){
+				message('操作完成',$this->createMobileUrl('view_address'),'success');
 			}else{
-				message('地址添加失败','','error');
+				message('操作失败','','error');
 			}
 			exit();
+		}else{
+			if(!empty($_GPC['id'])){
+				if($_GPC['op'] == 'del'){
+
+					$res = pdo_delete('ly_photobook_address',array('id'=>$_GPC['id']));
+					if($res){
+						message('操作完成','','success');
+					}else{
+						message('操作失败','','error');
+					}
+				}elseif($_GPC['op'] == 'edit')
+					$address = pdo_get('ly_photobook_address',array('id'=>$_GPC['id']));
+			}
 		}
 		include $this->template('addredd_add');
 	}
@@ -2261,6 +2286,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doMobilePlace_order(){
 		global $_W,$_GPC;
 		$order_id=(int)$_GPC['order_id'];
+	
 		//订单信息
 		$order_info = pdo_get('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'id'=>$order_id));
 
@@ -2318,8 +2344,6 @@ class PhotobookModuleSite extends WeModuleSite {
 			);
 			if(pdo_update('ly_photobook_order_main',$data,array('id'=>$order_id))){
 				header('Location: '.$this->createMobileUrl('Shop_order',array('order_id'=>$order_id)));
-			}else{
-				message('数据提交失败','','error');
 			}
 		}
 		include $this->template('place_order');

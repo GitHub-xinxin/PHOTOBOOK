@@ -96,9 +96,9 @@
 			<a class="mui-tab-item" href="#tabbar-with-map">
 				
 			</a>
-			<a class="mui-tab-item" href="{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid'],'op'=>$_GPC['op']))}" style="background: #e74c3c;color: #fff;font-weight: bold;">
+			<span class="mui-tab-item" id="buy" style="background: #e74c3c;color: #fff;font-weight: bold;">
 				下单购买
-			</a>
+			</span>
 		</nav>
 		<script type="text/javascript">
 			$(function(){
@@ -115,6 +115,14 @@
 						else if(res.code ==3)
 							layer.msg('不能加入购物车，该订单已经支付了,如想再次购买，请直接点下单购买哦')
 					},'json')
+				})
+				$('#buy').click(function(){
+					if("{$is_buy}" != 0){
+						layer.msg('亲,该款照片书已经支付,如果想再次下单购买请联系客服哦',{icon:6}) 
+						return;
+					}else{
+						window.location.href = "{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid'],'op'=>$_GPC['op']))}"
+					}
 				})
 			})
 			window.onload=function(){

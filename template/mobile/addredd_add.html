@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>添加地址</title>
+	<title>
+		{if $_GPC['op'] == 'edit'}
+		编辑地址
+		{else}
+		添加地址
+		{/if}
+	</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<link rel="stylesheet" href="../addons/photobook/template/mobile/css/jquery-weui.min.css">
@@ -15,52 +21,79 @@
 	<div class="weui-cells">
 		<div class="weui-cell">
 			<div class="weui-cell__bd" style="text-align: center;">
+				{if $_GPC['op'] == 'edit'}
+				编辑地址
+				{else}
 				添加地址
+				{/if}
 			</div> 
 			<div class="weui-cell__ft">
 				<a href="{php echo $this->createMobileUrl('view_address')}" class="weui-btn weui-btn_default" style="font-size: 12px">历史地址></a>
 			</div>
 		</div>
 	</div>
-	<form action="" method="post">
-	<div class="weui-cells weui-cells_form">
-		<div class="weui-cell weui-cell_warn">
-			<div class="weui-cell__bd">
-				<input class="weui-input" type="text" name="receiver" placeholder="收件人姓名">
-			</div>
-		</div>
-		<div class="weui-cell weui-cell_warn">
-			<div class="weui-cell__bd">
-				<input class="weui-input" type="number" name="phone" pattern="[0-9]*" placeholder="电话号码">
-			</div>
-		</div>
-		<div class="weui-cells__title">地址：省、市、区</div>
-		<div class="weui-cell weui-cell_warn">
-			<div class="weui-cell__bd">
-				<input type="text" class="weui-input" id='city-picker' name="address" />
-			</div>
-		</div>
-		<div class="weui-cells__title">地址补充信息(门牌号等)</div>
-		<div class="weui-cells">
-			<div class="weui-cell">
+	<form action="" method="post" onsubmit="return check()">
+		<div class="weui-cells weui-cells_form">
+			<div class="weui-cell weui-cell_warn">
 				<div class="weui-cell__bd">
-					<input class="weui-input" name="detail" type="text" placeholder="详细地址">
+					<input class="weui-input" type="text" id="receiver" value="{$address['receiver']}" name="receiver" placeholder="收件人姓名">
 				</div>
 			</div>
-		</div>
-		<input type="hidden" name="token" value="{$_W['token']}">
-		<div style="margin: 0.5em">
+			<div class="weui-cell weui-cell_warn">
+				<div class="weui-cell__bd">
+					<input class="weui-input" type="number"  value="{$address['phone']}" name="phone" pattern="[0-9]*" placeholder="电话号码">
+				</div>
+			</div>
+			<div class="weui-cells__title">地址：省、市、区</div>
+			<div class="weui-cell weui-cell_warn">
+				<div class="weui-cell__bd">
+					<input type="text" class="weui-input" value="{$address['address']}" id='city-picker' name="address" />
+				</div>
+			</div>
+			<div class="weui-cells__title">地址补充信息(门牌号等)</div>
+			<div class="weui-cells">
+				<div class="weui-cell">
+					<div class="weui-cell__bd">
+						<input class="weui-input" id="detail" value="{$address['detail']}" name="detail" type="text" placeholder="详细地址">
+					</div>
+				</div>
+			</div>
+			<input type="hidden" name="id" value="{$address['id']}">
+			<input type="hidden" name="token" value="{$_W['token']}">
+			<div style="margin: 0.5em" class="btn">
 
-								<button type="submit" name="submit" value="提交" class="weui-btn weui-btn_plain-primary" style="width: 100%;">确认</button>
-			<!-- <a href="javascript:;" class="weui-btn weui-btn_plain-primary">确定</a> -->
+				<button type="submit" name="submit" value="提交" class="weui-btn weui-btn_plain-primary" style="width: 100%;">确认</button>
+<!-- 				{if !empty($address)}
+					<button class="weui-btn weui-btn_plain-primary" id="del_btn" data-id="{$address['id']}">删除地址</button>
+				{/if} -->
+				<!-- <a href="javascript:;" class="weui-btn weui-btn_plain-primary">确定</a> -->
+			</div>
 		</div>
-	</div>
 	</form>
 	<script>
 		$("#city-picker").cityPicker({
 			title: "请选择收货地址"
 		});
-		$("#city-picker").val("点此选择");
+		// $('#del_btn').click(function(event) {
+		// 	/* Act on the event */
+		// 	if(confirm('确定要删除？')){
+		// 		var id = $(this).data('id')
+		// 		window.event.returnValue=false; 
+		// 		location.href = "{php echo $this->createMobileUrl('Addredd_add',array('op'=>'del'))}&id="+id
+		// 	}
+		// });
+		function check(){
+			if(!$('#receiver').val()){
+				alert('请输入收件人姓名')
+				 return false
+			}
+			if(!$('#detail').val()){
+				alert('请输入详细地址')
+				 return false
+			}
+		}
+		if(!"{$address['address']}")
+			$("#city-picker").val("点此选择");
 	</script>
 </body>
 </html> 

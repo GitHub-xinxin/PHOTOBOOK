@@ -26,20 +26,19 @@
 		var op = document.getElementsByName('op')[0].value;
 
 		var uploader = new plupload.Uploader({
-			runtimes : 'html5,flash,silverlight,html4',
+			runtimes:'html5,flash,silverlight,browserplus,html4',
 			browse_button : 'selectfiles', 
 			filters: {
 				mime_types : [ //只允许上传图片和zip文件
-				{ title : "Image files", extensions : "jpg,gif,png,jpeg,bmp" }, 
+				{ title : "Image files", extensions : "image/*,jpg,jpeg,png" },
 				],
 			},
+			multipart:"true",
+			multi_selection:"true",
 			container: document.getElementById('container'),
-			flash_swf_url : 'lib/plupload-2.1.2/js/Moxie.swf',
-			silverlight_xap_url : 'lib/plupload-2.1.2/js/Moxie.xap',
+			flash_swf_url : '../mobile/lib/plupload-2.1.2/js/Moxie.swf',
+			silverlight_xap_url : '../mobile/lib/plupload-2.1.2/js/Moxie.xap',
 			url : host,
-			multipart_params: {
-			},
-		
 			init: {
 				PostInit: function() {
 					document.getElementById('ossfile').innerHTML = '';	
@@ -50,6 +49,7 @@
 				},
 				//添加文件执行
 				FilesAdded: function(up, files) {	
+					console.log(files)
 					plupload.each(files, function(file) { 
 						document.getElementById('ossfile').innerHTML += '<div style="font-size:0.7em;" id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ')<b></b>'
 						+'<div class="progress"><div class="progress-bar" style="width: 0%"></div></div>'
@@ -131,14 +131,4 @@
 		});
 		
 		uploader.init();
-		//模拟文件删除
-		$('#delete').click(function(){
-			$.ajax({
-				url:"http://demo-photo.oss-cn-beijing.aliyuncs.com/img_00.JPG",
-				type:"delete",
-				dataType:"json",
-				success:function(res){
-					console.log(res)
-				}
-			})
-		})
+		

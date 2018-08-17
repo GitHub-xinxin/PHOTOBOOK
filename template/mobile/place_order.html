@@ -59,7 +59,7 @@
 									{else}
 										<select name="address_id">
 										{loop $address $a}
-										  <option value ="{$a['id']}">{$a['detail']}</option>
+										  <option value ="{$a['id']}">{$a['address']}{$a['detail']}</option>
 										{/loop}
 										</select>
 									{/if}
@@ -149,8 +149,8 @@
 				}
 				var phone =document.getElementsByName('phone')[0].value;
 				if(!(/^1[34578]\d{9}$/.test(phone))){ 
-					// alert("请填写正确的11位电话号码,请重填");  
-					// return false; 
+					alert("请填写正确的11位电话号码,请重填");  
+					return false; 
 				} 
 			}		
 		</script>

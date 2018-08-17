@@ -59,6 +59,18 @@
 		display: none;
 		color: red;
 	}
+	hr{
+		background: white;        
+       border: none;        
+       height: 1px;  
+	}
+	.time_line{
+		position: relative;
+		z-index: -1000
+	}
+	.time_line div{
+		font-size: 0.7em;position: absolute;top: -1.7em;left: 11em;color: #c2c2c2;background-color:rgb(239, 239, 244)
+	}
 </style>
 </head>
 <body>
@@ -77,15 +89,15 @@
 					</div>
 					<div class="mui-col-sm-10 mui-col-xs-10">
 						{if $_GPC['op'] !='del'}
-							<div style="text-align: center;padding-top: 0.5em;color: coral;">
-								{if $HIDE}
-								选择一张图片
-								{else}
-								已选：<span id="yixuan">0</span>/至少选：{$timgcount}张图
-								{/if}
-							</div>
+						<div style="text-align: center;padding-top: 0.5em;color: coral;">
+							{if $HIDE}
+							选择一张图片
+							{else}
+							已选：<span id="yixuan">0</span>/至少选：{$timgcount}张图
+							{/if}
+						</div>
 						{else}
-							<div style="padding-top: 0.5em;color: coral;">我的照片库</div>
+						<div style="padding-top: 0.5em;color: coral;">我的照片库</div>
 						{/if}
 					</div>
 				</div>
@@ -97,10 +109,10 @@
 							<div>
 								<!-- <button type="button" class="layui-btn layui-btn-danger" id="test1">上传图片</button> -->
 								{if $_GPC['op'] !='del'}
-									<button type="button" class="layui-btn layui-btn-danger" id="del">删除图片</button>
-									<button type="button" class="layui-btn layui-btn-danger" id="upload_pic">上传图片</button>
+								<button type="button" class="layui-btn layui-btn-danger" id="del">删除图片</button>
+								<button type="button" class="layui-btn layui-btn-danger" id="upload_pic">上传图片</button>
 								{else}
-									<button type="button" class="layui-btn layui-btn-danger" id="delete">删除图片</button>
+								<button type="button" class="layui-btn layui-btn-danger" id="delete">删除图片</button>
 								{/if}
 								
 							</div>
@@ -112,21 +124,21 @@
 								</div>
 							</button> -->
 							{if $_GPC['op'] !='del'}
-								<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
-									<p style="font-size: 12px">
-										为了照片的完整性，照片的四周5mm内不要留有重要信息，以免被裁掉。
-									</p>
-									<p style="font-size: 12px">
-										<span class="mui-icon mui-icon-info" style="color: red"></span>
-										表示图片的尺寸不符合要求，可能会影响印刷出来的效果，不建议您使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
-									</p>
-									<p style="font-size: 12px">
-										<span class="mui-icon mui-icon-info" style="color: #f3b717"></span>
-										表示图片尺寸太小，印刷出来的效果很差，强烈建议您不要使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
-									</p>
-								</div>
+							<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
+								<p style="font-size: 12px">
+									为了照片的完整性，照片的四周5mm内不要留有重要信息，以免被裁掉。
+								</p>
+								<p style="font-size: 12px">
+									<span class="mui-icon mui-icon-info" style="color: red"></span>
+									表示图片的尺寸不符合要求，可能会影响印刷出来的效果，不建议您使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+								</p>
+								<p style="font-size: 12px">
+									<span class="mui-icon mui-icon-info" style="color: #f3b717"></span>
+									表示图片尺寸太小，印刷出来的效果很差，强烈建议您不要使用，请谨慎选择。厂家不对此类照片的印刷效果负责。
+								</p>
+							</div>
 							{else}
-								<p></p>
+							<p></p>
 							{/if}
 						</div>
 						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;">
@@ -150,6 +162,12 @@
 									</div>
 								</div>
 							</div>
+								{if (int)$item['createtime'] > (int)$userimg[$index+1]['createtime'] + 300}
+									<div class="time_line">
+										<hr>
+										<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+									</div>
+								{/if}
 							{/if}
 							{/loop}							
 						</div>
@@ -174,6 +192,12 @@
 									</div>
 								</div>
 							</div>
+								{if (int)$item['createtime'] > (int)$userimg[$index+1]['createtime'] + 300}
+									<div class="time_line">
+										<hr>
+										<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+									</div>
+								{/if}
 							{/if}
 							{/loop}
 						</div>
@@ -216,22 +240,22 @@
 		</nav>
 		{/if}
 		{if $_GPC['op'] !='del'}
-			{if !$HIDE}
-			<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
-				<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
-					<span class="mui-icon mui-icon-image"></span>
-					<span class="mui-tab-label">快捷排序</span>
-				</a>
-				<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
-					<span class="mui-icon mui-icon-compose"></span>
-					<span class="mui-tab-label">按图合成</span>
-				</a>
-				<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
-					<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
-					<span class="mui-tab-label">自动排版</span>
-				</a>
-			</nav>
-			{/if}
+		{if !$HIDE}
+		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
+			<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
+				<span class="mui-icon mui-icon-image"></span>
+				<span class="mui-tab-label">快捷排序</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
+				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-tab-label">按图合成</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
+				<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
+				<span class="mui-tab-label">自动排版</span>
+			</a>
+		</nav>
+		{/if}
 		{/if}
 		<div class="mui-content"  id="jing2">
 			<ul class="mui-table-view">
@@ -275,31 +299,31 @@
 	layui.use('upload', function(){
 		var upload = layui.upload;
 		var uploadInst = upload.render({
-				elem: '#test1',
-				url: '{$urlnew}',
-				accept: 'images',
-				auto:'true',
-				multiple:'true',
-				before: function(obj){
+			elem: '#test1',
+			url: '{$urlnew}',
+			accept: 'images',
+			auto:'true',
+			multiple:'true',
+			before: function(obj){
 				    layer.load(); //上传loading
-				  },
+				},
 				done: function(data){
 					layer.closeAll('loading')
+					if(data.code==0){
+						var strid='card_'+data.pid
+						var sst="#"+strid
+						$("#zuixin").prepend('<div class="mui-col-sm-4 mui-col-xs-4"><div class="mui-card" id="'+strid+'" name="'+data.pid+'"><div class="mui-card-content"><div class="thisorder">{if !$HIDE}<span class="cardspan" style="display:none">0</span>{/if}</div><div class="imgalert" > <label class="mui-icon mui-icon-info one"></label><label class="mui-icon mui-icon-info two"></label>{if $HIDE}<span class="mui-icon mui-icon-star star_alert" style="display: none;" data-check="0"></span>{/if}</div><img src="'+data.img+'" alt="" style="width: 100%;" /></div></div></div>')
+						{if $HIDE}$(sst).bind("tap",Selected_pictures);{/if}
+						{if !$HIDE}$(sst).bind("tap",func);{/if}
 						if(data.code==0){
-							var strid='card_'+data.pid
-							var sst="#"+strid
-							$("#zuixin").prepend('<div class="mui-col-sm-4 mui-col-xs-4"><div class="mui-card" id="'+strid+'" name="'+data.pid+'"><div class="mui-card-content"><div class="thisorder">{if !$HIDE}<span class="cardspan" style="display:none">0</span>{/if}</div><div class="imgalert" > <label class="mui-icon mui-icon-info one"></label><label class="mui-icon mui-icon-info two"></label>{if $HIDE}<span class="mui-icon mui-icon-star star_alert" style="display: none;" data-check="0"></span>{/if}</div><img src="'+data.img+'" alt="" style="width: 100%;" /></div></div></div>')
-							{if $HIDE}$(sst).bind("tap",Selected_pictures);{/if}
-							{if !$HIDE}$(sst).bind("tap",func);{/if}
-							if(data.code==0){
-								mui.toast("上传成功",{ duration:'short', type:'div' })
-							}else{
-								mui.toast("上传失败",{ duration:'short', type:'div' })
-							}
-							console.log("上传成功")
+							mui.toast("上传成功",{ duration:'short', type:'div' })
 						}else{
-							mui.toast(data.message,{ duration:'short', type:'div' })
-						} 
+							mui.toast("上传失败",{ duration:'short', type:'div' })
+						}
+						console.log("上传成功")
+					}else{
+						mui.toast(data.message,{ duration:'short', type:'div' })
+					} 
 				},
 				error: function(){		   
 				}
@@ -324,7 +348,7 @@
 	var limit =null;
 	var muicard=document.getElementsByClassName("mui-card")
 	var func=function() {
-			
+
 		var thisid="#"+this.id;
 		$this_span=$(thisid).find('span')
 		console.log($this_span[0])
@@ -381,26 +405,27 @@
 			})
 		}
 	}
-		$("#queding").bind('tap',function(e) {
-			var dangqianimgid=sessionStorage.getItem("dangqianimgid");
-			
-			if(dangqianimgid == 0){
-				mui.toast("请选择一张图片",{ duration:'short', type:'div' })
-			}else{
-				$.post('{$url_ONE}',
-				{
-					uid: dangqianimgid
-				}, 
-				function(data) {
-					if(data.code==0){
-						var zhengze=function(str){
-							var reg=new RegExp("px","g"); 
-							var newstr=str.replace(reg,"");
-							console.log('data==')
-							console.log(data);
-							
-							return newstr;
-						}
+	$("#queding").bind('tap',function(e) {
+		var dangqianimgid=sessionStorage.getItem("dangqianimgid");
+
+		if(dangqianimgid == 0){
+			mui.toast("请选择一张图片",{ duration:'short', type:'div' })
+		}else{
+			$.post('{$url_ONE}',
+			{
+				uid: dangqianimgid
+			}, 
+			function(data) {
+
+				if(data.code==0){
+					var zhengze=function(str){
+						var reg=new RegExp("px","g"); 
+						var newstr=str.replace(reg,"");
+						console.log('data==')
+						console.log(data);
+
+						return newstr;
+					}
 
 					var jsonarr=sessionStorage.getItem("jsonarr");//框的数据
 					var arrimgtstr=sessionStorage.getItem("arrimgt");//图片尺寸的数据
@@ -430,16 +455,17 @@
 							})
 						}
 					}
-			
+
 					order[Source_of_change].imgurl=data.img.thumb;
 					order[Source_of_change].type="img";
 					order[Source_of_change].width=data.img.width;
 					order[Source_of_change].height=data.img.height;
 					order[Source_of_change].roate=0;
 					order[Source_of_change].imageId=data.img.id;
+
 						//--
-						arrimgt[Source_of_change].width=data.img.width;
-						arrimgt[Source_of_change].height=data.img.height;
+						// arrimgt[Source_of_change].width=data.img.width;
+						// arrimgt[Source_of_change].height=data.img.height;
 						var New_insert_picture=JSON.stringify(order);
 						var New_arrimgt=JSON.stringify(arrimgt);
 						sessionStorage.setItem("jsonarr",New_insert_picture);
@@ -451,35 +477,35 @@
 				},
 				"json"
 				);
-			}
-		});
-		var Selected_pictures=function(){
-			var thisid="#"+this.id;
-			console.log(thisid);
-			$this_span=$(thisid).find('span');
-			if($this_span.data("check")==0){
-				var imgs=$(thisid).find('img').attr("src");
-				var Tid=Number(thisid.replace("#card_",""));
-				$(".star_alert").hide();
-				$this_span.show();
-				$this_span.data("check","1");
-				sessionStorage.setItem("dangqianimgid",Tid);
-			}else{
-				$this_span.hide();
-				$this_span.data("check","0");
-				sessionStorage.setItem("dangqianimgid",0);
-			}
 		}
-		{if $HIDE}
-		for(var i=0;i<muicard.length;i++){
-			muicard[i].addEventListener("tap",Selected_pictures);
+	});
+	var Selected_pictures=function(){
+		var thisid="#"+this.id;
+		console.log(thisid);
+		$this_span=$(thisid).find('span');
+		if($this_span.data("check")==0){
+			var imgs=$(thisid).find('img').attr("src");
+			var Tid=Number(thisid.replace("#card_",""));
+			$(".star_alert").hide();
+			$this_span.show();
+			$this_span.data("check","1");
+			sessionStorage.setItem("dangqianimgid",Tid);
+		}else{
+			$this_span.hide();
+			$this_span.data("check","0");
+			sessionStorage.setItem("dangqianimgid",0);
 		}
-		{/if}
-		{if !$HIDE}
-		for(var i=0;i<muicard.length;i++){
-			muicard[i].addEventListener("tap",func);
-		}
-		{/if}
+	}
+	{if $HIDE}
+	for(var i=0;i<muicard.length;i++){
+		muicard[i].addEventListener("tap",Selected_pictures);
+	}
+	{/if}
+	{if !$HIDE}
+	for(var i=0;i<muicard.length;i++){
+		muicard[i].addEventListener("tap",func);
+	}
+	{/if}
 	//_____________快速排序页底部按钮_______________________________
 	document.getElementById("fanhui").addEventListener("tap",function(){
 		$("#jing2").hide();
@@ -520,8 +546,8 @@
 						url:turnurl
 					})
 				}else{
-					// mui.alert(JSON.stringify(data))
-					mui.alert("出现错误"+data.errors)
+					mui.alert(JSON.stringify(data))
+					// mui.alert("出现错误"+data.errors)
 
 				}
 			},
@@ -529,30 +555,31 @@
 			)}
 	//--------------------------
 	{if !$HIDE}
-		document.getElementById("baocun").addEventListener("tap",function(){
-			var pdatas=new Array;
-			$("#items").children().children().each(function(ix,val){
-				var pid=val.id.replace("lik","card_");
-				var img=$(val).parent().data('img_url');
-				var img_name =$(val).parent().data('img_name');
-				pdatas.push({
-					pid:pid,
-					img:img,
-					img_name:img_name
-				})
+	document.getElementById("baocun").addEventListener("tap",function(){
+		var pdatas=new Array;
+		$("#items").children().children().each(function(ix,val){
+			var pid=val.id.replace("lik","card_");
+			var img=$(val).parent().data('img_url');
+			var img_name =$(val).parent().data('img_name');
+			pdatas.push({
+				pid:pid,
+				img:img,
+				img_name:img_name
 			})
-			tijiao(pdatas)
 		})
-		
-		{if $_GPC['op'] != 'del'}
-			document.getElementById("antu").addEventListener("tap",function(){
-				tijiao(js_data)
-			})
-			document.getElementById("zidong").addEventListener("tap",function(){
-				tijiao(js_data)
-			})
+		tijiao(pdatas)
+	})
+
+	{if $_GPC['op'] != 'del'}
+	document.getElementById("antu").addEventListener("tap",function(){
+		tijiao(js_data)
+	})
+	document.getElementById("zidong").addEventListener("tap",function(){
+		tijiao(js_data)
+	})
 			//上传照片
 			document.getElementById("upload_pic").addEventListener("tap",function(){
+	
 				window.location.href="{php echo $this->createMobileUrl('upload_user_photo')}"+'&tid='+"{$tid}"+"&op={$_GPC['op']}"
 			})
 			document.getElementById("del").addEventListener("tap",function(){
@@ -575,7 +602,7 @@
 					}
 				})
 			})
-		{else}
+			{else}
 			document.getElementById("delete").addEventListener("tap",function(){
 				if(js_data.length == 0){
 					alert('没有选择删除图片')
@@ -595,8 +622,8 @@
 					}
 				})
 			})
-		{/if}
-	{/if}
+			{/if}
+			{/if}
 	//_____________________________________________________________
 	$(function(){
 
@@ -647,16 +674,15 @@
 								mui.toast("上传失败",{ duration:'short', type:'div' })
 							}
 						},
-						'json'
-						)
+						'json')
 				}
 			}
 		})
 	})
 
-	</script>
-	<script src="../addons/photobook/template/mobile/js/Sortable.min.js"></script>
-	<script type="text/javascript">
+</script>
+<script src="../addons/photobook/template/mobile/js/Sortable.min.js"></script>
+<script type="text/javascript">
 	var syc_photo=function(){
 		$("#items").html("")
 		js_data.forEach(function(val,index,arr){
