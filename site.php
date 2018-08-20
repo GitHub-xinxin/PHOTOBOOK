@@ -82,7 +82,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_thumb = $ordersub_id."_".$index.'.'.$temp[1];
 		$send_data ='x-oss-process=image/resize,p_100|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
-		
+
 		foreach ($data as $key => $frame){
 			
 			/**
@@ -93,7 +93,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				
 				$org =str_replace("_thum","",$trimarray[$key]['imgurl']);
 				$thumb_img = "roate_".$org; 
-				
+
 				if($trimarray[$key]['roate']==90 || $trimarray[$key]['roate']==-270){
 					$send_data ='x-oss-process=image/rotate,90|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
 				}elseif($trimarray[$key]['roate']==180 || $trimarray[$key]['roate']==-180){
@@ -162,17 +162,28 @@ class PhotobookModuleSite extends WeModuleSite {
 				/**
 				 * 合成模板
 				 */
-				// var_dump('frame.top=='.$frame_top.' frame.left=='.$frame_left); 
-				$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
-				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
+				if(!stristr($thumb_img,'.jpeg')){
+					//转换为jpg格式，然后保存
+					$thumb_img_jpg = explode(".", $thumb_img)[0].'.jpg'; 
+					$send_data ='x-oss-process=image/format,jpg|sys/saveas,o_'.base64_encode($thumb_img_jpg).',b_'.base64_encode('demo-photo');
+					$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process', $send_data);
+					$compound_data =base64_encode($thumb_img_jpg);
+				}
+				else
+					$compound_data =base64_encode($thumb_img);
+
+				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',t_100,g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
-				
+
 				/**
 				 * 删除上传的临时图片
 				 */
 			}
 			$clear = new commonFunction();
+			//从oss删除临时图片
 			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
+			if($thumb_img_jpg)
+				$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img_jpg,'DELETE');
 		}
 		/**
 		 * png覆盖
@@ -299,13 +310,13 @@ class PhotobookModuleSite extends WeModuleSite {
 				/**
 				 * 合成模板
 				 */
-				// var_dump('frame.top=='.$frame_top.' frame.left=='.$frame_left); 
-				$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
+				if(!stristr($thumb_img,'.jpeg'))
+					$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
+				else
+					$compound_data =base64_encode($thumb_img);
 				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',t_100,g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
-				load()->func('logging');
-				//记录文本日志
-				logging_run('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process'.$send_data,'info','file---');
+				
 				/**
 				 * 删除上传的临时图片
 				 */
@@ -320,7 +331,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			}
 		
 			$clear = new commonFunction();
-			// $clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
+			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
 		}
 		/**
 		 * png覆盖
@@ -348,14 +359,11 @@ class PhotobookModuleSite extends WeModuleSite {
 					$color_data = trim($frame['color'],'#');
 				$send_data ='x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,text_'.$text_data.',size_'.$size_data.',color_'.$color_data.',g_nw,x_'.round($frame['left']).',y_'.round($frame['top']).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
-				logging_run('id===='.json_encode($response),'info','compo333333und');
 			}
 		}
 		/**
 		 * 更新数据表
 		 */
-		load()->func('logging');
-		logging_run('id===='.$template_thumb,'info','compound');
 		$trim =json_encode($trimarray);
 		pdo_update('ly_photobook_order_sub',array('img_path'=>$template_thumb,'trim'=>$trim),array('id'=>$ordersub_id));
 	}

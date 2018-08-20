@@ -11,3 +11,9 @@
 2018-08-15 16:20:19 : 有这个人的share记录了
 2018-08-15 16:20:19 : 没有生成海报，返回以前生成的
 2018-08-15 16:20:19 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter8.jpg
+2018-08-18 17:14:41 : 进入createMPoster
+2018-08-18 17:14:41 : select * from `ims_ly_photobook_share` where posterid='11' and openid='oMxUt0ZTji0_Xrrzj6S6UdynhVk8' limit 1
+2018-08-18 17:14:41 : createMPoster: share===>{"id":"8","uniacid":"2","image_url":"http:\/\/weixin.qq.com\/q\/02eolP0GPlcJh1clJR1r1c","openid":"oMxUt0ZTji0_Xrrzj6S6UdynhVk8","nickname":"\u65f6\u5149\u5370\u738b\u4e9a\u6d32","avatar":"http:\/\/thirdwx.qlogo.cn\/mmopen\/1gRytQU7jymibibbpib0unLXlyFwToeUBjjmhQ9JzTZRDWAAGnrHzVtukwRwiaXWTU5E9GjmfspRViaIiaTxVTcaFkCXeVPI6FFxbQ\/132","posterid":"11","sceneid":"20068","parentid":"0","ticketid":"gQHs7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyZW9sUDBHUGxjSmgxY2xKUjFyMWMAAgQVYA5bAwQAjScA","createtime":"1527668756"}
+2018-08-18 17:14:41 : 有这个人的share记录了
+2018-08-18 17:14:41 : 没有生成海报，返回以前生成的
+2018-08-18 17:14:41 : img:/www/wwwroot/photos.leyaocn.com/addons/photobook/poster/mposter8.jpg
