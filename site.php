@@ -161,16 +161,12 @@ class PhotobookModuleSite extends WeModuleSite {
 				
 				/**
 				 * 合成模板
+				 * 将图片转换为jpg格式
 				 */
-				if(!stristr($thumb_img,'.jpeg')){
-					//转换为jpg格式，然后保存
-					$thumb_img_jpg = explode(".", $thumb_img)[0].'.jpg'; 
-					$send_data ='x-oss-process=image/format,jpg|sys/saveas,o_'.base64_encode($thumb_img_jpg).',b_'.base64_encode('demo-photo');
-					$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process', $send_data);
-					$compound_data =base64_encode($thumb_img_jpg);
-				}
-				else
-					$compound_data =base64_encode($thumb_img);
+				
+				$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
+				$compound_data =str_replace('+', '-', $compound_data);
+				$compound_data =str_replace('/', '_', $compound_data);
 
 				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',t_100,g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
@@ -182,8 +178,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			$clear = new commonFunction();
 			//从oss删除临时图片
 			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
-			if($thumb_img_jpg)
-				$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img_jpg,'DELETE');
+
 		}
 		/**
 		 * png覆盖
@@ -309,18 +304,19 @@ class PhotobookModuleSite extends WeModuleSite {
 				
 				/**
 				 * 合成模板
+				 * 将图片转换为jpg格式
 				 */
-				if(!stristr($thumb_img,'.jpeg'))
-					$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
-				else
-					$compound_data =base64_encode($thumb_img);
+				$compound_data =base64_encode($thumb_img."?x-oss-process=image/format,jpg");
+				$compound_data =str_replace('+', '-', $compound_data);
+				$compound_data =str_replace('/', '_', $compound_data);
+
 				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',t_100,g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
 				
 				/**
 				 * 删除上传的临时图片
 				 */
-				// var_dump($thumb_img);
+				
 				if($trimarray[$key]['roate']==90 || $trimarray[$key]['roate']==-270 || $trimarray[$key]['roate']==-90 || $trimarray[$key]['roate']==270){
 					$trimarray[$key]['width']=$img_h.'px';
 					$trimarray[$key]['height']=$img_w.'px';
