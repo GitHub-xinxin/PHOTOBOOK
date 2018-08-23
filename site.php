@@ -75,14 +75,12 @@ class PhotobookModuleSite extends WeModuleSite {
 		/**
 		 * 先生成模板图的副本
 		 */
-		// if($org_w >4096)
-		// 	$org_w = 4096;
 		$temp =explode('.',$T_photo);
 		$index++;
 		$template_thumb = $ordersub_id."_".$index.'.'.$temp[1];
 		$send_data ='x-oss-process=image/resize,p_100|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 		$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$T_photo.'?x-oss-process', $send_data);
-
+		load()->func('logging');
 		foreach ($data as $key => $frame){
 			
 			/**
@@ -93,7 +91,15 @@ class PhotobookModuleSite extends WeModuleSite {
 				
 				$org =str_replace("_thum","",$trimarray[$key]['imgurl']);
 				$thumb_img = "roate_".$org; 
-
+				//如果图片的宽高 其中一个超过4096 无法生成缩略图
+				
+				$img_org_info = ihttp_get('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$org.'?x-oss-process=image/info');
+				$de_org_info =json_decode($img_org_info['content'],true);
+				if($de_org_info['ImageHeight']['value'] > 4096 || $de_org_info['ImageWidth']['value'] > 4096){
+					//如果原图有一边超过4096 将原图按最长边缩放到4096  替换原图
+					$send_data ='x-oss-process=image/resize,l_4096|sys/saveas,o_'.base64_encode($org).',b_'.base64_encode('demo-photo');
+					$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$org.'?x-oss-process', $send_data);
+				}
 				if($trimarray[$key]['roate']==90 || $trimarray[$key]['roate']==-270){
 					$send_data ='x-oss-process=image/rotate,90|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
 				}elseif($trimarray[$key]['roate']==180 || $trimarray[$key]['roate']==-180){
@@ -105,7 +111,8 @@ class PhotobookModuleSite extends WeModuleSite {
 				}
 				//在原图基础上,是否进行旋转
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$org.'?x-oss-process', $send_data);
-		
+				
+				//记录文本日志
 				
 				/**
 				 * 获取图片的信息
@@ -158,7 +165,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$tailor_data = ',limit_0/crop,x_'.round($tailor_x).',y_'.round($tailor_y).',w_'.round($frame_w).',h_'.round($frame_h);
 				$send_data ='x-oss-process=image/resize,'.$thumb_type.'_'.round($thumb_value).$tailor_data.'|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process', $send_data);
-				
+					
 				/**
 				 * 合成模板
 				 * 将图片转换为jpg格式
@@ -170,6 +177,8 @@ class PhotobookModuleSite extends WeModuleSite {
 
 				$send_data ='x-oss-process=image/watermark,image_'.$compound_data.',t_100,g_nw,x_'.round($frame_left).',y_'.round($frame_top).'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
+				//记录文本日志
+				logging_run('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process'.$send_data, 'info', '9900');
 
 				/**
 				 * 删除上传的临时图片
