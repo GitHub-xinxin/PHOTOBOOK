@@ -26,6 +26,6 @@ class commonFunction{
         $file_contents = curl_exec($ch);//获得返回值
         return $file_contents;
         curl_close($ch);
-    }
+    } 
 }
 ?>

@@ -1,15 +1,15 @@
 {template 'common/header'}
 
 <style>
-    th {
-        text-align: center !important;
-    }
+th {
+    text-align: center !important;
+}
 
-    td {
-        text-align: center !important;
-        white-space: normal !important;
-        word-break: break-all !important;
-    }
+td {
+    text-align: center !important;
+    white-space: normal !important;
+    word-break: break-all !important;
+}
 </style>
 <div class="panel panel-default">
 
@@ -46,7 +46,15 @@
                     <td>{$l['commission']}</td>
                     <td>{$l['agent_code']}</td>
                     <td>
-                        <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('sharelist',array('id'=>$l['id']))}">推广记录 【{$l['count']}】</a>
+                        <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('sharelist',array('id'=>$l['id']))}">推广记录 【
+                            {if !empty($l['count'])}
+                            {$l['count']}
+                            {else}
+                                0
+                            {/if}
+                            】
+                        </a>
+                        <a href="{php echo $this->createWebUrl('dealerlist',array('id'=>$l['id'],'op'=>'cancel'))}" onclick="if(!confirm('你确定要取消{$l['nickname']}代理吗?')) return false;" class="btn btn-danger">取消代理</a>
                     </td>
 
                 </tr>

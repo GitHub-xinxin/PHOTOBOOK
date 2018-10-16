@@ -1,0 +1,65 @@
+{template 'common/header'}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<style>
+    td,th{
+        text-align: center;
+    }
+</style>
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active">
+        <a href="#">
+            代金券分享统计
+        </a>
+    </li>
+</ul>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <span>{$_GPC['name']}的代金券分享概述</span>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4">
+                总购买代金券数：{$buy_total}
+            </div>
+            <div class="col-md-4">
+                分享代金券数：{$share_total}
+            </div>
+            <div class="col-md-4">
+                所占比例：{php echo round($share_total/$buy_total*100,2)}% 
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myTabContent" class="tab-content">
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>代理员</th>
+                <th>代金券类型</th>
+                <th>被分享人</th>
+                <th>数量</th>
+                <th>分享时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {loop $share_list $index $item}
+            <tr>
+                <td>{php echo $index+1}</td>
+                <td>{$item['parent']} </td>
+                <td>{$item['code_kind']} </td>
+                <td>{$item['children']}</td>
+                <td>{$item['number']}</td>
+                <td>{php echo date('Y-m-d H:i:s',$item['insert_time'])}</td>
+            </tr>
+            {/loop}
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    require(['https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js'], function () {
+        $('#myTable').DataTable({
+        });
+    })
+</script>
+{template 'common/footer'}

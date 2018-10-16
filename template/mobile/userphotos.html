@@ -34,7 +34,7 @@
 		position: relative;height: 0px;text-align: right
 	}
 	.cardspan{
-		font-size: 20px;background-color: #27ae60;color: #fff;
+		font-size: 16px;background-color: #5FB878;color: #fff;
 	}
 	.imgalert{
 		position: relative;height: 0px;text-align: left
@@ -61,15 +61,18 @@
 	}
 	hr{
 		background: white;        
-       border: none;        
-       height: 1px;  
+		border: none;        
+		height: 1px;  
 	}
 	.time_line{
 		position: relative;
 		z-index: -1000
 	}
 	.time_line div{
-		font-size: 0.7em;position: absolute;top: -1.7em;left: 11em;color: #c2c2c2;background-color:rgb(239, 239, 244)
+		font-size: 0.55em;position: absolute;top: -1em;left: 15em;color: #c2c2c2;background-color:rgb(239, 239, 244)
+	}
+	.mui-icon{
+		font-size: 18px
 	}
 </style>
 </head>
@@ -113,16 +116,10 @@
 								<button type="button" class="layui-btn layui-btn-danger" id="upload_pic">上传图片</button>
 								{else}
 								<button type="button" class="layui-btn layui-btn-danger" id="delete">删除图片</button>
+								<button type="button" class="layui-btn layui-btn-danger" id="upload_pic">上传图片</button>
 								{/if}
 								
 							</div>
-
-<!-- 							<button type="button" id="up_button" class="mui-btn mui-btn-danger">
-								<div>
-									<input style="opacity: 0" type="file" id="head_img_change" style="width: 100%;background-color: #fff"/>
-									点此上传
-								</div>
-							</button> -->
 							{if $_GPC['op'] !='del'}
 							<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
 								<p style="font-size: 12px">
@@ -147,9 +144,24 @@
 						<div class="mui-row" id="zuixin">
 							{loop $userimg $index $item}
 							{if $day <=(int)$item['createtime']}
-							<div class="mui-col-sm-4 mui-col-xs-4">
+							{if empty($userimg[$index-1])}
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<div class="time_line">
+									<hr>
+									<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+								</div>
+							</div>
+							{elseif (int)$item['createtime'] < (int)$userimg[$index-1]['createtime'] - 300}
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<div class="time_line">
+									<hr>
+									<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+								</div>
+							</div>
+							{/if}
+							<div class="mui-col-sm-3 mui-col-xs-3">
 								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
-									<div class="mui-card-content" style="height: 6em;overflow: hidden;">
+									<div class="mui-card-content" style="height: 5em;overflow: hidden;">
 										<div class="thisorder"> 
 											{if !$HIDE}<span class="cardspan">0</span>{/if}
 										</div>
@@ -158,16 +170,10 @@
 											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:6em;" />
+										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:5em;" />
 									</div>
 								</div>
 							</div>
-								{if (int)$item['createtime'] > (int)$userimg[$index+1]['createtime'] + 300}
-									<div class="time_line">
-										<hr>
-										<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
-									</div>
-								{/if}
 							{/if}
 							{/loop}							
 						</div>
@@ -177,9 +183,24 @@
 						<div class="mui-row">
 							{loop $userimg $index $item}
 							{if $day>(int)$item['createtime']&&$item['createtime']>$month}
-							<div class="mui-col-sm-4 mui-col-xs-4">
+							{if empty($userimg[$index-1])}
+							<div  class="mui-col-sm-12 mui-col-xs-12">
+								<div class="time_line">
+									<hr>
+									<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+								</div>
+							</div>
+							{elseif (int)$item['createtime'] < (int)$userimg[$index-1]['createtime'] - 300}
+							<div class="mui-col-sm-12 mui-col-xs-12">
+								<div class="time_line">
+									<hr>
+									<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+								</div>
+							</div>
+							{/if}
+							<div class="mui-col-sm-3 mui-col-xs-3">
 								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
-									<div class="mui-card-content" style="height: 6em;overflow: hidden;">
+									<div class="mui-card-content" style="height: 5em;overflow: hidden;">
 										<div class="thisorder"> 
 											{if !$HIDE}<span class="cardspan">0</span>{/if}
 										</div>
@@ -188,16 +209,10 @@
 											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:6em;" />
+										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:5em;" />
 									</div>
 								</div>
 							</div>
-								{if (int)$item['createtime'] > (int)$userimg[$index+1]['createtime'] + 300}
-									<div class="time_line">
-										<hr>
-										<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
-									</div>
-								{/if}
 							{/if}
 							{/loop}
 						</div>
@@ -207,9 +222,9 @@
 						<div class="mui-row">
 							{loop $userimg $index $item}
 							{if $month>$item['createtime']}
-							<div class="mui-col-sm-4 mui-col-xs-4">
+							<div class="mui-col-sm-3 mui-col-xs-3">
 								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
-									<div class="mui-card-content" style="height: 6em;overflow: hidden;">
+									<div class="mui-card-content" style="height: 5em;overflow: hidden;">
 										<div class="thisorder"> 
 											{if !$HIDE}<span class="cardspan">0</span>{/if}
 										</div>
@@ -218,81 +233,80 @@
 											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}"  alt="" style="width: 100%;height:6em;" />
+										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}"  alt="" style="width: 100%;height:5em;" />
 									</div>
 								</div>
 							</div>
 							{/if}
 							{/loop}
-							</div
-							<div style="height: 6em;"></div>
 						</div>
+						<div style="height: 3em;"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-		{if $HIDE}
-		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
-			<a class="mui-tab-item mui-active" style="color: #e74c3c;" id="queding">
-				<span class="mui-icon mui-icon-checkmarkempty"></span>
-				<span class="mui-tab-label">确定</span>
-			</a>
-		</nav>
-		{/if}
-		{if $_GPC['op'] !='del'}
-		{if !$HIDE}
-		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
-			<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
-				<span class="mui-icon mui-icon-image"></span>
-				<span class="mui-tab-label">快捷排序</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
-				<span class="mui-icon mui-icon-compose"></span>
-				<span class="mui-tab-label">按图合成</span>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
-				<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
-				<span class="mui-tab-label">自动排版</span>
-			</a>
-		</nav>
-		{/if}
-		{/if}
-		<div class="mui-content"  id="jing2">
-			<ul class="mui-table-view">
-				<style>
-				.mui-table-view-cell{
-					background-size: 100%;
-					height: 5em;
-					background-repeat:no-repeat; 
-				}
-				.thislabel{
-					background: #ecf0f1;opacity:0.8;color:#ac173b;border-radius: 2px;
-					font-size: 1em;
-					font-family: "微软雅黑";
-				}
-			</style>
-			<div class="mui-row" id="items">
-			</div>
-		</ul>
-		<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer2">
-			<!-- <a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;">
-				<button type="button" class="mui-btn mui-btn-success" id="xiangshang">↑向上</button>
-			</a> -->
-			<a class="mui-tab-item" href="#tabbar-with-chat" style="color: palevioletred;">
-				<button type="button" class="mui-btn " id="fanhui">返回</button>
-			</a>
-			<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
-				<button type="button" class="mui-btn  mui-btn-warning" id="baocun">生成</button>
-			</a>
-			<!-- <a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
-				<button type="button" class="mui-btn  mui-btn-primary" id="xiangxia">↓向下</button>
-			</a> -->
-		</nav>
 	</div>
-	<script type="text/javascript" src="../addons/photobook/template/mobile/js/app.js"></script>
-	<script type="text/javascript">
+	{if $HIDE}
+	<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
+		<a class="mui-tab-item mui-active" style="color: #e74c3c;" id="queding">
+			<span class="mui-icon mui-icon-checkmarkempty"></span>
+			<span class="mui-tab-label">确定</span>
+		</a>
+	</nav>
+	{/if}
+	{if $_GPC['op'] !='del'}
+	{if !$HIDE}
+	<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer">
+		<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;" id="kuaijie">
+			<span class="mui-icon mui-icon-image"></span>
+			<span class="mui-tab-label">快捷排序</span>
+		</a>
+		<a class="mui-tab-item" href="#tabbar-with-chat" id="antu" style="color: palevioletred;">
+			<span class="mui-icon mui-icon-compose"></span>
+			<span class="mui-tab-label">按图合成</span>
+		</a>
+		<a class="mui-tab-item" href="#tabbar-with-contact" id="zidong" style="color: orange;">
+			<span class="mui-icon  mui-icon-extra mui-icon-extra-arrowrightcricle"></span>
+			<span class="mui-tab-label">自动排版</span>
+		</a>
+	</nav>
+	{/if}
+	{/if}
+	<div class="mui-content"  id="jing2">
+		<ul class="mui-table-view">
+			<style>
+			.mui-table-view-cell{
+				background-size: 100%;
+				height: 5em;
+				background-repeat:no-repeat; 
+			}
+			.thislabel{
+				background: #ecf0f1;opacity:0.8;color:#ac173b;border-radius: 2px;
+				font-size: 1em;
+				font-family: "微软雅黑";
+			}
+		</style>
+		<div class="mui-row" id="items" style="overflow:scroll"></div>
+	</ul>
+	<nav class="mui-bar mui-bar-tab" style="text-align: center;background-color: azure;" id="footer2">
+		<a class="mui-tab-item mui-active" href="#tabbar" style="color: #16a085;">
+			<button type="button" class="mui-btn mui-btn-success" id="xiangshang">↑向上</button>
+		</a>
+		<a class="mui-tab-item" href="#tabbar-with-chat" style="color: palevioletred;">
+			<button type="button" class="mui-btn " id="fanhui">返回</button>
+		</a>
+		<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
+			<button type="button" class="mui-btn  mui-btn-warning" id="baocun">生成</button>
+		</a>
+		<a class="mui-tab-item" href="#tabbar-with-contact" style="color: orange;">
+			<button type="button" class="mui-btn  mui-btn-primary" id="xiangxia">↓向下</button>
+		</a>
+	</nav>
+</div>
+<script type="text/javascript" src="../addons/photobook/template/mobile/js/app.js"></script>
+<script type="text/javascript">
 
-	</script>
+</script>
 </body>
 <script src="../addons/photobook/template/mobile/layui/layui.js"></script>
 <script>
@@ -330,10 +344,14 @@
 			})
 	});
 </script>
-<script type="text/javascript">
+<script type="text/javascript">	
 	//如果
 	$("#jing2").hide();
 	$("#footer2").hide();
+	//设置排序图片容器高度为屏幕高度，方便苹果手机滚屏
+	$('#items').css('height',parseInt($(window).height())-60)
+	$("#xiangshang").hide();
+	$("#xiangxia").hide();
 	$("#kuaijie").bind("tap",function(){
 		$("#jing1").hide();
 		$("#footer").hide();
@@ -513,18 +531,7 @@
 		$("#jing1").show(300);
 		$("#footer").show(300);
 	})
-	// var offset =0;
-	// document.getElementById("xiangshang").addEventListener("tap",function(){
-	// 	offset -=200;
-	// 	if(offset < 0)
-	// 		offset =0;
-	// 	$('#items').scrollTop(offset); 
-	// })
-	// document.getElementById("xiangxia").addEventListener("tap",function(){
-	// 	alert($('#items').height())
-	// 	offset +=200;
-	// 	$("#items").scrollTop(offset); 
-	// })
+	
 	//--------------------------
 	var tijiao=function(arr){
 		var tid=$("#tid").val()
@@ -569,7 +576,11 @@
 		})
 		tijiao(pdatas)
 	})
+	//上传照片
+	document.getElementById("upload_pic").addEventListener("tap",function(){
 
+		window.location.href="{php echo $this->createMobileUrl('upload_user_photo')}"+'&tid='+"{$tid}"+"&op={$_GPC['op']}"
+	})
 	{if $_GPC['op'] != 'del'}
 	document.getElementById("antu").addEventListener("tap",function(){
 		tijiao(js_data)
@@ -577,11 +588,7 @@
 	document.getElementById("zidong").addEventListener("tap",function(){
 		tijiao(js_data)
 	})
-			//上传照片
-			document.getElementById("upload_pic").addEventListener("tap",function(){
-	
-				window.location.href="{php echo $this->createMobileUrl('upload_user_photo')}"+'&tid='+"{$tid}"+"&op={$_GPC['op']}"
-			})
+			
 			document.getElementById("del").addEventListener("tap",function(){
 				if(js_data.length == 0){
 					alert('没有选择删除图片')
@@ -626,10 +633,29 @@
 			{/if}
 	//_____________________________________________________________
 	$(function(){
-
-		　　　　$("#head_img_change").change(function() {
-			　　      var $file = $(this);
-			　　　　　var fileObj = $file[0]
+		if(!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)){
+			$("#xiangshang").show();
+			$("#xiangxia").show();
+			$('#items').on('touchmove touchstart', function (event) {
+				event.preventDefault();
+			});
+			var offset =0;
+			document.getElementById("xiangshang").addEventListener("tap",function(){
+				offset -=200;
+				if(offset < 0)
+					offset =0;
+				$('#items').scrollTop(offset); 
+			})
+			document.getElementById("xiangxia").addEventListener("tap",function(){
+				offset +=200;
+				if(offset > parseInt($(window).height())-60)
+					offset = parseInt($(window).height())-60
+				$("#items").scrollTop(offset); 
+			})
+		}
+		$("#head_img_change").change(function() {
+			var $file = $(this);
+			var fileObj = $file[0]
 			var filepath=fileObj.files[0].name
 			var extStart =filepath.lastIndexOf(".");
 			var ext = filepath.substring(extStart, filepath.length).toUpperCase();
@@ -673,8 +699,7 @@
 							}else{
 								mui.toast("上传失败",{ duration:'short', type:'div' })
 							}
-						},
-						'json')
+						},'json')
 				}
 			}
 		})
@@ -700,15 +725,7 @@
 		})
 	}
 	var el = document.getElementById('items');
-	// $('#items').on('ondrag','li',function(){
 
-	// })
-	// el.dragsort({
-	// 	dragSelector: "li",
-	// 	dragBetween: true,
-	// 	dragEnd: syc_idnum, //拖拽完成后回调函数
-	// 	placeHolderTemplate: "<li class='placeHolder'><div></div></li>" //拖动是阴影
-	// });
 	Sortable.create(el,{
 		sort:true, 
 		animation: 150,
@@ -717,7 +734,6 @@
 			syc_idnum()
 		},
 		onStart:function(){	
-			//alert('start')
 			$('#footer2').hide()
 		},
 		onMove:function(){

@@ -13,11 +13,11 @@
 						<p>零售价：{$c['list_price']}</p>
 						{if $user['dealer'] != -1}
 							<div style="text-align: center">	
-								<a href="{php echo $this->createMobileUrl('agentsublist',array('cid'=>$c['id'],'cnum'=>$c['number']))}" class="mui-btn mui-btn-danger" style="width: 45%">分享</a>
-								<a href="{php echo $this->createMobileUrl('usable',array('price'=>$c['list_price']))}" class="mui-btn mui-btn-success" style="width: 45%">使用</a>
+								<a href="{php echo $this->createMobileUrl('agentsublist',array('cid'=>$c['id'],'cnum'=>$c['number']))}" class="mui-btn mui-btn-danger" style="width: 45%;background: #01AAED;border: none;">分享</a>
+								<a href="{php echo $this->createMobileUrl('usable',array('price'=>$c['list_price']))}" class="mui-btn mui-btn-success" style="width: 45%;background: #FF5722;border: none;">使用</a>
 							</div>	
 						{elseif $user['dealer'] == -1}
-							<a href="{php echo $this->createMobileUrl('usable',array('price'=>$c['list_price']))}" class="mui-btn mui-btn-success" style="width: 100%">使用</a>
+							<a href="{php echo $this->createMobileUrl('usable',array('price'=>$c['list_price']))}" class="mui-btn mui-btn-success" style="width: 100%;background: #FF5722;border: none;">使用</a>
 						{/if}
 						</div>
 		        </li>

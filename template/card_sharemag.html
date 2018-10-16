@@ -1,0 +1,52 @@
+{template 'common/header'}
+<style>
+.qr_img{
+    width: 5vw;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<ul class="nav nav-tabs">
+    <li> <a href="{php echo $this->createWebUrl('cartlist')}">代金券</a></li>
+    <li> <a href="{php echo $this->createWebUrl('code_buy')}">代金券购买记录</a></li>
+    <li class="active"><a href="{php echo $this->createWebUrl('card_sharemag')}">代金券分享统计</a></li>
+</ul>
+
+<div id="myTabContent" class="tab-content">
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>代理人</th>
+                <th>代理类型</th>
+                <th style="width: 25%;">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {loop $list $index $item}
+            <tr>
+                <td>{php echo $index+1}</td>
+                <td>{$item['name']} </td>
+                <td>
+                    {if $item['dealer'] == 1}
+                        代理
+                    {elseif $item['dealer'] == 2}
+                        内部代理
+                    {else}
+                        不详
+                    {/if}
+                </td>
+                <td>
+                    <a href="{php echo $this->createWebUrl('card_sharelog',['aid'=>$item['id'],'name'=>$item['name']])}" class="btn btn-primary">分享明细</a>
+                </td>
+            </tr>
+            {/loop} 
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    require(['https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js'], function () {
+        $('#myTable').DataTable({
+        });
+    })
+</script> 
+{template 'common/footer'}

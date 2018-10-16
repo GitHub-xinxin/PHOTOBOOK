@@ -1,5 +1,14 @@
 {template 'header'}
-				<div id="scroll" class="mui-content mui-scroll-wrapper ">
+<style>
+	input::-webkit-input-placeholder {
+         /* placeholder颜色  */
+        /* placeholder字体大小  */
+        font-size: 0.8em;
+         /* placeholder位置  */
+        text-align: right;
+     }
+</style>
+				<div id="scroll" class="mui-content mui-scroll-wrapper" style="font-size: 0.8em">
 					<div class="mui-scroll">
 						<form class="mui-input-group" method="post" onsubmit="return check()">
 							<div class="mui-input-row">
@@ -20,7 +29,7 @@
 								<label>联系电话</label>
 								<input type="number" class="mui-input-clear" name="user_phone" placeholder="请输入电话号">
 							</div>
-						<!-- 	<div class="mui-input-row">
+					<!-- 		<div class="mui-input-row">
 							<label>图片说明</label>
 							<span class="mui-btn mui-btn-success mui-btn-outlined">
 								上传

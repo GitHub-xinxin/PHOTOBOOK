@@ -2,24 +2,30 @@
 
 <div id="scroll" class="mui-content mui-scroll-wrapper">
 	<div class="mui-scroll">
-		<div style="margin-top: 1em;padding-left:0.7em;background-color:rgb(0,138,255);height:7em" >
+		<div style="margin-top: 1em;padding-left:0.7em;background-color:#1E9FFF;height:7em" >
 			<div>
 				<p style="color:white;padding-top:0.8em">佣金金额(元)</p> 
 			</div>
 			<div style="padding-top:0.5em;">
 				<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('myrebatelist')}">
-					<p style="color:white;font-size: 50px;">
+					<p style="color:white;font-size: 30px;">
 						{if empty($money_count)}
-							0
-						{else}
-							{$money_count}
+						0
+						{else} 
+						{$money_count}
 						{/if}
 						<span style="display:block;font-size:30px;padding-left:10em;margin-top:-0.95em" class="mui-icon mui-icon-arrowright"></span>
 					</p>	
 				</a>	
 			</div>
 			<div style="margin-top: 1em;font-size: 20px;">
-				<p style="color:white">累计收入:0元</p>
+				<p style="color:white">累计收入:
+					{if empty($lj_count)}
+					0
+					{else} 
+					{$lj_count}
+					{/if}
+				元</p>
 			</div>
 		</div>
 		<div class="mui-col-sm-12 mui-col-xs-12">
@@ -36,7 +42,11 @@
 						</div>
 						<div class="mui-col-sm-4 mui-col-xs-4">
 							<div style="text-align: center;">
+								{if empty($lf_count)}
 								0
+								{else} 
+								{$lf_count}
+								{/if}
 							</div>
 							<div style="text-align: center;">
 								拉粉奖励
@@ -44,7 +54,11 @@
 						</div>
 						<div class="mui-col-sm-4 mui-col-xs-4">
 							<div style="text-align: center;">
+								{if empty($xs_count)}
 								0
+								{else} 
+								{$xs_count}
+								{/if}
 							</div>
 							<div style="text-align: center;">
 								销售奖励
@@ -54,38 +68,58 @@
 				</li>
 			</ul>
 			
-			<div class="mui-row" style="margin-top: 1em;">
+			<div class="mui-row" style="margin-top: 0.5em;">
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
-						<span>
-							<span class="mui-icon mui-icon-paperplane"></span> 我的海报
-							<button id="poster" style="margin-left:11em;background-color:rgb(230, 70, 142);color:white">预览海报</button>
+					<li class="mui-table-view-cell poster">
+						<span  class="mui-navigate-right">
+							<img class="menu_img" src="../addons/photobook/images/hb.png" alt=""> 我的海报
 						</span>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell qrcode">
 						<span class="mui-navigate-right" href="{php echo $this->createMobileUrl('becomeagent')}">
-							<span class="mui-icon mui-icon-spinner-cycle mui-spin"></span> 代理二维码
-							<button id="qrcode" style="margin-left:11em;background-color:rgb(230, 70, 142);color:white">预览</button>
+							<img class="menu_img" src="../addons/photobook/images/qrcode.png" alt=""> 代理二维码
 						</span>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('quanlist')}">
-							<span class="mui-icon mui-icon-gear"></span> 购买代金券
+							<img class="menu_img" src="../addons/photobook/images/kj.png" alt=""> 购买代金券
 						</a>
 					</li>
 				</ul>
 			</div>
-			<div class="mui-row" style="margin-top: 1em;">
+			<div class="mui-row" style="margin-top: 0.5em;">
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
-						<a>
-							<span class="mui-icon mui-icon-plus"></span> 我的团队
-							<span style="margin-left:14em;color:rgb(65, 63, 63)">共<span style="font-size:2em;color:rgb(230, 70, 142)">{$all_count}</span>人</span>
+						<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('team')}">
+							<img class="menu_img" src="../addons/photobook/images/td.png" alt=""> 我的团队
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('junior')}">
-							<span class="mui-icon mui-icon-navigate"></span> 我的代理
+							<img class="menu_img" src="../addons/photobook/images/fs.png" alt=""> 我的粉丝
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-row" style="margin-top: 0.5em;">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('yj_detail')}">
+							<img class="menu_img" src="../addons/photobook/images/yj.png" alt=""> 佣金明细
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('return_detail')}">
+							<img class="menu_img" src="../addons/photobook/images/tx.png" alt=""> 提现记录
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="mui-row" style="margin-top: 0.5em;">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" href="{php echo $this->createMobileUrl('document_list')}">
+							<img class="menu_img" src="../addons/photobook/images/wd.png" alt=""> 文档中心
 						</a>
 					</li>
 				</ul>
@@ -96,7 +130,7 @@
 </div>
 <script>
 	$(function(){
-		$('#qrcode').click(function(){
+		$('.qrcode').on('tap',(function(){
 			if("{$ticketid}" == '' || "{$ticketid}" == null){
 				layer.msg('暂无二维码,请扫描海报或在公众号回复 "{$poster}" 生成二维码')
 				return 
@@ -104,11 +138,14 @@
 			layer.open({
 				type: 0, 
 				title:'代理二维码',
-				area: ['75%','28em'],
-				content: '<img style="width:100%;height:auto"src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$ticketid}">' //这里content是一个普通的String
+				 closeBtn :0,
+				 area:['100%','100%'],
+				 id:'l1',
+				 anim: 2,
+				content: '<img style="width:100%;height:auto;margin-top:15vw"src="https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket={$ticketid}">' //这里content是一个普通的String
 			});
-		})
-		$('#poster').click(function(){
+		}))
+		$('.poster').on('tap',(function(){
 			if("{$share_id}" == '' || "{$share_id}" == null){
 				layer.msg('暂无海报,请扫描海报或在公众号回复 "{$poster}" 生成专属海报')
 				return;
@@ -116,10 +153,19 @@
 			layer.open({
 				type: 0, 
 				title:'分享海报',
-				area: ['75%', '28em'],
-				content: '<img style="width:100%;height:auto"src="../addons/photobook/poster/mposter{$share_id}.jpg">' //这里content是一个普通的String
+				area:['100%','100%'],
+				closeBtn :0,
+				id:'l2',
+				anim: 2,
+				content: '<img style="width:100%;height:auto"src="../addons/photobook/poster/mposter{$share_id}.jpg">', 
+				cancel: function(index, layero){ 
+					if(confirm('确定要关闭么')){ 
+						layer.close(index)
+					}
+					return false; 
+				}  
 			});
-		})
+		}))
 	})
 </script>
 {template 'footer'}

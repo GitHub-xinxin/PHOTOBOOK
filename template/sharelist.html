@@ -28,7 +28,7 @@ td{
                     <th>序号</th>
                     <th>昵称</th>
                     <th>成为代理时间</th>
-                    <th style="width: 300px;">操作</th>
+                    <!-- <th style="width: 300px;">操作</th> -->
 
                 </tr>
 
@@ -42,11 +42,11 @@ td{
 
                     <td>{php echo $index+1}</td>
                     <td>{$l['nickname']}</td>
-                    <td>{php echo date('Y-m-d H:m:s',$l['commission'])}</td>
-                    <td>
+                    <td>{php echo date('Y-m-d H:m:s',$l['createtime'])}</td>
+                  <!--   <td>
                         <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('sharelist',array('id'=>$l['id']))}">推广记录 【{$l['count']}】</a>
 
-                    </td>
+                    </td> -->
 
                 </tr>
 

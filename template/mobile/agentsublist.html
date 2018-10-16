@@ -5,7 +5,7 @@
 		<div class="mui-col-sm-12 mui-col-xs-12">
 			{loop $subs $s}
 			<ul class="mui-table-view">
-			    <li class="mui-table-view-cell"><img src="{$s['avatar']}" height="40px"><span style="margin-left: 20px">{$s['nickname']}</span><button type="button" onclick="giveHe('{$s['openid']}','{$s['nickname']}',{$coid})" class="mui-btn mui-btn-success">给他</button></li>
+			    <li class="mui-table-view-cell"><img style="border-radius: 50%" src="{$s['avatar']}" height="40px"><span style="margin-left: 10px;position: relative;top: -4vw">{$s['nickname']}</span><button type="button" onclick="giveHe('{$s['openid']}','{$s['nickname']}',{$coid})" class="mui-btn mui-btn-success" style="background: #01AAED;border: none;">给他</button></li>
 			</ul>
 		        {/loop}
 		    </ul>

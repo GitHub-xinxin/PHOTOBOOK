@@ -1,4 +1,20 @@
 {template 'header'}
+<style type="text/css">
+	.img{
+		width: 7vw;
+		margin-left: 8vw
+	}
+	.radio{
+		position: absolute;
+		top: 6.8vw;
+		left: 2.5vw
+	}
+	.div-img{
+		position: relative;
+	}
+	.edit{
+	}
+</style>
 <div id="scroll" class="mui-content mui-scroll-wrapper">
 	<div class="mui-scroll">
 		<div style="font-size: 12px;font-family: '微软雅黑';" class="oo">
@@ -7,15 +23,23 @@
 		<div class="mui-row">
 			<ul class="mui-table-view" id="ul">
 				{loop $address $a}
-				<li class="mui-table-view-cell" class="li_address" data-id="{$a['id']}">
+				<li class="mui-table-view-cell" class="li_address">
 					<div class="mui-row">
-						<div class="mui-col-sm-6 mui-col-xs-6">
+						<div class="mui-col-sm-2 mui-col-xs-2">
+							<div style="position: relative;">
+								<input class="radio" {if $_GPC['aid'] == $a['id']} checked {/if} type="radio" name="select_name" value="{$a['id']}">
+							</div>
+						</div>
+						<div class="mui-col-sm-4 mui-col-xs-4">
 							<span class="mui-icon mui-icon-contact"></span>
 							{$a['receiver']}
 						</div>
-						<div class="mui-col-sm-6 mui-col-xs-6">
+						<div class="mui-col-sm-4 mui-col-xs-4">
 							<span class="mui-icon mui-icon-phone"></span>
 							{$a['phone']}
+						</div>
+						<div class="mui-col-sm-2 mui-col-xs-2 edit"  data-id="{$a['id']}" >
+							<div class="div-img"><img class="img" src="../addons/photobook/template/mobile/img/bj.png"></div>
 						</div>
 					</div>
 					<div class="mui-row" style="margin-top: 0.5em;">
@@ -40,18 +64,29 @@
 			<!-- 	<div class="mui-col-sm-6 mui-col-xs-6">
 				<button type="button" class="mui-btn mui-btn-primary" style="width: 80%;margin-left: 10%;margin-right: 10%;">使用所选地址</button>
 			</div> -->
-			<div class="mui-col-sm-12 mui-col-xs-12">
-				<a href="{php echo $this->createMobileUrl('addredd_add')}">
+			<div class="mui-col-sm-10 mui-col-xs-10">
+				<a href="{php echo $this->createMobileUrl('addredd_add')}&sel_id={$_GPC['aid']}&order_id={$_GPC['order_id']}">
 					<button type="button" class="mui-btn mui-btn-success" style="width: 80%;margin-left: 10%;margin-right: 10%;">添加新地址</button></a>
 				</div>
+				<div class="mui-col-sm-2 mui-col-xs-2">
+					<a href="{php echo $this->createMobileUrl('place_order')}&sel_addid={$_GPC['aid']}&order_id={$_GPC['order_id']}">
+					<button type="button" class="mui-btn mui-btn-danger" style="width: 90%;">返回</button></a>
+				</div>
+				</div>
 			</div>
+
 		</nav>
 		<script type="text/javascript" src="../addons/photobook/template/mobile/js/app.js"></script>
 		<script type="text/javascript">
-			mui(".mui-table-view").on('tap','.mui-table-view-cell',function(){
+			$(".edit").on('tap',function(){
 				var id =  $(this).data('id')
-				location.href = "{php echo $this->createMobileUrl('Addredd_add',array('op'=>'edit'))}&id="+id
+				var aid = $('input:radio[name="select_name"]:checked').val()
+				location.href = "{php echo $this->createMobileUrl('Addredd_add',array('op'=>'edit'))}&id="+id+"&order_id="+"{$_GPC['order_id']}"+'&sel_id='+aid
 			}) 
+			$('input:radio[name="select_name"]').change( function(){
+				var id = $(this).val()
+				window.location.href = "{php echo $this->createMobileUrl('place_order')}&sel_addid= "+id+"&order_id="+"{$_GPC['order_id']}"
+			})
 		</script>
 
 	</body>

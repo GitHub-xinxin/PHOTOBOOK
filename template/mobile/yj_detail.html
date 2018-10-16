@@ -1,0 +1,37 @@
+{template 'header'}
+<style>
+	.mui-collapse-content p{
+		font-size: 0.9em
+	}
+</style>
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<ul class="mui-table-view"> 
+			{if empty($rebate)}
+				<li class="mui-table-view-cell" style="color: #00aab8;text-align: center;">
+					<span class="mui-icon mui-icon-close"></span>
+					暂时没有
+				</li>
+			{else}
+				{loop $rebate $k $c}
+					<li class="mui-table-view-cell mui-collapse">
+						<a class="mui-navigate-right" href="#">返利金额：{$c['money']}</a>
+						<div class="mui-collapse-content">
+							<p>状态：{if $c['status']==0}
+								未申请提现
+								{else if $c['status']==1}
+								申请提现待审核
+								{else if $c['status']==2}
+								已经体现并通过
+								{/if}
+							</p>
+							 <p>备注：{if $c['type'] == 0} 下级购买返利 {elseif $c['type'] == 1} 新增粉丝奖励 {elseif $c['type'] == 2} 下级购买代金券{/if}</p>
+							<p>时间：<?php echo date('Y-m-d H:i:s',$c['createtime']);?></p>
+						</div>
+					</li>
+				{/loop}
+			{/if}
+		</ul>
+	</div>
+</div>
+{template 'footer'}

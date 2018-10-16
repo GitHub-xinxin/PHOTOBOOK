@@ -19,4 +19,4 @@ foreach ($list as $key => $li) {
 	$list[$key]['userinfo']=$account_api->fansQueryInfo($li['openid']);
 }
 $pager = pagination($total, $pindex, $psize);
-include $this->template('rebatelist');
+include $this->template('rebatelist'); 

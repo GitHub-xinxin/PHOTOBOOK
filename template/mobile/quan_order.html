@@ -16,7 +16,7 @@
 												</p>
 											</div>
 											<div>
-												<p style="margin-top: 1em;color: darkgoldenrod;font-size: 20px;">￥{$code['dealer_price']}</p>
+												<p style="margin-top: 1em;color: darkgoldenrod;font-size: 20px;">￥{if $is_agent == 2} {$code['dealer_price']} {elseif $is_agent == 1} {$code['pt_dealer_price']}{/if}元</p>
 											</div>
 										</div>
 									</div>
@@ -36,7 +36,7 @@
 								<input type="hidden" name="codeid" value="{$cid}">
 								<div class="mui-button-row">
 									<input type="hidden" name="token" value="{$_W['token']}">
-									<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-success" style="width: 100%;">微信支付</button>
+									<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-success" style="width: 100%;background: #01AAED;border-style: none;">微信支付</button>
 								</div>
 							</form>
 						</div>

@@ -133,7 +133,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$frame_h = trim($frame['height'],'px') * $coefficient;
 				$frame_top = trim($frame['top'],'px') * $coefficient;
 				$frame_left = trim($frame['left'],'px') * $coefficient;
-			
+
 				/**
 				 * 计算缩放那一边
 				 */
@@ -165,7 +165,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$tailor_data = ',limit_0/crop,x_'.round($tailor_x).',y_'.round($tailor_y).',w_'.round($frame_w).',h_'.round($frame_h);
 				$send_data ='x-oss-process=image/resize,'.$thumb_type.'_'.round($thumb_value).$tailor_data.'|sys/saveas,o_'.base64_encode($thumb_img).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img.'?x-oss-process', $send_data);
-					
+
 				/**
 				 * 合成模板
 				 * 将图片转换为jpg格式
@@ -233,6 +233,93 @@ class PhotobookModuleSite extends WeModuleSite {
 		include_once 'inc/kind.php';
 	}
 	/**
+	 * 文档管理后台
+	 */
+	public function doWebDocument_mag(){
+		global $_W,$_GPC;
+
+		empty($_GPC['op'])? $operation = 'list' : $operation = $_GPC['op'];
+
+		if($operation == 'list'){
+			$list = pdo_getall('ly_photobook_documents',array('uniacid'=>$_W['uniacid']),array(),'','id desc');
+		}elseif($operation == 'add'){
+			if(checksubmit()){
+				$data = [
+					'uniacid'=>$_W['uniacid'],
+					'content'=>$_GPC['content'],
+					'title'=>$_GPC['title'],
+					'insert_time'=>time()
+				];
+				if(empty($_GPC['id'])){
+					$res =  pdo_insert('ly_photobook_documents',$data);
+				}else{
+					$res =  pdo_update('ly_photobook_documents',$data,array('id'=>$_GPC['id']));
+				}
+				if($res)
+					message('操作成功',$this->createWebUrl('document_mag'),'success');
+				else
+					message('操作失败',$this->createWebUrl('document_mag'),'success');	
+			}else{
+				$document = pdo_get('ly_photobook_documents',array('id'=>$_GPC['id']));
+			}
+		}elseif($operation == 'del'){
+			if(!empty($_GPC['id']))
+				$res = pdo_delete('ly_photobook_documents',array('id'=>$_GPC['id']));
+			if($res)
+				message('操作成功',$this->createWebUrl('document_mag'),'success');
+			else
+				message('操作失败',$this->createWebUrl('document_mag'),'success');	
+		}
+		include $this->template('document_mag');
+	}
+	/**
+	 * 文档列表
+	 */
+	public function doMobileDocument_list(){
+		global $_W,$_GPC;
+		$p_title='文档管理';
+
+		$documents = pdo_getall('ly_photobook_documents',array('uniacid'=>$_W['uniacid']),array(),'','id desc');
+		include $this->template('document_list');
+	}
+	/**
+	 * 文档明细
+	 */
+	public function doMobileDocument_detail(){
+		global $_W,$_GPC;
+		$p_title='文档管理';
+
+		$document = pdo_get('ly_photobook_documents',array('id'=>$_GPC['id']));
+		include $this->template('document_detail');
+	}
+	/**
+	*代理价格设置
+	*/
+	public function doWebDeal_setting(){
+		global $_W,$_GPC;
+
+		if(checksubmit()){
+			$insert_data = [
+				'deal_price'=>$_GPC['price'],
+				'take_price'=>$_GPC['take_price'],
+				'parent_price'=>$_GPC['parent_price'],
+				'uniacid'=>$_W['uniacid']
+			];
+			if(empty($_GPC['id'])){
+				$res = pdo_insert('ly_photobook_setting',$insert_data);
+			}else{
+				$res = pdo_update('ly_photobook_setting',$insert_data,array('id'=>$_GPC['id']));
+			}
+			if($res)
+				message('操作成功',$this->createWebUrl('deal_setting'),'success');
+			else
+				message('操作失败',$this->createWebUrl('deal_setting'),'error');
+		}else{
+			$deal_setting = pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']));
+		}
+		include $this->template('deal_setting');
+	}
+	/**
 	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板图 $ordersub_id:订单页ID
 	 */
 	// $trimarray,$data,$T_photo,$ordersub_id
@@ -277,7 +364,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$frame_h = trim($frame['height'],'px');
 				$frame_top = trim($frame['top'],'px');
 				$frame_left = trim($frame['left'],'px');
-			
+
 				/**
 				 * 计算缩放那一边
 				 */
@@ -303,7 +390,7 @@ class PhotobookModuleSite extends WeModuleSite {
 					$tailor_x = abs(trim($trimarray[$key]['Xleft'],'px'));
 					$tailor_y = abs(trim($trimarray[$key]['Xtop'],'px'));
 				}
-			
+
 				/**
 				 * 缩放与裁剪
 				 */ 
@@ -334,7 +421,7 @@ class PhotobookModuleSite extends WeModuleSite {
 					$trimarray[$key]['height']=$img_h.'px';
 				} 
 			}
-		
+
 			$clear = new commonFunction();
 			$clear->callInterfaceCommon('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$thumb_img,'DELETE');
 		}
@@ -386,7 +473,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			$thum =$temp[0].'_thum.'.$temp[1];
 			$data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($thum).',b_'.base64_encode('demo-photo');
 			$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$_GPC['org_name'].'?x-oss-process', $data);
-						
+
 			if($response['status'] == 'OK'){
 				//将原图缩略图录入数据表  需更改
 				$insert_data = array(
@@ -422,25 +509,25 @@ class PhotobookModuleSite extends WeModuleSite {
 	// 		exit;
 	// 	}
 	// }
- 
+
 	public function doWebRou() {
 		//这个操作被定义用来呈现 规则列表
 	}
 
 	private function _exec($do, $web = true){
-        global $_GPC;
-        $do = strtolower(trim($do));
-        if ($web) {
-            $file = IA_ROOT . "/addons/photobook/core/web/".$do.".php";
-        } else {
-            $file = IA_ROOT . "/addons/photobook/core/mobile/".$do.".php";
-        }
-        if (!is_file($file)) {
-            message("文件".$file."不存在，注意文件命名小写");
-        }
-        include $file;
-        exit;
-    }
+		global $_GPC;
+		$do = strtolower(trim($do));
+		if ($web) {
+			$file = IA_ROOT . "/addons/photobook/core/web/".$do.".php";
+		} else {
+			$file = IA_ROOT . "/addons/photobook/core/mobile/".$do.".php";
+		}
+		if (!is_file($file)) {
+			message("文件".$file."不存在，注意文件命名小写");
+		}
+		include $file;
+		exit;
+	}
 	//首页
 	public function doMobileHomea(){
 		global $_W,$_GPC;
@@ -450,7 +537,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	}
 	public function doMobileTexttext(){
 		global $_W,$_GPC;
-			var_dump($_W['fans']);
+		var_dump($_W['fans']);
 
 		include $this->template("home");
 	}
@@ -472,7 +559,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			exit;
 		}
 		$pindex = max(1, intval($_GPC['page']));
-	    $psize = 20;
+		$psize = 20;
 		$status=empty($_GPC['status'])?1:$_GPC['status'];
 		$where=array('uniacid'=>$_W['uniacid'],'status'=>$status);
 		$sql1='select * from '.tablename('ly_photobook_order_main').' where uniacid=:uniacid and status=:status ORDER BY id DESC LIMIT '.($pindex-1)*$psize.','.$psize;
@@ -502,22 +589,36 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doWebDealerlist(){
 		global $_W,$_GPC;
 
-		$list=pdo_fetchall('select a.id,a.agent_code,a.commission,b.nickname from '.tablename('ly_photobook_user').' as a left join '.tablename('mc_mapping_fans').' as b on a.openid= b.openid where a.uniacid='.$_W['uniacid'].' and b.uniacid='.$_W['uniacid'].' and a.dealer != -1');
+		if($_GPC['op'] == 'cancel'){
+			$res = pdo_update('ly_photobook_user',array('dealer'=>-1,'agent_code'=>''),array('id'=>$_GPC['id']));
+			if($res)
+				message('代理取消成功',$this->createWebUrl('dealerlist'),'success');
+			else
+				message('代理取消失败',$this->createWebUrl('dealerlist'),'error');
+		}
+		$list=pdo_fetchall('select a.id,a.openid,a.agent_code,a.commission,b.nickname from '.tablename('ly_photobook_user').' as a left join '.tablename('mc_mapping_fans').' as b on a.openid= b.openid where a.uniacid='.$_W['uniacid'].' and b.uniacid='.$_W['uniacid'].' and a.dealer != -1');
 		foreach ($list as $key => $value) {
-			$list[$key]['count']=pdo_fetchcolumn('select count(*) from '.tablename('ly_photobook_share').' where uniacid='.$_W['uniacid'].' and parentid='.$list[$key]['id']);
+			$share_id = pdo_get('ly_photobook_share',array('uniacid'=>$_W['uniacid'],'openid'=>$value['openid']))['id'];
+			$list[$key]['count']=pdo_fetchcolumn('select count(*) from '.tablename('ly_photobook_share').' where uniacid='.$_W['uniacid'].' and parentid='.$share_id);
 		}
 		include $this->template('deallist');
 	}
-
+	public function uid2sid($uid){
+		global $_GPC,$_W; 
+		$openid = pdo_get('ly_photobook_user',array('id'=>$uid))['openid'];
+		return pdo_get('ly_photobook_share',array('uniacid'=>$_W['uniacid'],'openid'=>$openid))['id'];
+	}
 	public function doWebSharelist(){
 		global $_W,$_GPC;
-		$sharelist=pdo_fetchall('select * from '.tablename('ly_photobook_share').' where uniacid='.$_W['uniacid'].' and parentid='.$_GPC['id']);
+		$s2uid = pdo_get('ly_photobook_share',array('id'=>$_GPC['id']))['openid'];
+		$sharelist=pdo_fetchall('select * from '.tablename('ly_photobook_share').' where uniacid='.$_W['uniacid'].' and parentid='.$this->uid2sid($_GPC['id']));
 		foreach ($sharelist as $key => $value){
-			$sharelist[$key]['count']=pdo_fetchcolumn('select count(*) from '.tablename('ly_photobook_share').' where uniacid='.$_W['uniacid'].' and parentid='.$sharelist[$key]['id']);
+			$share_id = pdo_get('ly_photobook_share',array('uniacid'=>$_W['uniacid'],'openid'=>$value['openid']))['id'];
+			$sharelist[$key]['count']=pdo_fetchcolumn('select count(*) from '.tablename('ly_photobook_share').' where uniacid='.$_W['uniacid'].' and parentid='.$value['id']);
 		}
 		include $this->template('sharelist');
 	}
-   
+
 	//检查当前用户的信息，如没有，则新建。
 	public function check_thisUser($openid,$uniacid){
 		$user=pdo_get("ly_photobook_user",array("openid"=>$openid,"uniacid"=>$uniacid));
@@ -540,37 +641,37 @@ class PhotobookModuleSite extends WeModuleSite {
 		$setting = $this->module['config'];
 		if(checksubmit()){
 			load()->func('file');
-		    $r = true;
-		    if(!empty($_GPC['cert'])) {
-		        $ret = file_put_contents(M_PATH . '/cert/apiclient_cert.pem.' . $_W['uniacid'], trim($_GPC['cert']));
-		        $r = $r && $ret;
-		    }
-		    if(!empty($_GPC['key'])) {
-		        $ret = file_put_contents(M_PATH . '/cert/apiclient_key.pem.' . $_W['uniacid'], trim($_GPC['key']));
-		        $r = $r && $ret;
-		    }
-		    if(!empty($_GPC['ca'])) {
-		        $ret = file_put_contents(M_PATH . '/cert/rootca.pem.' . $_W['uniacid'], trim($_GPC['ca']));
-		        $r = $r && $ret;
-		    }
-		    if(!$r) {
-		        message('证书保存失败, 请保证 /addons/photobook/cert/ 目录可写');
-		    }
-		    $input = array_elements(array('appid', 'secret','admin_openid', 'mchid', 'password', 'ip','one_level','two_level'), $_GPC);
-		    $input['appid'] = trim($input['appid']);
-		    $input['secret'] = trim($input['secret']);
-		    $input['mchid'] = trim($input['mchid']);
-		    $input['password'] = trim($input['password']);
-		    $input['one_level'] = trim($input['one_level']);
-		    $input['two_level'] = trim($input['two_level']); 
-		    $input['ip'] = trim($input['ip']);
+			$r = true;
+			if(!empty($_GPC['cert'])) {
+				$ret = file_put_contents(M_PATH . '/cert/apiclient_cert.pem.' . $_W['uniacid'], trim($_GPC['cert']));
+				$r = $r && $ret;
+			}
+			if(!empty($_GPC['key'])) {
+				$ret = file_put_contents(M_PATH . '/cert/apiclient_key.pem.' . $_W['uniacid'], trim($_GPC['key']));
+				$r = $r && $ret;
+			}
+			if(!empty($_GPC['ca'])) {
+				$ret = file_put_contents(M_PATH . '/cert/rootca.pem.' . $_W['uniacid'], trim($_GPC['ca']));
+				$r = $r && $ret;
+			}
+			if(!$r) {
+				message('证书保存失败, 请保证 /addons/photobook/cert/ 目录可写');
+			}
+			$input = array_elements(array('appid', 'secret','admin_openid', 'mchid', 'password', 'ip','one_level','two_level'), $_GPC);
+			$input['appid'] = trim($input['appid']);
+			$input['secret'] = trim($input['secret']);
+			$input['mchid'] = trim($input['mchid']);
+			$input['password'] = trim($input['password']);
+			$input['one_level'] = trim($input['one_level']);
+			$input['two_level'] = trim($input['two_level']); 
+			$input['ip'] = trim($input['ip']);
 			$input['admin_openid']=trim($input['admin_openid']);
 			$setting['msetting']=$input;
 			if($this->saveSettings($setting)) {
-    			message('保存参数成功', '','success');
-    		}else{
-    			message('保存参数失败', '','error');
-    		}
+				message('保存参数成功', '','success');
+			}else{
+				message('保存参数失败', '','error');
+			}
 		}
 		$setting=$setting['msetting'];
 		include $this->template('setting');
@@ -595,27 +696,27 @@ class PhotobookModuleSite extends WeModuleSite {
 		global $_W,$_GPC;
 		load()->func('tpl');
 		if(checksubmit()){
-  			$data=array(
-					'title' => $_GPC ['title'],
-					'bg' => $_GPC ['bg'],
-					'kword'=>$_GPC['kword'],
-					'data' => htmlspecialchars_decode($_GPC ['data']),
-					'uniacid' => $_W ['uniacid'],
-					'rtype' => $_GPC ['rtype'],
-					'winfo1' => $_GPC ['winfo1'],
-					'ftips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['ftips']), ENT_QUOTES),
-					'utips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['utips']), ENT_QUOTES),
+			$data=array(
+				'title' => $_GPC ['title'],
+				'bg' => $_GPC ['bg'],
+				'kword'=>$_GPC['kword'],
+				'data' => htmlspecialchars_decode($_GPC ['data']),
+				'uniacid' => $_W ['uniacid'],
+				'rtype' => $_GPC ['rtype'],
+				'winfo1' => $_GPC ['winfo1'],
+				'ftips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['ftips']), ENT_QUOTES),
+				'utips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['utips']), ENT_QUOTES),
 					// 'utips2' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['utips2']), ENT_QUOTES),
-					'createtime'=>time(),
-  				);
-  			$res=pdo_insert('ly_photobook_poster',$data);
-  			if($res==1){
-  				$this->createRule($_GPC['kword'],pdo_insertid());
-  				message('创建成功','','success');
-  			}else{
-   				message('创建失败','','error');
-  			}
-  			exit();
+				'createtime'=>time(),
+			);
+			$res=pdo_insert('ly_photobook_poster',$data);
+			if($res==1){
+				$this->createRule($_GPC['kword'],pdo_insertid());
+				message('创建成功','','success');
+			}else{
+				message('创建失败','','error');
+			}
+			exit();
 		}
 		include $this->template('createposter');
 	}
@@ -623,21 +724,21 @@ class PhotobookModuleSite extends WeModuleSite {
 	 * 创建关键字
 	 */
 	private function createRule($kword, $posterid) {
-	    global $_W;
-	    $rule = array(
-	        'uniacid' => $_W['uniacid'],
-	        'name' => '生成海报',
-	        'module' => $this->modulename,
-	        'status' => 1,
-	        'displayorder' => 254,
-	        );
-	    pdo_insert('rule', $rule);
-	    unset($rule['name']);
-	    $rule['type'] = 1;
-	    $rule['rid'] = pdo_insertid();
-	    $rule['content'] = $kword;
-	    pdo_insert('rule_keyword', $rule);
-	    pdo_update("ly_photobook_poster", array('rule_id' => $rule['rid']), array('id' => $posterid));
+		global $_W;
+		$rule = array(
+			'uniacid' => $_W['uniacid'],
+			'name' => '生成海报',
+			'module' => $this->modulename,
+			'status' => 1,
+			'displayorder' => 254,
+		);
+		pdo_insert('rule', $rule);
+		unset($rule['name']);
+		$rule['type'] = 1;
+		$rule['rid'] = pdo_insertid();
+		$rule['content'] = $kword;
+		pdo_insert('rule_keyword', $rule);
+		pdo_update("ly_photobook_poster", array('rule_id' => $rule['rid']), array('id' => $posterid));
 	}
 
 	/**
@@ -653,16 +754,16 @@ class PhotobookModuleSite extends WeModuleSite {
 			$result = pdo_delete('ly_photobook_poster', array('id' => $_GPC['posterid']));
 			if (!empty($result)) {
 				$shares = pdo_fetchall('select id from ' . tablename("ly_photobook_share") . " where posterid='{$_GPC['posterid']}'");
-	            foreach ($shares as $value) {
-	                @unlink(str_replace('#sid#', $value['id'], "../addons/photobook/poster/mposter#sid#.jpg"));
-	            }
+				foreach ($shares as $value) {
+					@unlink(str_replace('#sid#', $value['id'], "../addons/photobook/poster/mposter#sid#.jpg"));
+				}
 	            // 删除分享记录
 				pdo_delete("ly_photobook_share", array('posterid' => $_GPC['posterid']));
 				// 删除规则与关键字
-	            pdo_delete('rule', array('id' => $poster['rule_id']));
-	            pdo_delete('rule_keyword', array('rid' => $poster['rule_id']));
+				pdo_delete('rule', array('id' => $poster['rule_id']));
+				pdo_delete('rule_keyword', array('rid' => $poster['rule_id']));
 	            // 删除qr表记录
-	            pdo_delete('qrcode', array('name' => $poster['title'], 'uniacid' => $_W['uniacid'], 'keyword' => $poster['kword']));
+				pdo_delete('qrcode', array('name' => $poster['title'], 'uniacid' => $_W['uniacid'], 'keyword' => $poster['kword']));
 				message('删除成功',$this->createWebUrl('mposter'),'success');
 			}else{
 				message('删除失败','','error');
@@ -671,49 +772,49 @@ class PhotobookModuleSite extends WeModuleSite {
 		}else if($op=='edit'){
 			$item=pdo_get('ly_photobook_poster',array('id'=>$_GPC['posterid']));
 			if(checksubmit()){
-	  			$data=array(
-						'title' => $_GPC ['title'],
-						'bg' => $_GPC ['bg'],
-						'kword'=>$_GPC['kword'],
-						'data' => htmlspecialchars_decode($_GPC ['data']),
-						'uniacid' => $_W ['uniacid'],
-						'rtype' => $_GPC ['rtype'],
-						'winfo1' => $_GPC ['winfo1'],
-						'ftips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['ftips']), ENT_QUOTES),
-						'utips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['utips']), ENT_QUOTES),
+				$data=array(
+					'title' => $_GPC ['title'],
+					'bg' => $_GPC ['bg'],
+					'kword'=>$_GPC['kword'],
+					'data' => htmlspecialchars_decode($_GPC ['data']),
+					'uniacid' => $_W ['uniacid'],
+					'rtype' => $_GPC ['rtype'],
+					'winfo1' => $_GPC ['winfo1'],
+					'ftips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['ftips']), ENT_QUOTES),
+					'utips' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['utips']), ENT_QUOTES),
 						// 'utips2' => htmlspecialchars_decode(str_replace('&quot;', '&#039;', $_GPC ['utips2']), ENT_QUOTES),
-						'createtime'=>time(),
-	  				);
-	  			$res=pdo_update('ly_photobook_poster',$data,array('id'=>$_GPC['id']));
-	  			if($res==1){
-	  				if (empty($item['rule_id'])) {
-				        $this->createRule($_GPC['kword'],$_GPC['posterid']);
-				    } elseif ($item['kword'] != $data['kword']) {
+					'createtime'=>time(),
+				);
+				$res=pdo_update('ly_photobook_poster',$data,array('id'=>$_GPC['id']));
+				if($res==1){
+					if (empty($item['rule_id'])) {
+						$this->createRule($_GPC['kword'],$_GPC['posterid']);
+					} elseif ($item['kword'] != $data['kword']) {
 				        //修改生成二维码的关键字
-				        $rk = pdo_fetch('select * from ' . tablename('rule_keyword') . " where rid='{$item['rule_id']}' and content='{$item['kword']}' limit 1");
-				        if (empty($rk)) {
-				            $rule = array(
-				                'uniacid' => $_W['uniacid'],
-				                'module' => $this->modulename,
-				                'status' => 1,
-				                'displayorder' => 254,
-				                'type' => 1,
-				                'rid' => $item['rule_id'],
-				                'content' => $data['kword'],
-				                );
-				            pdo_insert('rule_keyword', $rule);
-				        } else{
-				            pdo_update('rule_keyword', array('content' => $data['kword']), array('rid' => $item['rule_id'], 'content' => $item['kword']));
-				        }
+						$rk = pdo_fetch('select * from ' . tablename('rule_keyword') . " where rid='{$item['rule_id']}' and content='{$item['kword']}' limit 1");
+						if (empty($rk)) {
+							$rule = array(
+								'uniacid' => $_W['uniacid'],
+								'module' => $this->modulename,
+								'status' => 1,
+								'displayorder' => 254,
+								'type' => 1,
+								'rid' => $item['rule_id'],
+								'content' => $data['kword'],
+							);
+							pdo_insert('rule_keyword', $rule);
+						} else{
+							pdo_update('rule_keyword', array('content' => $data['kword']), array('rid' => $item['rule_id'], 'content' => $item['kword']));
+						}
 				        // ##################################################################################
-				        pdo_update('qrcode', array('keyword' => $data['kword']), array('name' => $item['title'], 'keyword' => $item['kword']));
-				    }
-	  				
-	  				message('修改成功','','success');
-	  			}else{
-	   				message('修改失败','','error');
-	  			}
-	  			exit();
+						pdo_update('qrcode', array('keyword' => $data['kword']), array('name' => $item['title'], 'keyword' => $item['kword']));
+					}
+
+					message('修改成功','','success');
+				}else{
+					message('修改失败','','error');
+				}
+				exit();
 			}
 			$data = json_decode(str_replace('&quot;', "'", $item['data']), true);
 			include $this->template('editposter');
@@ -761,6 +862,21 @@ class PhotobookModuleSite extends WeModuleSite {
 		 */
 		$sql='select sum(money) as sum from '.tablename('ly_photobook_user_rebate').' where uniacid=:uniacid and userid=:userid and status=:status';
 		$money_count=pdo_fetch($sql,array('uniacid'=>$_W['uniacid'],'userid'=>$userid,'status'=>0))['sum'];
+		/**
+		 * 累计收入
+		 */
+		$sql1='select sum(money) as sum from '.tablename('ly_photobook_user_rebate').' where uniacid=:uniacid and userid=:userid';
+		$lj_count=pdo_fetch($sql1,array('uniacid'=>$_W['uniacid'],'userid'=>$userid))['sum'];
+		/**
+		 * 拉粉奖励
+		 */
+		$sql2='select sum(money) as sum from '.tablename('ly_photobook_user_rebate').' where uniacid='.$_W['uniacid'].' and userid='.$userid.' and type =1';
+		$lf_count=pdo_fetch($sql2)['sum'];
+		/**
+		*　销售奖励
+		*/
+		$sql3='select sum(money) as sum from '.tablename('ly_photobook_user_rebate').' where uniacid='.$_W['uniacid'].' and userid='.$userid.' and type !=1';
+		$xs_count=pdo_fetch($sql3)['sum'];
 		include $this->template('agency_center');
 	}
 
@@ -789,26 +905,26 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doWebPostershare(){
 		global $_GPC,$_W;
 		$pindex = max(1, intval($_GPC['page']));
-	    $psize = 20;
-	    $posterid=$_GPC['posterid'];
-	    if(isset($_GPC['parentid'])){
+		$psize = 20;
+		$posterid=$_GPC['posterid'];
+		if(isset($_GPC['parentid'])){
 	    	// 下级
-	    	$sql="SELECT * FROM ".tablename('ly_photobook_share')." WHERE uniacid=:uniacid AND posterid=:posterid AND parentid=:parentid ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
-		    $list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'posterid'=>$posterid,'parentid'=>$_GPC['parentid']));
-		    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_share') . " where posterid='{$posterid}' AND uniacid={$_W['uniacid']} AND parentid=".$_GPC['parentid']);
-	    }else if(isset($_GPC['keyword'])){
+			$sql="SELECT * FROM ".tablename('ly_photobook_share')." WHERE uniacid=:uniacid AND posterid=:posterid AND parentid=:parentid ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
+			$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'posterid'=>$posterid,'parentid'=>$_GPC['parentid']));
+			$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_share') . " where posterid='{$posterid}' AND uniacid={$_W['uniacid']} AND parentid=".$_GPC['parentid']);
+		}else if(isset($_GPC['keyword'])){
 	    	// 搜索
-	    	$keyword=$_GPC['keyword'];
-	    	$sql="SELECT * FROM ".tablename('ly_photobook_share')." WHERE uniacid=:uniacid AND posterid=:posterid AND (nickname=:nickname OR openid=:openid) ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
-		    $list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'posterid'=>$posterid,'nickname'=>$keyword,'openid'=>$keyword));
-		    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_share') . " where posterid='{$posterid}' AND (nickname='".$keyword."' OR openid='".$keyword."') AND uniacid={$_W['uniacid']}");
-	    }else{
+			$keyword=$_GPC['keyword'];
+			$sql="SELECT * FROM ".tablename('ly_photobook_share')." WHERE uniacid=:uniacid AND posterid=:posterid AND (nickname=:nickname OR openid=:openid) ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
+			$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'posterid'=>$posterid,'nickname'=>$keyword,'openid'=>$keyword));
+			$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_share') . " where posterid='{$posterid}' AND (nickname='".$keyword."' OR openid='".$keyword."') AND uniacid={$_W['uniacid']}");
+		}else{
 	    	// 全部
-	    	$sql="SELECT * FROM ".tablename('ly_photobook_share')." WHERE uniacid=:uniacid AND posterid=:posterid ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
-		    $list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'posterid'=>$posterid));
-		    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_share') . " where posterid='{$posterid}' AND uniacid={$_W['uniacid']}");
-	    }
-	    $pager = pagination($total, $pindex, $psize);
+			$sql="SELECT * FROM ".tablename('ly_photobook_share')." WHERE uniacid=:uniacid AND posterid=:posterid ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
+			$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'posterid'=>$posterid));
+			$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_share') . " where posterid='{$posterid}' AND uniacid={$_W['uniacid']}");
+		}
+		$pager = pagination($total, $pindex, $psize);
 		include $this->template('postershare');
 	}
 
@@ -839,20 +955,20 @@ class PhotobookModuleSite extends WeModuleSite {
 				new ResizeImage($imagePath, '160', '120', '0', ATTACHMENT_ROOT.$imageThumb);
 			}
 			$data=array(
-					'detail'=>$_GPC['detail'],
-					'name'=>$_GPC['name'],
-					'thumb'=>$imageThumb,
-					'shell'=>$_GPC['shell'],
-					'size'=>$_GPC['size'],
-					'price'=>$_GPC['price'],
-					'inner_price'=>$_GPC['inner_price'],
-					'createtime'=>time(),
-					'uniacid'=>$_W['uniacid'],
-					'min_page'=>$_GPC['min_page'],
-					'max_page'=>$_GPC['max_page'],
-					"booktype"=>$_GPC['booktype'],
-					"kind"=>$_GPC['kind']
-				);
+				'detail'=>$_GPC['detail'],
+				'name'=>$_GPC['name'],
+				'thumb'=>$imageThumb,
+				'shell'=>$_GPC['shell'],
+				'size'=>$_GPC['size'],
+				'price'=>$_GPC['price'],
+				'inner_price'=>$_GPC['inner_price'],
+				'createtime'=>time(),
+				'uniacid'=>$_W['uniacid'],
+				'min_page'=>$_GPC['min_page'],
+				'max_page'=>$_GPC['max_page'],
+				"booktype"=>$_GPC['booktype'],
+				"kind"=>$_GPC['kind']
+			);
 			if(pdo_insert('ly_photobook_template_main',$data)){
 				message('添加成功，去添加模板图',$this->createWebUrl('edittemplateimage',array('t_id'=>pdo_insertid())),'success');
 			}else{
@@ -911,41 +1027,6 @@ class PhotobookModuleSite extends WeModuleSite {
 		include $this->template('uploadtemplate');
 	}
 
-	//////////
-	// 暂时保留 //
-	//////////
-
-	// $image = "jiequ.jpg"; // 原图
-	// $imgstream = file_get_contents($image);
-	// $im = imagecreatefromstring($imgstream);
-	// $x = imagesx($im);//获取图片的宽
-	// $y = imagesy($im);//获取图片的高
-	 
-	// // 缩略后的大小
-	// $xx = 140;
-	// $yy = 200;
-	 
-	// if($x>$y){
-	// //图片宽大于高
-	//     $sx = abs(($y-$x)/2);
-	//     $sy = 0;
-	//     $thumbw = $y;
-	//     $thumbh = $y;
-	// } else {
-	// //图片高大于等于宽
-	//     $sy = abs(($x-$y)/2.5);
-	//     $sx = 0;
-	//     $thumbw = $x;
-	//     $thumbh = $x;
-	//   }
-	// if(function_exists("imagecreatetruecolor")) {
-	//   $dim = imagecreatetruecolor($yy, $xx); // 创建目标图gd2
-	// } else {
-	//   $dim = imagecreate($yy, $xx); // 创建目标图gd1
-	// }
-	// imageCopyreSampled ($dim,$im,0,0,$sx,$sy,$yy,$xx,$thumbw,$thumbh);
-	// header ("Content-type: image/jpeg");
-	// imagejpeg ($dim, false, 100);
 	/**
 	 * 用户上传照片页ccbsx
 	 */
@@ -994,20 +1075,20 @@ class PhotobookModuleSite extends WeModuleSite {
 			// exit();
 			$fileName=$fileInfo['filename'];
 			$fileExt=$fileInfo['extension'];
-		 	$imageThumb='images/thumb/'.$fileName.'_cover.'.$fileExt;
-		 	include 'tools/imageThumb.class.php'; 
-		 	new ResizeImage($imageSavePath,(string)$ix,(string)$iy,'0',"../attachment/".$imageThumb);
-		 	$user=pdo_get("ly_photobook_user",array("uniacid"=>$_W['uniacid'],"openid"=>$_W['openid']));
-		 	if(empty($user)){
-		 		$oneuser=array(
+			$imageThumb='images/thumb/'.$fileName.'_cover.'.$fileExt;
+			include 'tools/imageThumb.class.php'; 
+			new ResizeImage($imageSavePath,(string)$ix,(string)$iy,'0',"../attachment/".$imageThumb);
+			$user=pdo_get("ly_photobook_user",array("uniacid"=>$_W['uniacid'],"openid"=>$_W['openid']));
+			if(empty($user)){
+				$oneuser=array(
 					"uniacid"=>2,
 					"openid"=>$openid,
 					"dealer"=>-1,   
 				);
-		 		pdo_insert("ly_photobook_user",$oneuser);
-		 	}
-		 	$Ouser=pdo_get("ly_photobook_user",array("uniacid"=>$_W['uniacid'],"openid"=>$_W['openid']));
-		 	$data=array(
+				pdo_insert("ly_photobook_user",$oneuser);
+			}
+			$Ouser=pdo_get("ly_photobook_user",array("uniacid"=>$_W['uniacid'],"openid"=>$_W['openid']));
+			$data=array(
 				"uniacid"=>2,
 				"width"=>$width, 
 				"height"=>$height,
@@ -1025,7 +1106,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			}else{
 				$resdata['code']="1"; 
 				$resdata['message']="上传失败，数据插入失败了";
-			return json_encode($resdata);
+				return json_encode($resdata);
 			}
 		}
 		return json_encode($resdata);
@@ -1051,6 +1132,21 @@ class PhotobookModuleSite extends WeModuleSite {
 			$HIDE=false;
 		}
 		$Cuser=$this->Oneuser($_W['openid'],$_W['uniacid']);
+		$userimg=pdo_getall('ly_photobook_user_images',array('user_id'=>$Cuser['uid'],"delete"=>0),array(),'','createtime desc');
+		//如果没有缩略图 发送请求oss生成缩略图
+		foreach ($userimg as $key => $value) {
+			if(empty($value['thumb'])){
+				$temp =explode('.', $value['original']);
+				$thum =$temp[0].'_thum.'.$temp[1];
+				$data ='x-oss-process=image/resize,w_360|sys/saveas,o_'.base64_encode($thum).',b_'.base64_encode('demo-photo');
+				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$value['original'].'?x-oss-process', $data);
+
+				if($response['status'] == 'OK'){
+				//将原图缩略图录入数据表  需更改
+					pdo_update('ly_photobook_user_images',array('thumb'=>$thum),array('id'=>$value['id']));
+				}
+			}
+		}
 		$userimg=pdo_getall('ly_photobook_user_images',array('user_id'=>$Cuser['uid'],"delete"=>0),array(),'','createtime desc');
 		$day=mktime(0,0,0,date('m'),date('d'),date('Y'));//日
 		$week=mktime(0,0,0,date('m'),date('d')-date('w')+1,date('Y'));//周
@@ -1091,30 +1187,30 @@ class PhotobookModuleSite extends WeModuleSite {
 /**
  * 图片处理页
  */
-	public function doMobileAPI_Accept_pictures(){
-		global $_GPC,$_W;
-		 $data=array(
-		 	"pid"=>0,
-		 	"img"=>$_GPC['image'],
+public function doMobileAPI_Accept_pictures(){
+	global $_GPC,$_W;
+	$data=array(
+		"pid"=>0,
+		"img"=>$_GPC['image'],
 		 	"code"=>0,//code为0则为正确，1为错误。message为错误信息
 		 	"message"=>''
 		 );
-		 $ix=$_GPC['width']/3;
-		 $iy=$_GPC['height']/3;
-		 if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $data['img'], $result)){
+	$ix=$_GPC['width']/3;
+	$iy=$_GPC['height']/3;
+	if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $data['img'], $result)){
 		$type = $result[2];
 		$media="images/usersphoto/".$_W['openid'].time().".{$type}";
 		$new_file = "../attachment/".$media;
 		if (file_put_contents(ATTACHMENT_ROOT.$new_file, base64_decode(str_replace($result[1], '',$_GPC['image'])))){
 			// if($this->check_thisUser($_W['openid'],$_W['uniacid'])){
-				$user=pdo_get("ly_photobook_user",array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']));
-				include 'tools/imageThumb.class.php';                       
-				$fileInfo=pathinfo($new_file);
-				$fileName=$fileInfo['filename'];
-				$fileExt=$fileInfo['extension'];
-				$imageThumb='images/thumb/'.$fileName.'_cover.'.$fileExt;
-				new ResizeImage($new_file, (string)$ix,(string)$iy, '0', ATTACHMENT_ROOT.$imageThumb);
-				$PhotoData=array(
+			$user=pdo_get("ly_photobook_user",array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']));
+			include 'tools/imageThumb.class.php';                       
+			$fileInfo=pathinfo($new_file);
+			$fileName=$fileInfo['filename'];
+			$fileExt=$fileInfo['extension'];
+			$imageThumb='images/thumb/'.$fileName.'_cover.'.$fileExt;
+			new ResizeImage($new_file, (string)$ix,(string)$iy, '0', ATTACHMENT_ROOT.$imageThumb);
+			$PhotoData=array(
 				"uniacid"=>$_W['uniacid'],
 				"size"=>$_GPC['size'],
 				"width"=>$_GPC['width'],
@@ -1123,23 +1219,23 @@ class PhotobookModuleSite extends WeModuleSite {
 				"original"=>$media,
 				"createtime"=>time(),
 				"user_id"=>$user['id']
-				);
-				$res1=pdo_insert('ly_photobook_user_images',$PhotoData);
-				$res2=pdo_get("ly_photobook_user_images",array("thumb"=>$imageThumb,'user_id'=>$user['id']));
-				if($res1){
-					$data['pid']=$res2['id']; 
-					$data['img']="../attachment/".$imageThumb; 
-					$data['message']="成功"; 
-				}else{
-					$data['message']="失败"; 
-				}
+			);
+			$res1=pdo_insert('ly_photobook_user_images',$PhotoData);
+			$res2=pdo_get("ly_photobook_user_images",array("thumb"=>$imageThumb,'user_id'=>$user['id']));
+			if($res1){
+				$data['pid']=$res2['id']; 
+				$data['img']="../attachment/".$imageThumb; 
+				$data['message']="成功"; 
+			}else{
+				$data['message']="失败"; 
+			}
 		}else{
 			$data['code']=1;
 			$data['message']="生成失败"; 
 		}
 	}	
-		return json_encode($data);
-	}
+	return json_encode($data);
+}
 	/**
 	 * 传给前端照片书的信息
 	 */
@@ -1195,20 +1291,20 @@ class PhotobookModuleSite extends WeModuleSite {
 				$imageThumb=$_GPC['thumb'];
 			}
 			$data=array(
-					'detail'=>$_GPC['detail'],
-					'name'=>$_GPC['name'],
-					'thumb'=>$imageThumb,
-					'shell'=>$_GPC['shell'],
-					'size'=>$_GPC['size'],
-					'price'=>$_GPC['price'],
-					'inner_price'=>$_GPC['inner_price'],
-					'createtime'=>time(),
-					'uniacid'=>$_W['uniacid'],
-					'max_page'=>$_GPC['max_page'],
-					'min_page'=>$_GPC['min_page'],
-					"booktype"=>$_GPC['booktype'],
-					"kind"=>$_GPC['kind']
-				);
+				'detail'=>$_GPC['detail'],
+				'name'=>$_GPC['name'],
+				'thumb'=>$imageThumb,
+				'shell'=>$_GPC['shell'],
+				'size'=>$_GPC['size'],
+				'price'=>$_GPC['price'],
+				'inner_price'=>$_GPC['inner_price'],
+				'createtime'=>time(),
+				'uniacid'=>$_W['uniacid'],
+				'max_page'=>$_GPC['max_page'],
+				'min_page'=>$_GPC['min_page'],
+				"booktype"=>$_GPC['booktype'],
+				"kind"=>$_GPC['kind']
+			);
 			if(pdo_update('ly_photobook_template_main',$data,array('id'=>$_GPC['id']))){
 				message('修改成功',$this->createWebUrl('photobook'),'success');
 			}else{
@@ -1266,7 +1362,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			echo json_encode($resArr);exit;
 		}
 		if(checksubmit()){
-	
+
 			if(empty($_GPC['template_id'])&&!empty($_GPC['type'])&&!empty($_GPC['t_id'])){
 				//如果是这俩参数，说明这个是要上传封面图的
 				//然后查查有没有这个封面了，有的话就改，没有的话就是加。
@@ -1290,13 +1386,13 @@ class PhotobookModuleSite extends WeModuleSite {
 			$data=array(
 					// 'original'=>$_GPC['bg'],
 					// 'thumb'=>$imageThumb,
-					'original'=>$_GPC['filename'],
-					'thumb'=>explode('.', $_GPC['filename'])[0].'_thum.'.explode('.', $_GPC['filename'])[1],
-					'imagecount'=>$_GPC['imagecount'],
-					'uniacid'=>$_W['uniacid'],
-					'data' => htmlspecialchars_decode($_GPC ['data'])
-				);
-		
+				'original'=>$_GPC['filename'],
+				'thumb'=>explode('.', $_GPC['filename'])[0].'_thum.'.explode('.', $_GPC['filename'])[1],
+				'imagecount'=>$_GPC['imagecount'],
+				'uniacid'=>$_W['uniacid'],
+				'data' => htmlspecialchars_decode($_GPC ['data'])
+			);
+
 			pdo_update('ly_photobook_template_sub',$data,array('id'=>$_GPC['id']));
 			message('修改成功',$this->createWebUrl('edittemplateimage',array("t_id"=>$_GPC['t_id'])),'success');
 			exit;
@@ -1362,26 +1458,51 @@ class PhotobookModuleSite extends WeModuleSite {
 		if(checksubmit()){
 			$number=$_GPC['number'];
 			$data=array(
-					'name'=>$_GPC['name'],
-					'list_price'=>$_GPC['list_price'],
-					'dealer_price'=>$_GPC['dealer_price'],
-					'uniacid'=>$_W['uniacid'],
-					'createtime'=>time(),
-					'number'=>$number
-				);
+				'name'=>$_GPC['name'],
+				'list_price'=>$_GPC['list_price'],
+				'dealer_price'=>$_GPC['dealer_price'],
+				'pt_dealer_price'=>$_GPC['pt_dealer_price'],
+				'uniacid'=>$_W['uniacid'],
+				'createtime'=>time(),
+				'number'=>$number
+			);
 			pdo_insert('ly_photobook_codes',$data);
 			message('创建成功','','success');
 			exit;
 		}
 		$pindex = max(1, intval($_GPC['page']));
-	    $psize = $this->pageSize;
-	    $sql="SELECT * FROM ".tablename('ly_photobook_codes')." WHERE uniacid=:uniacid ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
-	    $list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid']));
-	    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_codes') . " where uniacid='{$_W['uniacid']}'");
+		$psize = $this->pageSize;
+		$sql="SELECT * FROM ".tablename('ly_photobook_codes')." WHERE uniacid=:uniacid ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;
+		$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid']));
+		$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_codes') . " where uniacid='{$_W['uniacid']}'");
 		$pager = pagination($total, $pindex, $psize);
 		include $this->template('cartlist');
 	}
+	/**
+	 * 修改代金券
+	 */
+	public function doWebEdit_code(){
+		global $_GPC,$_W;
 
+		if(checksubmit()){
+			$number=$_GPC['number'];
+			$data=array(
+				'name'=>$_GPC['name'],
+				'list_price'=>$_GPC['list_price'],
+				'dealer_price'=>$_GPC['dealer_price'],
+				'pt_dealer_price'=>$_GPC['pt_dealer_price'],
+				'uniacid'=>$_W['uniacid'],
+				'number'=>$number
+			);
+			if(pdo_update('ly_photobook_codes',$data,array('id'=>$_GPC['cid'])))
+				message('修改成功',$this->createWebUrl('cartlist'),'success');
+			else
+				message('修改失败',$this->createWebUrl('cartlist'),'error');
+		}else{
+			$code = pdo_get('ly_photobook_codes',array('id'=>$_GPC['id']));
+		}
+		include $this->template('edit_code');
+	}
 	/**
 	 * 删除代金券
 	 */
@@ -1412,15 +1533,15 @@ class PhotobookModuleSite extends WeModuleSite {
 			////////
 			$openid=pdo_fetchcolumn('select openid from '.tablename('ly_photobook_service').' WHERE id='.$_GPC['post_id']);
 			$insert=array(
-					'openid'=>'openid',
-					'create_time'=>time(),
-					'title'=>'回复：'.$openid,
-					'detail'=>$_GPC['detail'],
-					'user_phone'=>$_GPC['user_phone'],
-					'order_id'=>'',
-					'status'=>3,
-					'uniacid'=>$_W['uniacid']
-				);
+				'openid'=>'openid',
+				'create_time'=>time(),
+				'title'=>'回复：'.$openid,
+				'detail'=>$_GPC['detail'],
+				'user_phone'=>$_GPC['user_phone'],
+				'order_id'=>'',
+				'status'=>3,
+				'uniacid'=>$_W['uniacid']
+			);
 			pdo_insert('ly_photobook_service',$insert);
 			pdo_update('ly_photobook_service',array('status'=>1),array('id'=>$_GPC['post_id']));
 			/**
@@ -1428,29 +1549,29 @@ class PhotobookModuleSite extends WeModuleSite {
 			 */
 			$work_order = pdo_get('ly_photobook_service',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['post_id']));
 			$mess_arr=array(
-                "first"=>"您好，您提交的问题已经处理完成",
-                "k1"=>$work_order['id'],
+				"first"=>"您好，您提交的问题已经处理完成",
+				"k1"=>$work_order['id'],
 				"k2"=>$work_order['title'],
 				"k3"=>date('Y-m-d H:i',time()),
-                "rem"=>$_GPC['detail'],
-                "openid"=>$work_order['openid'],
-                "mid1"=>"IUdAawAikNI99D7fqDhlEDnb6KC9NIUDamkS7w9i9iA"
-            );			
-            $over_mess= new templatemessage();
-            $over_mess->work_order_done($mess_arr);
+				"rem"=>$_GPC['detail'],
+				"openid"=>$work_order['openid'],
+				"mid1"=>"IUdAawAikNI99D7fqDhlEDnb6KC9NIUDamkS7w9i9iA"
+			);			
+			$over_mess= new templatemessage();
+			$over_mess->work_order_done($mess_arr);
 			message('回复成功','','success');
 		}
 		$pindex = max(1, intval($_GPC['page']));
-	    $psize = $this->pageSize;
-	    if(isset($_GPC['status'])){
-	    	$sql="SELECT * FROM ".tablename('ly_photobook_service')." WHERE uniacid=:uniacid AND status=:status ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;	
-	    	$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'status'=>$_GPC['status']));
-		    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_service') . " where uniacid={$_W['uniacid']} AND status=".$_GPC['status']);
-	    }else{
-	    	$sql="SELECT * FROM ".tablename('ly_photobook_service')." WHERE uniacid=:uniacid AND status=:status ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;	
-	    	$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'status'=>0));
-		    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_service') . " where uniacid={$_W['uniacid']}  AND status=0");
-	    }
+		$psize = $this->pageSize;
+		if(isset($_GPC['status'])){
+			$sql="SELECT * FROM ".tablename('ly_photobook_service')." WHERE uniacid=:uniacid AND status=:status ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;	
+			$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'status'=>$_GPC['status']));
+			$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_service') . " where uniacid={$_W['uniacid']} AND status=".$_GPC['status']);
+		}else{
+			$sql="SELECT * FROM ".tablename('ly_photobook_service')." WHERE uniacid=:uniacid AND status=:status ORDER BY id LIMIT ".($pindex-1)*$psize.",".$psize;	
+			$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid'],'status'=>0));
+			$total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_service') . " where uniacid={$_W['uniacid']}  AND status=0");
+		}
 		$pager = pagination($total, $pindex, $psize);
 		include $this->template('ser_message');
 	}
@@ -1513,7 +1634,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		if(empty($_GPC['booktype'])){
 			message("无此类别，请返回");
 		}
-	
+
 		$p_title="照片书列表";
 		$m_active=1;
 		$this->check_thisUser($_W['openid'],$_W['uniacid']);
@@ -1535,6 +1656,87 @@ class PhotobookModuleSite extends WeModuleSite {
 		$sql='select id,name,price,sales,thumb from '.tablename('ly_photobook_template_main').' where uniacid ='.$_W['uniacid'].' AND price = '.trim($_GPC['price']);
 		$list=pdo_fetchall($sql);
 		include $this->template('usable');
+	}
+	public function shareid2uid($openid){
+		global $_W;
+		return pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$openid))['id'];
+	}
+	//团队购卷量
+	public function team_count($parentid){
+		global $_W,$_GPC;
+		$res['total'] = 0;
+		$res['fans'] = 0;
+		$res['dl_count'] = 0;
+		//二级代理(中是代理人数)
+		$sql = 'select u.openid,s.avatar,s.nickname,s.id from ims_ly_photobook_share as s left join ims_ly_photobook_user as u on s.openid = u.openid where s.parentid = '.$parentid.' and u.dealer != -1 and s.uniacid = '.$_W['uniacid'].' and u.uniacid='.$_W['uniacid'];
+		$three_dl = pdo_fetchall($sql);
+		$res['dl_count'] += count($three_dl);
+		//二级代理全部下级
+		$three_all_dl = pdo_fetch('select count(*) as count from ims_ly_photobook_share where uniacid = '.$_W['uniacid'].' and parentid='.$parentid)['count'];
+		$res['fans'] += $three_all_dl - count($three_dl);
+		foreach ($three_dl as $key => $value) {
+			$num = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$this->shareid2uid($value['openid']))['count'];
+			if(!empty($num))
+				$res['total'] += $num;
+			//三级代理
+			$sql2 = 'select u.openid,s.avatar,s.nickname,s.id from ims_ly_photobook_share as s left join ims_ly_photobook_user as u on s.openid = u.openid where s.parentid = '.$value['id'].' and u.dealer != -1 and s.uniacid = '.$_W['uniacid'].' and u.uniacid='.$_W['uniacid'];
+			$four_dl = pdo_fetchall($sql2);
+			$res['dl_count'] += count($four_dl);
+			//三级代理全部下级
+			$four_all_dl = pdo_fetch('select count(*) as count from ims_ly_photobook_share where uniacid = '.$_W['uniacid'].' and parentid='.$value['id'])['count'];
+			$res['fans'] += $four_all_dl - count($four_dl);
+			foreach ($four_dl as $key => $value) {
+				$num2 = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$this->shareid2uid($value['openid']))['count'];
+				if(!empty($num2))
+					$res['total'] += $num2;
+				//四级代理
+				$sql３ = 'select u.openid,s.avatar,s.nickname,s.id from ims_ly_photobook_share as s left join ims_ly_photobook_user as u on s.openid = u.openid where s.parentid = '.$value['id'].' and u.dealer != -1 and s.uniacid = '.$_W['uniacid'].' and u.uniacid='.$_W['uniacid'];
+				$five_dl = pdo_fetchall($sql3);
+				$res['dl_count'] += count($five_dl);
+				//四级代理全部下级
+				$five_all_dl = pdo_fetch('select count(*) as count from ims_ly_photobook_share where uniacid = '.$_W['uniacid'].' and parentid='.$value['id'])['count'];
+				$res['fans'] += $five_all_dl - count($five_dl);
+				foreach ($five_dl as $key => $value) {
+					$num3 = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$this->shareid2uid($value['openid']))['count'];
+					if(!empty($num3))
+						$res['total'] += $num3;
+				}
+			}
+		}
+		return $res;
+	}
+	/**
+	*我的团队 
+	*/
+	public function doMobileTeam(){
+		global $_W,$_GPC; 
+
+		//我的上级
+		$self = pdo_get('ly_photobook_share',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']));
+		$parent = pdo_get('ly_photobook_share',array('uniacid'=>$_W['uniacid'],'id'=>$self['parentid']));
+		//下级粉丝数
+		$childrens = pdo_fetchall('select * from ims_ly_photobook_share where parentid = '.$self['id'].' and uniacid = '.$_W['uniacid']);
+		//下级是代理的列表
+		$sql = 'select u.openid,s.avatar,s.nickname,s.id from ims_ly_photobook_share as s left join ims_ly_photobook_user as u on s.openid = u.openid where s.parentid = '.$self['id'].' and u.dealer != -1 and s.uniacid = '.$_W['uniacid'].' and u.uniacid='.$_W['uniacid'];
+		$children_dl = pdo_fetchall($sql);
+		//我的直推人数　（是自己下级中是代理的人数）
+		$count = count($children_dl);
+		//团队人数　（自己下级中代理的代理的代理的人数）
+		$team_count = $count;
+		//新增人数
+		$new_add = count($childrens) - $count;
+		//我的购卷量
+		$user = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']));
+		$has_card = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$user['id'])['count'];
+		//下级列表
+		foreach ($children_dl as $key => $value) {
+			$children_dl[$key]['has_card'] = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$this->shareid2uid($value['openid']))['count'];
+			$temp = $this->team_count($value['id']);
+			$children_dl[$key]['team_has'] = $temp['total'];
+			$team_count += $temp['dl_count'];
+			$new_add += $temp['fans'];
+		}
+		include $this->template('team');
 	}
 	/**
 	 * 照片书模板详情页
@@ -1566,15 +1768,15 @@ class PhotobookModuleSite extends WeModuleSite {
 		global $_GPC,$_W;
 		if(checksubmit()){
 			$insert_data=array(
-					'openid'=>$_W['openid'],
-					'create_time'=>time(),
-					'title'=>$_GPC['title'],
-					'detail'=>$_GPC['detail'],
-					'user_phone'=>$_GPC['user_phone'],
-					'order_id'=>$_GPC['order_id'],
-					'status'=>0,
-					'uniacid'=>$_W['uniacid']
-				);
+				'openid'=>$_W['openid'],
+				'create_time'=>time(),
+				'title'=>$_GPC['title'],
+				'detail'=>$_GPC['detail'],
+				'user_phone'=>$_GPC['user_phone'],
+				'order_id'=>$_GPC['order_id'],
+				'status'=>0,
+				'uniacid'=>$_W['uniacid']
+			);
 			if(pdo_insert('ly_photobook_service',$insert_data)){
 				/**
 				 * 发送模板消息给客服人员
@@ -1621,7 +1823,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		 /**
 		  * 待收货订单数
 		  */
-		$warting_count = count(pdo_getall('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'user_id'=>$userid,'status in'=>array(1,2,3))),0);
+		 $warting_count = count(pdo_getall('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'user_id'=>$userid,'status in'=>array(1,2,3))),0);
 		/**
 		 * 待评价订单数
 		 */
@@ -1630,7 +1832,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		 * 优惠券数量
 		 */
 		$card_count = 0;
-		$count = pdo_getall('ly_photobook_user_code',array('uniacid'=>$_W['uniacid'],'user_id'=>$user['id'],'status'=>0));
+		$count = pdo_fetchall('SELECT b.name,a.*,b.dealer_price,b.list_price FROM ims_ly_photobook_user_code AS a LEFT JOIN ims_ly_photobook_codes AS b ON a.code_id = b.id WHERE a.uniacid = '.$_W['uniacid'].' AND b.uniacid = '.$_W['uniacid'].' AND a.status =0 AND a.number >0 AND a.user_id ='.$user['id'].' GROUP BY a.code_id');
 		foreach($count as $index=>$row)
 			$card_count +=$row['number'];
 		$p_title='个人中心';
@@ -1771,7 +1973,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			if($uimgcount>50)
 				$uimgcount=50;
 		}
-			
+
 		if($uimgcount<$userPiclimit){
 			$redata=array(
 				"errors"=>'用户图片不够，请选够'.$userPiclimit.'张图',
@@ -1919,126 +2121,126 @@ class PhotobookModuleSite extends WeModuleSite {
 	 * 照片书预览
 	 * http://huilife.cnleyao.com/app/index.php?i=2&c=entry&do=turn&m=photobook&tid=143&wid=468&time=1506673487000
 	 */ 
-	public function doMobileTurn(){
-		global $_W,$_GPC;
-		load()->func('logging');
-		logging_run('进入Turn,bookid:'.$_GPC['tid']);
-		if($_W['isajax']){
-			if(!empty($_GPC['order_id'])){
-				$is_add = pdo_get('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['order_id']));
-				if(empty($is_add['shopping_cart']) && $is_add['status'] == 0){
-					$shopping_car_status = pdo_update('ly_photobook_order_main',array('shopping_cart'=>1,'count'=>1),array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['order_id']));
-					if($shopping_car_status){
-						$resArr['code'] = 0;
+		public function doMobileTurn(){
+			global $_W,$_GPC;
+			load()->func('logging');
+			logging_run('进入Turn,bookid:'.$_GPC['tid']);
+			if($_W['isajax']){
+				if(!empty($_GPC['order_id'])){
+					$is_add = pdo_get('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['order_id']));
+					if(empty($is_add['shopping_cart']) && $is_add['status'] == 0){
+						$shopping_car_status = pdo_update('ly_photobook_order_main',array('shopping_cart'=>1,'count'=>1),array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['order_id']));
+						if($shopping_car_status){
+							$resArr['code'] = 0;
+						}else{
+							$resArr['code'] = 1;
+						}
 					}else{
-						$resArr['code'] = 1;
+						if($is_add['status'] == 0)
+							$resArr['code'] =2;
+						else	
+							$resArr['code'] = 3;
 					}
-				}else{
-					if($is_add['status'] == 0)
-						$resArr['code'] =2;
-					else	
-						$resArr['code'] = 3;
+					echo json_encode($resArr);exit;
 				}
-				echo json_encode($resArr);exit;
 			}
-		}
-		$Npage=1;
-		if($_GPC['Npage']>1){
-			$Npage=$_GPC['Npage'];
-		}
-		set_time_limit(0);
-		$account_api = WeAccount::create();
-		$userInfo = $account_api->fansQueryInfo($_W['openid']);
-		$bookid=$_GPC['tid'];
+			$Npage=1;
+			if($_GPC['Npage']>1){
+				$Npage=$_GPC['Npage'];
+			}
+			set_time_limit(0);
+			$account_api = WeAccount::create();
+			$userInfo = $account_api->fansQueryInfo($_W['openid']);
+			$bookid=$_GPC['tid'];
 		//该照片书信息
-		$is_buy = pdo_get('ly_photobook_order_main',array('id'=>$bookid,'uniacid'=>$_W['uniacid']))['status'];
+			$is_buy = pdo_get('ly_photobook_order_main',array('id'=>$bookid,'uniacid'=>$_W['uniacid']))['status'];
 		//获取模板的属性
-		$template_main_id=pdo_get('ly_photobook_order_main',array('id'=>$bookid),array('template_id'))['template_id'];
-		$template_main_type=pdo_get('ly_photobook_template_main',array('id'=>$template_main_id),array('shell'))['shell'];
+			$template_main_id=pdo_get('ly_photobook_order_main',array('id'=>$bookid),array('template_id'))['template_id'];
+			$template_main_type=pdo_get('ly_photobook_template_main',array('id'=>$template_main_id),array('shell'))['shell'];
 
-		$wid=$_GPC['wid'];
-		$userid =pdo_get('ly_photobook_user',array("uniacid"=>$_W['uniacid'],"openid"=>$_W['openid']))['id'];
-		if(empty($userid)){
-			message("无此用户",error);
-		}
-		$sql="SELECT * FROM ims_ly_photobook_order_sub WHERE main_id={$bookid} ORDER BY id";
-		$res=pdo_fetchall($sql);
-		$list=array();
-		
-		include "tools/posterTools.php";
-		$list=array();
+			$wid=$_GPC['wid'];
+			$userid =pdo_get('ly_photobook_user',array("uniacid"=>$_W['uniacid'],"openid"=>$_W['openid']))['id'];
+			if(empty($userid)){
+				message("无此用户",error);
+			}
+			$sql="SELECT * FROM ims_ly_photobook_order_sub WHERE main_id={$bookid} ORDER BY id";
+			$res=pdo_fetchall($sql);
+			$list=array();
+
+			include "tools/posterTools.php";
+			$list=array();
 		//遍历每个订单页，如果缩略合成图有了，则存到数组里，如果没有则生成，并保存
-		logging_run('进入函数前----'.date("Y-M-D h:m:s",time()));
-		foreach ($res as $key => $value) {
+			logging_run('进入函数前----'.date("Y-M-D h:m:s",time()));
+			foreach ($res as $key => $value) {
 			// $value为order_sub的一条记录
-			logging_run('执行order_sub----'.$value['id']);
-			$trim=$value['trim'];
-			$trimarray=json_decode($trim,true);
+				logging_run('执行order_sub----'.$value['id']);
+				$trim=$value['trim'];
+				$trimarray=json_decode($trim,true);
 			// 获取模板
-			$sql1="SELECT * FROM ims_ly_photobook_template_sub WHERE id={$value['template_id']} ORDER BY id limit 1";
-			$res1=pdo_fetch($sql1);
-			$pageType=$res1['type'];
-			$T_photo=$res1['thumb'];
+				$sql1="SELECT * FROM ims_ly_photobook_template_sub WHERE id={$value['template_id']} ORDER BY id limit 1";
+				$res1=pdo_fetch($sql1);
+				$pageType=$res1['type'];
+				$T_photo=$res1['thumb'];
 			// var_dump('模板图：'.$T_photo);
 			// 筐的位置尺寸
-			logging_run('进入函数前=='.str_replace('&quot;', "'", $res1['data']),'info','after');
-			$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
+				logging_run('进入函数前=='.str_replace('&quot;', "'", $res1['data']),'info','after');
+				$data = json_decode(str_replace('&quot;', "'", $res1['data']), true);
 			// 合成图片的位置
 			// $img = ATTACHMENT_ROOT."BOOKS/temp_book_".$value['id'].".png";
 			// var_dump($value['img_path']);
-			logging_run('进入测试前----'.$_GPC['tid']);
+				logging_run('进入测试前----'.$_GPC['tid']);
 			//找不到缩略图就调用函数生成，同时指定ordersub的id，便于更新trim信息
 			// if(!is_file($value['img_path'])){
 			// 	createzLeaf($trimarray,$data,$T_photo,$img,$value['id'],true);
 			// }else{
 			// }
-			$timg = $value['img_path'];
-			if(empty($value['img_path'])){
-				$timg = time().$T_photo;
-				$this->Compound($trimarray,$data,$T_photo,$value['id'],$timg);
+				$timg = $value['img_path'];
+				if(empty($value['img_path'])){
+					$timg = time().$T_photo;
+					$this->Compound($trimarray,$data,$T_photo,$value['id'],$timg);
+				}
+
+
+				/*$str.='{"top":"","type":"img","width":"","height":"","left":"","imageId":"'.$userimgid.'","imgurl":"'.$img['img'].'","roate":""},';*/
+				if($pageType==1){
+					$startPage=array('img'=>$timg,'id'=>$value['id']);
+				}
+				else if($pageType==2){
+					$endPage=array('img'=>$timg,'id'=>$value['id']);
+				}
+				else{
+					$list[]=array('img'=>$timg,'id'=>$value['id']);
+				}
 			}
-			
-			
-			/*$str.='{"top":"","type":"img","width":"","height":"","left":"","imageId":"'.$userimgid.'","imgurl":"'.$img['img'].'","roate":""},';*/
-			if($pageType==1){
-				$startPage=array('img'=>$timg,'id'=>$value['id']);
-			}
-			else if($pageType==2){
-				$endPage=array('img'=>$timg,'id'=>$value['id']);
-			}
-			else{
-				$list[]=array('img'=>$timg,'id'=>$value['id']);
-			}
-		}
-		logging_run('执行完函数后----'.date("Y-M-D h:m:s",time()));
+			logging_run('执行完函数后----'.date("Y-M-D h:m:s",time()));
 
 		// var_dump($list);
-		include $this->template('turn2');  
-	}
-	//更换模板API
-	public function doMobileAPI_ChangeTemp(){
-		global $_W,$_GPC;
-		$orderid=$_GPC['thisOrderId'];
-		$Tid=$_GPC['tid'];
-		$redata=array(
-			"code"=>0,
-			"message"=>""
-		);
-		$res=pdo_update("ly_photobook_order_sub",array("template_id"=>$Tid),array("id"=>$orderid));
-		if($res){
-			$redata['message']="更新成功了";
-		}else{
-			$redata['message']="更新失败";
-			$redata['code']=1;
+			include $this->template('turn2');  
 		}
-		return json_encode($redata);
-	}
+	//更换模板API
+		public function doMobileAPI_ChangeTemp(){
+			global $_W,$_GPC;
+			$orderid=$_GPC['thisOrderId'];
+			$Tid=$_GPC['tid'];
+			$redata=array(
+				"code"=>0,
+				"message"=>""
+			);
+			$res=pdo_update("ly_photobook_order_sub",array("template_id"=>$Tid),array("id"=>$orderid));
+			if($res){
+				$redata['message']="更新成功了";
+			}else{
+				$redata['message']="更新失败";
+				$redata['code']=1;
+			}
+			return json_encode($redata);
+		}
 	///////////////////////     单图操作    /////////////////////////////////////////////////////////////////////////////
-	public function doMobileNewimgtouchit(){
-		global $_W,$_GPC;
-		$Npage=$_GPC['Npage'];
+		public function doMobileNewimgtouchit(){
+			global $_W,$_GPC;
+			$Npage=$_GPC['Npage'];
 		// var_dump($Npage);
-		$url=$this->createMobileUrl("userphotos",array("type"=>"change"));
+			$url=$this->createMobileUrl("userphotos",array("type"=>"change"));
 		$url_reOnesave=$this->createMobileUrl("API_texttext");//对应前端单页保存的按钮，保存时发AJAX到这个链接
 		$url_API_Ctep=$this->createMobileUrl("API_Ctep");//应该是更换模板
 		$ordersubid=$_GPC['id'];
@@ -2236,10 +2438,12 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doMobileQuanList(){
 		global $_W,$_GPC;
 		$pindex = max(1, intval($_GPC['page']));
-	    $psize = 10;
+		$psize = 10;
+		//是内部代理还是普通代理
+		$is_agent = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['dealer'];
 	    // 全部
-	    $sql="SELECT * FROM ".tablename('ly_photobook_codes')." WHERE uniacid=:uniacid";
-	    $list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid']));
+		$sql="SELECT * FROM ".tablename('ly_photobook_codes')." WHERE uniacid=:uniacid";
+		$list=pdo_fetchall($sql,array('uniacid'=>$_W['uniacid']));
 	    // $total = pdo_fetchcolumn("SELECT COUNT(*) FROM " . tablename('ly_photobook_codes') . " where status=0 AND uniacid={$_W['uniacid']}");
 	    // $pager = pagination($total, $pindex, $psize);
 		include $this->template('quanlist');
@@ -2248,6 +2452,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	//添加地址页
 	public function doMobileAddredd_add(){
 		global $_W,$_GPC;
+
 		if(checksubmit()){
 			/*["receiver"]=> string(8) "32423543" ["phone"]=> string(7) "3453653" ["address"]=> string(26) "北京 北京市 东城区" ["detail"]=> string(10) "3333333333" */
 			$user_id=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']),array('id'))['id'];
@@ -2264,7 +2469,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			else
 				$res = pdo_update('ly_photobook_address',$data,array('id'=>$_GPC['id']));
 			if($res){
-				message('操作完成',$this->createMobileUrl('view_address'),'success');
+				message('操作完成',$this->createMobileUrl('view_address').'&order_id='.$_GPC['order_id'].'&aid='.$_GPC['sel_id'],'success');
 			}else{
 				message('操作失败','','error');
 			}
@@ -2272,15 +2477,15 @@ class PhotobookModuleSite extends WeModuleSite {
 		}else{
 			if(!empty($_GPC['id'])){
 				if($_GPC['op'] == 'del'){
-
 					$res = pdo_delete('ly_photobook_address',array('id'=>$_GPC['id']));
+					var_dump($res);
 					if($res){
-						message('操作完成','','success');
+						message('操作完成',$this->createMobileUrl('view_address').'&order_id='.$_GPC['order_id'].'&aid='.$_GPC['sel_id'],'success');
 					}else{
 						message('操作失败','','error');
 					}
 				}elseif($_GPC['op'] == 'edit')
-					$address = pdo_get('ly_photobook_address',array('id'=>$_GPC['id']));
+				$address = pdo_get('ly_photobook_address',array('id'=>$_GPC['id']));
 			}
 		}
 		include $this->template('addredd_add');
@@ -2289,9 +2494,10 @@ class PhotobookModuleSite extends WeModuleSite {
 	//地址列表页
 	public function doMobileView_address(){
 		global $_W,$_GPC;
+
 		$url=$this->createMobileUrl("addredd_add");
 		$user_id=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']),array('id'))['id'];
-		$address=pdo_getall('ly_photobook_address',array('uniacid'=>$_W['uniacid'],'user_id'=>$user_id));
+		$address=pdo_getall('ly_photobook_address',array('uniacid'=>$_W['uniacid'],'user_id'=>$user_id),array(),'','id desc');
 		include $this->template('view_address');
 	}
 
@@ -2299,7 +2505,7 @@ class PhotobookModuleSite extends WeModuleSite {
 	public function doMobilePlace_order(){
 		global $_W,$_GPC;
 		$order_id=(int)$_GPC['order_id'];
-	
+
 		//订单信息
 		$order_info = pdo_get('ly_photobook_order_main',array('uniacid'=>$_W['uniacid'],'id'=>$order_id));
 
@@ -2318,7 +2524,13 @@ class PhotobookModuleSite extends WeModuleSite {
 		$template_id=pdo_get('ly_photobook_template_sub',array('id'=>$template_sub_id),array('template_id'))['template_id'];
 		$template=pdo_get('ly_photobook_template_main',array('id'=>$template_id),array('name','thumb','price','inner_price'));
 		$user_id=pdo_get('ly_photobook_user',array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']),array('id'))['id'];
-		$address=pdo_getall('ly_photobook_address',array('uniacid'=>$_W['uniacid'],'user_id'=>$user_id));
+		/**
+		最新的收货地址
+		*/
+		if(empty($_GPC['sel_addid']))
+			$a = pdo_get('ly_photobook_address',array('uniacid'=>$_W['uniacid'],'user_id'=>$user_id),array(),'','id desc');
+		else
+			$a = pdo_get('ly_photobook_address',array('id'=>$_GPC['sel_addid']));
 		/**
 		 * 查找卡卷列表
 		 */
@@ -2334,7 +2546,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				if(!empty($_GPC['select_card'])){
 					$card_info = pdo_get('ly_photobook_user_code',array('id'=>$_GPC['select_card']));
 					$reduce_price = pdo_get('ly_photobook_codes',array('id'=>$card_info['code_id']))['list_price'];
-				
+
 					if($is_inner_sub){
 						$price -=$template['inner_price'];	
 					}else{
@@ -2355,7 +2567,13 @@ class PhotobookModuleSite extends WeModuleSite {
 				'card_id'=>$select_card_id,
 				'phone'=>$_GPC['phone']
 			);
-			if(pdo_update('ly_photobook_order_main',$data,array('id'=>$order_id))){
+			//判断是否是返回键返回
+			$has_data = pdo_get('ly_photobook_order_main',array('id'=>$order_id),array('count','price','remark','address_id','card_id','phone'));
+			$has_data['price'] = (float)$has_data['price'];
+			$has_data['card_id'] = (int)$has_data['card_id'];
+			if($has_data == $data){
+				header('Location: '.$this->createMobileUrl('Shop_order',array('order_id'=>$order_id)));
+			}elseif(pdo_update('ly_photobook_order_main',$data,array('id'=>$order_id)) ){
 				header('Location: '.$this->createMobileUrl('Shop_order',array('order_id'=>$order_id)));
 			}
 		}
@@ -2398,17 +2616,24 @@ class PhotobookModuleSite extends WeModuleSite {
 		$code=pdo_get('ly_photobook_codes',array('id'=>$cid));
 		if(checksubmit()){
 			$user_id=pdo_fetchcolumn('select id from '.tablename('ly_photobook_user').' where openid=:openid',array('openid'=>$_W['openid']));
+			if($is_agent == 2){
+				//内部代理价格
+				$money=(float)$code['dealer_price']*(float)$_GPC['count'];
+			}elseif($is_agent == 1){
+				//普通代理价格
+				$money=(float)$code['pt_dealer_price']*(float)$_GPC['count'];
+			}
 			$insert=array(
 				'uniacid'=>$_W['uniacid'],
 				'price'=>$money,
 				'codeid'=>$cid,
 				'number'=>$_GPC['count'],
 				'status'=>0,
-				'user_id'=>$user_id
+				'user_id'=>$user_id,
+				'createtime'=>time()
 			);
 			//录入订单表
 			pdo_insert('ly_photobook_code_order',$insert);
-			$money=(float)$code['dealer_price']*(float)$_GPC['count'];
 			$tickets='code_'.date('YmdHis').'_'.random(10, 1).'_'.pdo_insertid();
 			$params = array(
 				'tid' => $tickets,
@@ -2640,7 +2865,9 @@ class PhotobookModuleSite extends WeModuleSite {
 	 */
 	public function doMobileBecomeAgent(){
 		global $_W,$_GPC;
+		$p_title="注册总代理";
 		$dealer=pdo_get('ly_photobook_user',array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid'],'dealer'=>array(1,2)));
+		$price = pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']))['deal_price'];
 		if(!empty($dealer)){
 			header('Location: '.$this->createMobileUrl('agency_center'));
 		}else{
@@ -2656,12 +2883,12 @@ class PhotobookModuleSite extends WeModuleSite {
 					'tid' => $tickets,
 					'ordersn' => $tickets,
 					'title' => '成为代理商',
-					'fee' => 0.02
-				);
+					'fee' => $price
+				); 
 				$this->pay($params);
 				exit;
 			}
-			include $this->template('becomeagent');
+			include $this->template('becomeagentt');
 		}	
 	}
 
@@ -2709,78 +2936,83 @@ class PhotobookModuleSite extends WeModuleSite {
 		// 没有记录
 		include $this->template('setparent');
 	}
-
+	private function randFloat($min=0, $max=1){
+		return $min + mt_rand()/mt_getrandmax() * ($max-$min);
+	}
 	// 支付回调函数
 	public function payResult($params) {
-        global $_W,$_GPC;
+		global $_W,$_GPC;
         ///////////////
         // params数据： //
         ///////////////
-        /*rray(14) { ["weid"]=> string(1) "2" ["uniacid"]=> string(1) "2" ["result"]=> string(7) "success" ["type"]=> string(6) "wechat" ["from"]=> string(6) "return" ["tid"]=> string(31) "agent_20171007194847_6462226982" ["uniontid"]=> string(28) "2017100719485200013226668291" ["user"]=> string(1) "1" ["fee"]=> string(4) "0.02" ["tag"]=> array(1) { ["transaction_id"]=> string(28) "4200000023201710076697445140" } ["is_usecard"]=> string(1) "0" ["card_type"]=> string(1) "0" ["card_fee"]=> string(4) "0.02" ["card_id"]=> string(1) "0" }*/
-        if($params['result'] == 'success' && $params['from'] == 'return'){
+		/*rray(14) { ["weid"]=> string(1) "2" ["uniacid"]=> string(1) "2" ["result"]=> string(7) "success" ["type"]=> string(6) "wechat" ["from"]=> string(6) "return" ["tid"]=> string(31) "agent_20171007194847_6462226982" ["uniontid"]=> string(28) "2017100719485200013226668291" ["user"]=> string(1) "1" ["fee"]=> string(4) "0.02" ["tag"]=> array(1) { ["transaction_id"]=> string(28) "4200000023201710076697445140" } ["is_usecard"]=> string(1) "0" ["card_type"]=> string(1) "0" ["card_fee"]=> string(4) "0.02" ["card_id"]=> string(1) "0" }*/
+		if($params['result'] == 'success' && $params['from'] == 'return'){
 			load()->func('logging');					
 			logging_run('支付参数'.json_encode($params),'info','test');
-        	$type=explode('_',$params['tid'])[0];
-        	$order_id=end(explode('_',$params['tid']));
-        	if($type =='book'){
+			$type=explode('_',$params['tid'])[0];
+			$order_id=end(explode('_',$params['tid']));
+			if($type =='book'){
 				if(!pdo_get('ly_photobook_order_main',array('id'=>$order_id))['status']){
-						//如果用卡卷 更新卡卷数量
+					//如果用卡卷 更新卡卷数量
 					$card_main = pdo_get('ly_photobook_order_main',array('id'=>$order_id));
 					$card_id = $card_main['card_id'];
-					if(!empty($card_id)){
-						pdo_update('ly_photobook_user_code',array('number -='=>1),array('id'=>$card_id));
-					}
-					// 购买照片书的
+
+					//购买照片书的订单状态
 					pdo_update('ly_photobook_order_main',array('status'=>1),array('id'=>$order_id));
 					//更新照片书购买数量
 					pdo_update('ly_photobook_template_main',array('sales +='=>$card_main['count']),array('uniacid'=>$_W['uniacid'],'id'=>$card_main['template_id']));
-					$config = $this->module['config'];
-					$setting=$config['msetting'];
-					///////////
-					// 给上级返利 //
-					///////////
-					$prev_share_id=pdo_get('ly_photobook_share',array('openid'=>$_W['openid']),array('parentid'))['parentid'];
-					
-					if($prev_share_id){
-						// 有上级
-						$prev=pdo_get('ly_photobook_share',array('id'=>$prev_share_id['parentid']));
-						$prev_userid=pdo_get('ly_photobook_user',array('openid'=>$prev['openid']),array('id'));
-				
-						$prev_money=$setting['one_level'] * $params['fee'];
-			
-						$insert=array(
-							'userid'=>$prev_userid['id'],
-							'uniacid'=>$_W['uniacid'],
-							'createtime'=>time(),
-							'money'=>$prev_money,
-							'remark'=>'下级购买返利',
-							'status'=>0
-						);
-						
-						pdo_insert('ly_photobook_user_rebate',$insert);
-						
-						if($prev['parentid']){
-						//////////////
-						// 给上级上级返利	 //
-						//////////////
-							$prev_prev=pdo_get('ly_photobook_share',array('id'=>$prev['parentid']));
-							$prev_prev_userid=pdo_get('ly_photobook_user',array('openid'=>$prev_prev['openid']),array('id'));
-							$prev_prev_money=$setting['two_level'] * $params['fee'];
+
+					if(!empty($card_id)){
+						pdo_update('ly_photobook_user_code',array('number -='=>1),array('id'=>$card_id));
+					}else{
+						$config = $this->module['config'];
+						$setting=$config['msetting'];
+						///////////
+						// 给上级返利 //
+						///////////
+						$prev_share_id=pdo_get('ly_photobook_share',array('openid'=>$_W['openid']),array('parentid'))['parentid'];
+						$self_id = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id'];
+						if($prev_share_id){
+							// 有上级
+							$prev=pdo_get('ly_photobook_share',array('id'=>$prev_share_id['parentid']));
+							$prev_userid=pdo_get('ly_photobook_user',array('openid'=>$prev['openid']),array('id'));
+
+							$prev_money=$setting['one_level'] * $params['fee'];
+
 							$insert=array(
-								'userid'=>$prev_prev_userid['id'],
+								'userid'=>$prev_userid['id'],
+								'children'=>$self_id,
 								'uniacid'=>$_W['uniacid'],
 								'createtime'=>time(),
-								'money'=>$prev_prev_money,
-								'remark'=>'下下级购买返利',
+								'money'=>$prev_money,
+								'remark'=>'下级购买返利',
 								'status'=>0
-							);		
-							pdo_insert('ly_photobook_user_rebate',$insert);				
+							);
+							pdo_insert('ly_photobook_user_rebate',$insert);
+							if($prev['parentid']){
+								//////////////
+								// 给上级上级返利	 //
+								//////////////
+								$prev_prev=pdo_get('ly_photobook_share',array('id'=>$prev['parentid']));
+								$prev_prev_userid=pdo_get('ly_photobook_user',array('openid'=>$prev_prev['openid']),array('id'));
+								$prev_prev_money=$setting['two_level'] * $params['fee'];
+								$insert=array(
+									'userid'=>$prev_prev_userid['id'],
+									'children'=>$self_id,
+									'uniacid'=>$_W['uniacid'],
+									'createtime'=>time(),
+									'money'=>$prev_prev_money,
+									'remark'=>'下下级购买返利',
+									'status'=>0
+								);		
+								pdo_insert('ly_photobook_user_rebate',$insert);				
+							}
 						}
 					}
 					message('照片书支付成功',$this->createMobileUrl('usercenter'),'success');
 				}
 				
-        	}else if($type =='code'){
+			}else if($type =='code'){
 
 				if(!pdo_get('ly_photobook_code_order',array('id'=>$order_id))['status']){
 					// 代理商购买代金券的
@@ -2807,39 +3039,112 @@ class PhotobookModuleSite extends WeModuleSite {
 						$data['number'] += $ishas['number'];
 						pdo_update('ly_photobook_user_code',$data,array('id'=>$ishas['id']));
 					}
+					$parentid = pdo_get('ly_photobook_share',array('openid'=>$_W['openid']),array('parentid'))['parentid'];
+					$parent_openid = pdo_get('ly_photobook_share',array('id'=>$parentid))['openid'];
+					$parent_userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$parent_openid))['id'];
+					if(!empty($parent_openid)){
+						load()->model('mc');
+						$mc = mc_fetch($_W['openid']);
+						$num = $this->randFloat()/2;
+						$num = round($num,2);
+						while($num < 0.01){
+							$num = $this->randFloat()/10;
+							$num = round($num,2);
+						}
+						$send_mess = new templatemessage();
+						$send_arr = [
+							'first'=>'恭喜您,您的下级代理购买了代金券，您获得了'.$num.'元的佣金',
+							'k1'=>$mc['nickname'],
+							'k2'=>$num.'元',
+							'k3'=>date('Y-m-d H:i:s',time()),
+							'rem'=>'你可以到【发现】-【照片书总代】-销售奖励 中查看更多信息',
+							'openid'=>$parent_openid,
+							'mid1'=>'2D5D0-Pq7WE7ngtUID7HsMXAM5u3GbFBdHYo8cw6eMY',
+							'url'=>''
+						];
+						$send_mess->send_momey_mess($send_arr);
+						pdo_insert('ly_photobook_user_rebate',array('userid'=>$parent_userid,'money'=>$num,'remark'=>'下级购买代金券','type'=>2,'uniacid'=>$_W['uniacid'],'createtime'=>time()));
+					}	
 					message('代金券支付成功',$this->createMobileUrl('usercenter'),'success');
 				}
-        		
-        	}else if($type=='agent'){
+
+			}else if($type=='agent'){
         		// 成为代理商
-        		$code=$this->randChar(5);
-        		$id=pdo_fetchcolumn('select id from '.tablename('ly_photobook_user').' where openid=:openid and uniacid=:uniacid',array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']));
-        		pdo_update('ly_photobook_user',array('dealer'=>1,'agent_code'=>$code),array('id'=>$id));
-        		message('您已成为代理商',$this->createMobileUrl('usercenter'),'success');
-        	}
-        }else{
-        	message('支付失败',$this->createMobileUrl('chart'),'error');
-        }
-    }
+				if(pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['dealer'] != 1){
+					$code=$this->randChar(5);
+					$id=pdo_fetchcolumn('select id from '.tablename('ly_photobook_user').' where openid=:openid and uniacid=:uniacid',array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']));
+					$res = pdo_update('ly_photobook_user',array('dealer'=>1,'agent_code'=>$code),array('id'=>$id));
+					if($res){
+						$parentid = pdo_get('ly_photobook_share',array('openid'=>$_W['openid']),array('parentid'))['parentid'];
+						$parent_openid = pdo_get('ly_photobook_share',array('id'=>$parentid))['openid'];
+						$parent_userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$parent_openid))['id'];
+						if(!empty($parent_openid)){
+							load()->model('mc');
+							$mc = mc_fetch($_W['openid']);
+							$num = pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']))['parent_price'];
+							$send_mess = new templatemessage();
+							$send_arr = [
+								'first'=>'恭喜您,您有粉丝已经注册为代理了，您获得了'.$num.'元的佣金',
+								'k1'=>$mc['nickname'],
+								'k2'=>$num.'元',
+								'k3'=>date('Y-m-d H:i:s',time()),
+								'rem'=>'你可以到【发现】-【照片书总代】-销售奖励 中查看更多信息',
+								'openid'=>$parent_openid,
+								'mid1'=>'2D5D0-Pq7WE7ngtUID7HsMXAM5u3GbFBdHYo8cw6eMY',
+								'url'=>''
+							];
+							$send_mess->send_momey_mess($send_arr);
+							pdo_insert('ly_photobook_user_rebate',array('userid'=>$parent_userid,'money'=>$num,'remark'=>'下级购买代理','type'=>3,'uniacid'=>$_W['uniacid'],'createtime'=>time()));
+						}	
+					}
+				}
+				message('您已成为代理商',$this->createMobileUrl('usercenter'),'success');
+			}
+		}else{
+			message('支付失败',$this->createMobileUrl('chart'),'error');
+		}
+	}
+	public function id2openid($id){
+		global $_W,$_GPC;
+
+		return pdo_get('ly_photobook_user',array('id'=>$id,'uniacid'=>$_W['uniacid']))['openid'];
+	}
     /////////
     // 代理商代金券列表 //
     /////////
-    public function doMobileAgentCardList(){
-    	$this->_exec('AgentCardList',false);
-    }
-
+	public function doMobileAgentCardList(){
+		$this->_exec('AgentCardList',false);
+	}
+	/**
+	 * 代金券购买记录
+	 */
+	public function doWebCode_buy(){
+		$this->_exec('Code_buy',true);
+	}
+	/**
+	 * 代金券分享明细
+	 */
+	public function doWebCard_sharelog(){
+		$this->_exec('card_sharelog',true);
+	}
+	/**
+	 * 代金券分享统计
+	 */
+	public function doWebCard_sharemag(){
+		$this->_exec('card_sharemag',true);
+	}
     /////////
     // 代理商代下级列表 //
     /////////
-    public function doMobileAgentSubList(){
-    	$this->_exec('AgentSubList',false);
-    }
+	public function doMobileAgentSubList(){
+		$this->_exec('AgentSubList',false);
+	}
 
     ////////////
     // 给下级代金券 //
     ////////////
-    public function doMobileGiveHeCard(){
-    	global $_GPC,$_W;
+	public function doMobileGiveHeCard(){
+		global $_GPC,$_W;
 		if($_W['isajax']){
 			/**
 			 * 后台判断卡卷数时候大于0
@@ -2867,86 +3172,147 @@ class PhotobookModuleSite extends WeModuleSite {
 				$data['number'] +=$ishas['number'];
 				$result = pdo_update('ly_photobook_user_code',$data,array('id'=>$ishas['id']));
 			}
-				
+
 			if($result){
 				// 代理商的减掉
-				pdo_update('ly_photobook_user_code',array('number -='=>$_GPC['number']),array('id'=>$_GPC['coid']));
-				return '1';
+				$res = pdo_update('ly_photobook_user_code',array('number -='=>$_GPC['number']),array('id'=>$_GPC['coid']));
+				/**
+				 * 记录中间过程  上级 分享给了下级  多少代金券  什么时间
+				 */
+				if($res){
+					$parent = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id'];
+					$insert_data = [
+						'uniacid'=>$_W['uniacid'],
+						'parent'=>$parent,
+						'code_kind'=>$code_info['code_id'],
+						'number'=>$_GPC['number'],
+						'children'=>$user_id,
+						'insert_time'=>time()
+					];
+					if(pdo_insert('ly_photobook_share_code_log',$insert_data)){
+						return '1';
+					}
+				}
 			}else{
 				return '0';
 			}
 		}else{
 			return '访问错误';
 		}
-    }
+	}
 
     //////////
     // 返利记录 //
     //////////
-    public function doMobileMyRebateList(){
-    	$this->_exec('MyRebateList',false);
-    }
+	public function doMobileMyRebateList(){
+		$this->_exec('MyRebateList',false);
+	}
+	/**
+	 * 代理中心---佣金明细
+	 */
+	public function doMobileYj_detail(){
+		global $_W,$_GPC;
+		$p_title="佣金明细";
+		$userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id']; 
+		if(empty($_GPC['id']))
+			$rebate = pdo_getall('ly_photobook_user_rebate',array('uniacid'=>$_W['uniacid'],'userid'=>$userid),array(),'','id desc');
+		else{
+			$num_list = pdo_get('ly_photobook_apply_rebate',array('id'=>$_GPC['id']))['num_list'];
+			$num_list = json_decode($num_list,true);
+			foreach ($num_list as $key => $value) {
+				$rebate[] = pdo_get('ly_photobook_user_rebate',array('id'=>$value));
+			}
+		}
+		include $this->template('yj_detail');
+	}
+	/**
+	 * 代理中心---提现记录
+	 */
+	public function doMobileReturn_detail(){
+		global $_W,$_GPC;
+		$p_title="提现记录";
 
+		$userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id']; 
+		$rebates = pdo_getall('ly_photobook_apply_rebate',array('uniacid'=>$_W['uniacid'],'userid'=>$userid),array(),'','id desc');
+		include $this->template('return_detail');
+	}
     //////////
     // 申请提现 //
     //////////
     ///
-    public function doMobileApplyrebate(){
-    	global $_W,$_GPC;
+	public function doMobileApplyrebate(){
+		global $_W,$_GPC;
 		$userid=pdo_get('ly_photobook_user',array('openid'=>$_W['openid']))['id'];
-		$sql='select sum(money) as sum from '.tablename('ly_photobook_user_rebate').' where uniacid=:uniacid and userid=:userid and status=:status';
-		$allmoney=pdo_fetch($sql,array('uniacid'=>$_W['uniacid'],'userid'=>$userid,'status'=>0))['sum'];
+		$rebate_list = pdo_getall('ly_photobook_user_rebate',array('uniacid'=>$_W['uniacid'],'userid'=>$userid,'status'=>0));
+		foreach ($rebate_list as $key => $value) {
+			$rebate_num[] = $value['id'];
+		}
 
 		$insert=array(
 			'uniacid'=>$_W['uniacid'],
 			'userid'=>$userid,
 			'createtime'=>time(),
 			'status'=>0,
-			'money'=>$allmoney
+			'money'=>$_GPC['money'],
+			'num_list'=>json_encode($rebate_num)
 		);
 
 		if(pdo_insert('ly_photobook_apply_rebate',$insert)){
-			pdo_update('ly_photobook_user_rebate',array('status'=>1),array('status'=>0,'uniacid'=>$_W['uniacid'],'userid'=>$userid));
+			foreach ($rebate_list as $key => $value) {
+				pdo_update('ly_photobook_user_rebate',array('status'=>1),array('id'=>$value['id']));
+			}
 			return '1';
 		}else{
 			return '0';
 		}
-    }
+	}
 
     //////////
     // 奖励管理 //
     //////////
-    public function doWebRebateList(){
-    	$this->_exec('RebateList');
-    }
-
+	public function doWebRebateList(){
+		$this->_exec('RebateList');
+	}
+	/**
+	 * 奖励申请发放明细
+	 */
+	public function doWebRebate_detail(){
+		$this->_exec('rebate_detail');
+	}
     ////////////
     // 发送奖励提现 //
     ////////////
-    public function doWebSendRebate(){
-    	global $_W,$_GPC;
-    	if($_W['isajax']){
-    		$apply_rebate=pdo_get('ly_photobook_apply_rebate',array('id'=>$_GPC['id']));
-    		$monay=round($apply_rebate['money']*100);
+	public function doWebSendRebate(){
+		global $_W,$_GPC;
+		if($_W['isajax']){
+			$apply_rebate=pdo_get('ly_photobook_apply_rebate',array('id'=>$_GPC['id']));
+			$monay=round($apply_rebate['money']*100);
 			$openid=pdo_get('ly_photobook_user',array('id'=>$apply_rebate['userid']),array('openid'));
-			var_dump($openid);
+
 			$res=$this->Enfunds($monay,$openid['openid']);
-			var_dump($res);
-    		if($res['isok']){
-    			pdo_update('ly_photobook_apply_rebate',array('status'=>1),array('id'=>$_GPC['id']));
-    			return '1';
-    		}else{
-    			return '0';
-    		}
-    	}else{
-    		echo '非法访问';
-    	}
-    }
+
+			if($res['isok']){
+				pdo_update('ly_photobook_apply_rebate',array('status'=>1),array('id'=>$_GPC['id']));
+				/**
+				 * 将所有提现的金额状态改为已经提现
+				 */
+				$rebate_list = json_decode($apply_rebate['num_list'],true);
+				foreach ($rebate_list as $key => $value) {
+					pdo_update('ly_photobook_user_rebate',array('status'=>2),array('id'=>$value));
+				}
+				return '1';
+			}else{
+				return '0';
+			}
+		}else{
+			echo '非法访问';
+		}
+	}
 
 	//////////
 	// 发放奖励 //
 	//////////
-    private function Enfunds($amount,$openid){
+	private function Enfunds($amount,$openid){
 		global $_W,$_GPC;
 		$url = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers';
 		$this_data='timeA'.time().'A';
@@ -2975,7 +3341,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$pars['sign'] = strtoupper(md5($string1));
 		$xml = array2xml($pars);
 		$myfile = fopen("../addons/photobook/newfile.xml", "w") or die("Unable to open file!");
-	
+
 		$extrasa = array();
 		$extrasa['CURLOPT_CAINFO'] ='../addons/photobook/cert/rootca.pem';
 		$extrasa['CURLOPT_SSLCERT'] ='../addons/photobook/cert/apiclient_cert.pem';

@@ -45,6 +45,9 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 
 		}
 	}
+	private function randFloat($min=0, $max=1){
+		return $min + mt_rand()/mt_getrandmax() * ($max-$min);
+	}
 
 	// 关注事件，处理上下级关系
 	private function subscribe($scene_id){
@@ -96,7 +99,29 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 						$parentid=$share['id'];
 						$img = createMPoster($mc,$poster,'ly_photobook',$parentid);
 						$media_id = $this->uploadImage($img); 
-						
+						include 'TemplateMessage.php';
+						load()->model('mc');
+						$mc = mc_fetch($openid);
+						$num = $this->randFloat()/10;
+						$num = round($num,2);
+						while($num < 0.01){
+							$num = $this->randFloat()/10;
+							$num = round($num,2);
+						}
+						$send_mess = new templatemessage();
+						$send_arr = [
+							'first'=>'恭喜您有新的粉丝加入，获得了'.$num.'元的佣金',
+							'k1'=>$mc['nickname'],
+							'k2'=>$num.'元',
+							'k3'=>date('Y-m-d H:i:s',time()),
+							'rem'=>'你可以到【发现】-【照片书总代】-拉粉奖励 中查看更多信息',
+							'openid'=>$share['openid'],
+							'mid1'=>'2D5D0-Pq7WE7ngtUID7HsMXAM5u3GbFBdHYo8cw6eMY',
+							'url'=>''
+						];
+						$send_mess->send_momey_mess($send_arr);
+						$parent_userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$share['openid']))['id'];
+						pdo_insert('ly_photobook_user_rebate',array('userid'=>$parent_userid,'money'=>$num,'remark'=>'新增粉丝奖励','type'=>1,'uniacid'=>$_W['uniacid'],'createtime'=>time()));
 						return $this->sendImage($openid,$media_id);
 					}	
 				}
@@ -131,18 +156,18 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 
 	// 发送文字消息
 	public function sendText($openid, $text) {
-	    $post = '{"touser":"' . $openid . '","msgtype":"text","text":{"content":"' . $text . '"}}';
-	    $ret = $this->sendRes($this->getAccessToken(), $post);
-	    return $ret;
+		$post = '{"touser":"' . $openid . '","msgtype":"text","text":{"content":"' . $text . '"}}';
+		$ret = $this->sendRes($this->getAccessToken(), $post);
+		return $ret;
 	}
 
 	// 真实发送并返回结果
 	private function sendRes($access_token, $data) {
-	    $url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$access_token}";
-	    load()->func('communication');
-	    $ret = ihttp_request($url, $data);
-	    $content = @json_decode($ret['content'], true);
-	    return $content['errcode'];
+		$url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$access_token}";
+		load()->func('communication');
+		$ret = ihttp_request($url, $data);
+		$content = @json_decode($ret['content'], true);
+		return $content['errcode'];
 	}
 
 	// 获取accesstoken

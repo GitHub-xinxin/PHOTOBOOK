@@ -1,0 +1,62 @@
+{template 'common/header'}
+
+<style>
+th{
+	text-align: center !important;
+}
+
+td{
+	text-align: center !important;
+	white-space: normal !important;
+	word-break: break-all !important;
+}
+</style>
+
+<ul class="nav nav-tabs">
+    <li><a href="{php echo $this->createWebUrl('rebatelist')}">未发放</a></li>
+    <li><a href="{php echo $this->createWebUrl('rebatelist',array('status'=>1))}">已发放</a></li>
+    <li class="active"><a href="">申请明细</a></li>
+</ul>
+
+
+<div class="panel panel-default">
+    <div class='panel-heading'>
+        奖励申请列表
+    </div>
+    <div class="panel-body" style="text-align: center;">
+        <input type="hidden" name="token" value="{$_W['token']}">
+        <table class="table table-hover">
+            <thead class="navbar-inner">
+                <tr>
+                    <th>序号</th>
+                    <th>金额</th>
+                    <th>来源</th>
+                    <th>时间</th>
+                </tr>
+            </thead>
+            <tbody id="table_content">
+                {loop $list $index $l}
+                <tr>
+                    <td>{php echo $index+1}</td>
+                    <td>{$l['money']}</td>
+                    <td>
+                        {if $l['type'] == 0}
+                            下级购买照片书
+                        {elseif $l['type'] == 1}
+                            新增粉丝奖励
+                        {elseif $l['type'] == 2}
+                            下级购买代金券
+                        {/if}
+                    </td>
+                    <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+                </tr>
+                {/loop}
+            </tbody>
+        </table>
+        {$pager}
+    </div>
+</div>
+<script type="text/javascript">
+
+</script>
+{template 'common/footer'}

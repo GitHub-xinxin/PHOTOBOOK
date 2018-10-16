@@ -26,7 +26,7 @@
 		var op = document.getElementsByName('op')[0].value;
 
 		var uploader = new plupload.Uploader({
-			runtimes:'html5,flash,silverlight,browserplus,html4',
+			runtimes:'html5,flash,silverlight,browserplus,html4', 
 			browse_button : 'selectfiles', 
 			filters: {
 				mime_types : [ //只允许上传图片和zip文件
@@ -62,7 +62,7 @@
 					var index1=file.name.lastIndexOf(".");
 					var index2=file.name.length;  
 					var suffix=file.name.substring(index1,index2);//后缀名   
-					var filename=randomString(10)+suffix
+					var filename=randomString(20)+suffix
 					file.name =filename
 					//重新设置参数  
 					uploader.setOption('multipart_params',{
@@ -123,7 +123,7 @@
 							},700);
 					}else{
 						setTimeout(function(){  //
-							window.location.replace("http://photos.leyaocn.com/app/index.php?i=2&c=entry&eid=1");//页面刷新
+							window.location.replace("http://photos.leyaocn.com/app/index.php?i=2&c=entry&do=userphotos&m=photobook&op="+op);//页面刷新
 							},700);
 					}
 				}

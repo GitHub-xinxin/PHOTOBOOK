@@ -1,0 +1,65 @@
+{template 'common/header'}
+<style>
+	th,td{
+		text-align: center;
+	}
+</style>
+<ul class="nav nav-tabs">
+	<li {if $operation == 'list'} class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('document_mag',array('op'=>'list'))}">文档列表</a>
+	</li>
+	<li {if $operation == 'add'} class="active"{/if}>
+		<a href="{php echo $this->createWebUrl('document_mag',array('op'=>'add'))}">添加文档</a>
+	</li>
+</ul>
+
+{if $operation == 'list'}
+<table class="table">
+	<thead>
+		<tr>
+			<th>序号</th>
+			<th>标题</th>
+			<th>时间</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{loop $list $index $val}
+		<tr>
+			<td>{php echo $index+1}</td>
+			<td>{$val['title']}</td>
+			<td>{php echo date('Y-m-d H:i:s',$val['insert_time'])}</td>
+			<td>
+				<a href="{php echo $this->createWebUrl('document_mag',array('op'=>'add','id'=>$val['id']))}" class="btn btn-success">编辑</a>
+				<a href="{php echo $this->createWebUrl('document_mag',array('op'=>'del','id'=>$val['id']))}" class="btn btn-danger" onclick="return confirm('确定要删除吗？')">删除</a>
+			</td>
+		</tr>
+		{/loop}
+	</tbody>
+</table>
+
+{elseif $operation == 'add'}
+<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data">
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-1 control-label">文档标题</label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="text" id="title" name="title" class="form-control"  value="{$document['title']}" />
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-1 control-label">文档内容</label>
+		<div class="col-sm-9 col-xs-12">
+			{php echo tpl_ueditor('content',$document['content']);} 
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			<input type="hidden" name="id" value="{$document['id']}">
+			<input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1"  />
+			<input type="hidden" name="token" value="{$_W['token']}"  />
+		</div>
+	</div>
+</form>
+{/if}
+{template 'common/footer'}

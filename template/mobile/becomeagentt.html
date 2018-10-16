@@ -1,0 +1,32 @@
+{template 'header'}
+<style>
+
+.zcdl-div{
+	overflow: scroll;width: 95%;margin-left: 2.5%;
+}
+.zcdl-btn{
+	position: relative;
+	top: -41vw;
+	width: 50%;
+	left: 25%;
+}
+.mui-off-canvas-wrap .mui-draggable{
+	margin-bottom: 50px !important
+}
+</style>
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div class="zcdl-div">
+			<img src="../addons/photobook/images/zcdl3.jpg" style="width: 100%;" alt="">
+			<img id="zc_btn" class="zcdl-btn" src="../addons/photobook/images/zxdl4.jpg" alt="">
+		</div>
+	</div>
+</div>
+<script>
+	$(function(){
+		$('.zcdl-btn').on('tap',function(){
+			window.location.href = "{php echo $this->createMobileUrl('BecomeAgent',array('pay'=>1))}"
+		})
+	})
+</script>
+{template 'footer'} 

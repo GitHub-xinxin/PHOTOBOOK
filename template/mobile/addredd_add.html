@@ -28,7 +28,7 @@
 				{/if}
 			</div> 
 			<div class="weui-cell__ft">
-				<a href="{php echo $this->createMobileUrl('view_address')}" class="weui-btn weui-btn_default" style="font-size: 12px">历史地址></a>
+				
 			</div>
 		</div>
 	</div>
@@ -63,10 +63,9 @@
 			<div style="margin: 0.5em" class="btn">
 
 				<button type="submit" name="submit" value="提交" class="weui-btn weui-btn_plain-primary" style="width: 100%;">确认</button>
-<!-- 				{if !empty($address)}
+				{if !empty($address) && $address['id'] != $_GPC['sel_id']}
 					<button class="weui-btn weui-btn_plain-primary" id="del_btn" data-id="{$address['id']}">删除地址</button>
-				{/if} -->
-				<!-- <a href="javascript:;" class="weui-btn weui-btn_plain-primary">确定</a> -->
+				{/if}
 			</div>
 		</div>
 	</form>
@@ -74,17 +73,26 @@
 		$("#city-picker").cityPicker({
 			title: "请选择收货地址"
 		});
-		// $('#del_btn').click(function(event) {
-		// 	/* Act on the event */
-		// 	if(confirm('确定要删除？')){
-		// 		var id = $(this).data('id')
-		// 		window.event.returnValue=false; 
-		// 		location.href = "{php echo $this->createMobileUrl('Addredd_add',array('op'=>'del'))}&id="+id
-		// 	}
-		// });
+		$('#del_btn').click(function(event) {
+			/* Act on the event */
+			if(confirm('确定要删除？')){
+				var id = $(this).data('id')
+				window.event.returnValue=false; 
+				location.href = "{php echo $this->createMobileUrl('Addredd_add',array('op'=>'del'))}&id="+id+"&order_id="+"{$_GPC['order_id']}"+'&sel_id='+"{$_GPC['sel_id']}"
+			}
+		});
 		function check(){
 			if(!$('#receiver').val()){
 				alert('请输入收件人姓名')
+				 return false
+			}
+			var phone =document.getElementsByName('phone')[0].value;
+			if(!(/^1[34578]\d{9}$/.test(phone))){ 
+				alert("请填写正确的11位电话号码,请重填");  
+				return false; 
+			} 
+			if($('#city-picker').val() == '点此选择'){
+				alert('请输入省市区')
 				 return false
 			}
 			if(!$('#detail').val()){

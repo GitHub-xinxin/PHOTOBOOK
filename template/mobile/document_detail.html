@@ -1,0 +1,14 @@
+{template 'header'}
+
+<div id="scroll" class="mui-content mui-scroll-wrapper">
+	<div class="mui-scroll">
+		<div class="mui-row" style="margin-top: 1vw;margin-bottom: 3em">
+			<div style="text-align: center;padding:2vw 0">{$document['title']}</div>
+			<div style="float: right; font-size: 0.5em;padding-right: 2vw;">{php echo date('Y-m-d H:i:s',$document['insert_time']);}</div>
+			<div style="margin-top: 2em">
+				{php echo ihtml_entity_decode($document['content']);}
+			</div>
+		</div>
+	</div>
+</div>
+{template 'footer'}

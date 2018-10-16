@@ -11,46 +11,51 @@ td{
 	word-break: break-all !important;
 }
 </style>
-
+<ul class="nav nav-tabs">
+    <li class="active"><a href="{php echo $this->createWebUrl('cartlist')}">代金券</a></li>
+    <li> <a href="{php echo $this->createWebUrl('code_buy')}">代金券购买记录</a></li>
+    <li><a href="{php echo $this->createWebUrl('card_sharemag')}">代金券分享统计</a></li>
+</ul>
 <div class="panel panel-default">
 
-<div class='panel-heading'>
-  创建代金券
-</div>
-
-	<div class="panel-body" style="text-align: center;">
-        <form class="form-inline" role="form" action="" method="post">
-            <div class="form-group">
-                <label class="sr-only" for="name">卡卷名称</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="名称">
-            </div>
-          <div class="form-group">
+    <div class='panel-heading'>   
+      创建代金券
+  </div>
+  <div class="panel-body" style="text-align: center;">
+    <form class="form-inline" role="form" action="" method="post">
+        <div class="form-group">
+            <label class="sr-only" for="name">卡卷名称</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="名称">
+        </div>
+        <div class="form-group">
             <label class="sr-only" for="name">数量</label>
             <input type="number" class="form-control" id="number" name="number" placeholder="数量">
-          </div>
-          <div class="form-group">
+        </div>
+        <div class="form-group">
             <label class="sr-only" for="name">展示价格</label>
             <input type="number" min="0.0" step="0.1"  class="form-control" id="list_price" name="list_price" placeholder="展示价格">
-          </div>
-          <div class="form-group">
-            <label class="sr-only" for="name">购买价格</label>
-            <input type="number" min="0.0" step="0.1" class="form-control" id="dealer_price" name="dealer_price" placeholder="购买价格">
-          </div>
-          <input type="hidden" name="token" value="{$_W['token']}">
-          <input type="submit" name="submit" value="创建" class="btn btn-primary">
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="number" min="0.0" step="0.1" class="form-control" id="dealer_price" name="dealer_price" placeholder="内部代理价格">
+        </div>
+        <div class="form-group">
+            <input type="number" min="0.0" step="0.1" class="form-control" id="dealer_price" name="pt_dealer_price" placeholder="普通代理价格">
+        </div>
+        <input type="hidden" name="token" value="{$_W['token']}">
+        <input style="float: right;margin-top: 1em" type="submit" name="submit" value="创建" class="btn btn-primary">
+    </form>
+</div>
 
 </div>
 
 
 <div class="panel panel-default">
 
-<div class='panel-heading'>
-  代金券列表
-</div>
+    <div class='panel-heading'>
+      代金券列表
+  </div>
 
-    <div class="panel-body" style="text-align: center;">
+  <div class="panel-body" style="text-align: center;">
     <form action="{php echo $this->createWebUrl('deletecart')}" method="post">
         <input type="hidden" name="token" value="{$_W['token']}">
         <table class="table table-hover">
@@ -61,9 +66,10 @@ td{
                     <th>选择</th>
                     <th>名称</th>
                     <th>数量</th>
-                    <th>代理商价格</th>
+                    <th>内部代理商价格</th>
+                    <th>普通代理价格</th>
                     <th>模板价格</th>
-                    <th>时间</th>
+                    <th>创建时间</th>
                     <th style="width: 200px;">操作</th>
                 </tr>
 
@@ -71,28 +77,30 @@ td{
 
             <tbody id="table_content">
                 {loop $list $l}
-                    <tr>
+                <tr>
                     <td>
                         <input type="checkbox" name="se[]" value="{$l['id']}"></td>
                     </td>
-                        <td>{$l['name']}</td>
-                        <td>{$l['number']}</td>
-                        <td>{$l['dealer_price']}</td>
-                        <td>{$l['list_price']}</td>
-                        <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
-                        <td>
+                    <td>{$l['name']}</td>
+                    <td>{$l['number']}</td>
+                    <td>{$l['dealer_price']}</td>
+                    <td>{$l['pt_dealer_price']}</td>
+                    <td>{$l['list_price']}</td>
+                    <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+                    <td>
+                        <a href="{php echo $this->createWebUrl('edit_code',array('id'=>$l['id']))}" class="btn btn-success">编辑</a>
                         <a href="{php echo $this->createWebUrl('deletecart',array('id'=>$l['id']))}" onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger"> 删除</a>
-                        </td>
-                    </tr>
+                    </td>
+                </tr>
                 {/loop}
 
             </tbody>
 
-            </table>
-<input style="float: left;" type="submit" name="submit" onclick="return confirm('删除后将不可恢复，确定删除吗？')" value="批量删除" class="btn btn-danger">
+        </table>
+        <input style="float: left;" type="submit" name="submit" onclick="return confirm('删除后将不可恢复，确定删除吗？')" value="批量删除" class="btn btn-danger">
     </form>
-            {$pager}
-    </div>
+    {$pager}
+</div>
 
 </div>
 {template 'common/footer'}

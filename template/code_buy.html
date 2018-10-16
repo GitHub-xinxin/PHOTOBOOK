@@ -1,0 +1,70 @@
+{template 'common/header'}
+<style>
+th,td{
+	text-align: center;
+}
+</style>
+<ul class="nav nav-tabs">
+	<li> <a href="{php echo $this->createWebUrl('cartlist')}">代金券</a></li>
+	<li class="active"> <a href="{php echo $this->createWebUrl('code_buy')}">代金券购买记录</a></li>
+	<li><a href="{php echo $this->createWebUrl('card_sharemag')}">代金券分享统计</a></li>
+</ul>
+<div class="panel panel-default">
+
+	<div class='panel-heading'>
+		代金券购买记录搜索
+	</div>
+	<div class="panel-body" style="text-align: center;">
+		<form class="form-horizontal" role="form" action="" method="post">
+			<div class="form-group">
+				<label for="inputPassword" class="col-sm-2 control-label">按昵称搜索</label>
+				<div class="col-sm-7">
+					<input type="text" class="form-control" id="name" name="keyword" placeholder="请输入昵称">
+				</div>
+				<div class="col-sm-3"></div>
+				<input type="hidden" name="token" value="{$_W['token']}">
+				<input type="submit" name="submit" value="搜索" class="btn btn-primary">
+			</div>
+		</form>
+	</div>
+</div>
+<div class="panel-body" style="text-align: center;">
+
+	<table class="table table-hover">
+
+		<thead class="navbar-inner">
+
+			<tr>
+				<th>id</th>
+				<th>购买人</th>
+				<th>数量</th>
+				<th>购买价格</th>
+				<th>模板类型</th>
+				<th>购买时间</th>
+				<!-- <th style="width: 200px;">操作</th> -->
+			</tr>
+
+		</thead>
+
+		<tbody id="table_content">
+			{loop $buy_list $index $l}
+			<tr>
+				<td>
+					{php echo $index +1}
+				</td>
+				<td>{$l['user_id']}</td>
+				<td>{$l['number']}</td>
+				<td>{$l['price']}</td>
+				<td>{$l['codeid']}</td>
+				<td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+		<!-- 		<td>
+					<a href="{php echo $this->createWebUrl('deletecart',array('id'=>$l['id']))}" onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger"> 删除</a>
+				</td> -->
+			</tr>
+			{/loop}
+		</tbody>
+	</table> 
+	{$pager}
+</div>
+</div>
+{template 'common/footer'}

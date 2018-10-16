@@ -4,6 +4,9 @@
 		color: #c0392b;
 		text-align: center;
 	}
+	.mui-collapse-content p{
+		font-size: 0.9em
+	}
 </style>
 <div id="scroll" class="mui-content mui-scroll-wrapper">
 	<div class="mui-scroll">
@@ -18,7 +21,7 @@
 				<h4>{$allmoney}元</h4>
 			</div>
 			<div class="mui-card-footer">
-				<button type="button" onclick="applyrebate()" style="width: 100%;margin-top: 10px" class="mui-btn mui-btn-warning">申请提现</button>
+				<button id="rebate" data-money="{$allmoney}" type="button" onclick="applyrebate()" style="width: 100%;margin-top: 10px;background: #1E9FFF;border: none" class="mui-btn mui-btn-warning">申请提现</button>
 			</div>
 		</div>
 			<div style="width: 100%;text-align: center;margin-top: 10px;font-size: 28px">
@@ -39,7 +42,7 @@
 							已经体现并通过
 							{/if}
 		                </p>
-		                <p>备注：{$c['remark']}</p>
+		                <p>备注：{if $c['type'] == 0} 下级购买返利 {elseif $c['type'] == 1} 新增粉丝奖励 {elseif $c['type'] == 2} 下级购买代金券{/if}</p>
 		                <p>时间：<?php echo date('Y-m-d H:i:s',$c['createtime']);?></p>
 		            </div>
 		        </li>
@@ -57,8 +60,12 @@
 		if({$allmoney} == 0){
 			alert('无可提现金额');
 			return false;
+		}else if({$allmoney} < {$take_money}){
+			alert("最低提现金额{$take_money}元");
+			return false;
 		}
-		$.post('{php echo $this->createMobileUrl("applyrebate")}', {param1: 'value1'}, function(res, textStatus, xhr) {
+		var money = $('#rebate').data('money')
+		$.post('{php echo $this->createMobileUrl("applyrebate")}', {money: money}, function(res, textStatus, xhr) {
 			if(res){
 				alert('申请成功,等待审核');
 				location.reload();

@@ -30,7 +30,21 @@ class templatemessage{
 			);
 		return $this->sendTemplate_common($arr['openid'],$arr['mid1'],$arr['url'],$_tdata);
 	}
-
+	/**
+	 * 拉粉奖励
+	 * @param  [type] $arr [description]
+	 * @return [type]      [description]
+	 */
+	public function send_momey_mess($arr){
+		$_tdata =array(
+			'first'=>array('value'=>$arr['first'],'color'=>'#1E9FFF'),
+			'keyword1'=>array('value'=>$arr['k1'],'color'=>'#FF5722'),
+			'keyword2'=>array('value'=>$arr['k2'],'color'=>'#FF5722'),
+			'keyword3'=>array('value'=>$arr['k3'],'color'=>'#FF5722'),
+			'remark'=>array('value'=>$arr['rem'],'color'=>'#5FB878')
+			);
+		return $this->sendTemplate_common($arr['openid'],$arr['mid1'],$arr['url'],$_tdata);
+	}
 	function sendTemplate_common($touser,$template_id,$url,$data){
 		global $_W; 
 		$weid = $_W['acid'];  
