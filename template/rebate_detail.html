@@ -30,6 +30,7 @@ td{
                 <tr>
                     <th>序号</th>
                     <th>金额</th>
+                    <th>客户</th>
                     <th>来源</th>
                     <th>时间</th>
                 </tr>
@@ -39,14 +40,9 @@ td{
                 <tr>
                     <td>{php echo $index+1}</td>
                     <td>{$l['money']}</td>
+                    <td>{php echo mc_fetch($l['from_user'])['nickname']}</td>
                     <td>
-                        {if $l['type'] == 0}
-                            下级购买照片书
-                        {elseif $l['type'] == 1}
-                            新增粉丝奖励
-                        {elseif $l['type'] == 2}
-                            下级购买代金券
-                        {/if}
+                        {$l['remark']}
                     </td>
                     <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
                 </tr>

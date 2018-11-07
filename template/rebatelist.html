@@ -38,7 +38,7 @@ td{
                     <th>状态</th>
                     <th>金额</th>
                     <th>时间</th>
-                    <th style="width: 200px;">操作</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody id="table_content">
@@ -57,7 +57,8 @@ td{
                     <td>
                         <a class="btn btn-success" href="{php echo $this->createWebUrl('rebate_detail',array('id'=>$l['id']))}">查看明细</a>
                         {if !$_GPC['status']}
-                        <button class="btn btn-primary" onclick="sdfghdf({$l['id']})">通过</button>
+                        <button class="btn btn-danger" onclick="if(confirm('确定要拒绝吗？')) refuse({$l['id']})">拒绝</button>
+                        <button class="btn btn-primary" onclick="if(confirm('确定要发放吗？')) sdfghdf({$l['id']}); ">通过</button>
                         {/if}
                     </td>
                 </tr>
@@ -79,6 +80,9 @@ td{
                 }
             });
         }
+    }
+    function refuse(id){
+        window.location.href = "{php echo $this->createWebUrl('rebatelist')}"+'&op=refuse&id='+id
     }
 </script>
 {template 'common/footer'}

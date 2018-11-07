@@ -39,7 +39,6 @@ td{
                 {loop $lists $l}
 
                 <tr>
-
                     <td>{$l['title']}</td>
                     <td>{$l['kword']}</td>
                     <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
@@ -47,11 +46,8 @@ td{
                     <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('postershare',array('posterid'=>$l['id']))}">推广记录 【{$l['count']}】</a>
                     	<a href='{php echo $this->createWebUrl("editposter",array("op"=>"edit","posterid"=>$l["id"]))}' class="btn btn-default btn-sm">编辑</a>
                     	<a href='{php echo $this->createWebUrl("editposter",array("op"=>"delete","posterid"=>$l["id"]))}' onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger btn-sm">删除</a>
-						
                     </td>
-
                 </tr>
-
                 {/loop}
 
             </tbody>

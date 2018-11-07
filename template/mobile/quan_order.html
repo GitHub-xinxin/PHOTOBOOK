@@ -1,56 +1,56 @@
 {template 'header'}
-				<div id="scroll" class="mui-content mui-scroll-wrapper">
-					<div class="mui-scroll">
-						<ul class="mui-table-view" style="margin: 0.5em;">
-							<li class="mui-table-view-cell">
-								<div class="mui-col-sm-10 mui-col-xs-10">
-									<div class="mui-row">
-										<div class="mui-col-sm-6 mui-col-xs-6">
-											<img src="../addons/photobook/template/mobile/img/quan.png" alt="" style="width: 100%;border-radius: 5px;" />
-										</div>
-										<div class="mui-col-sm-6 mui-col-xs-6" style="padding-left: 1em;">
-											<div style="color: #2c3e50;">
-												{$code['name']}
-												<p>
-													（包含照片书专用券一张）
-												</p>
-											</div>
-											<div>
-												<p style="margin-top: 1em;color: darkgoldenrod;font-size: 20px;">￥{if $is_agent == 2} {$code['dealer_price']} {elseif $is_agent == 1} {$code['pt_dealer_price']}{/if}元</p>
-											</div>
-										</div>
+		<div id="scroll" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<ul class="mui-table-view" style="margin: 0.5em;">
+					<li class="mui-table-view-cell">
+						<div class="mui-col-sm-10 mui-col-xs-10">
+							<div class="mui-row">
+								<div class="mui-col-sm-6 mui-col-xs-6">
+									<img src="{media $code['pic']}" alt="" style="width: 100%;border-radius: 5px;" />
+								</div>
+								<div class="mui-col-sm-6 mui-col-xs-6" style="padding-left: 1em;">
+									<div style="color: #2c3e50;">
+										{$code['name']}
+										<p style="font-size: 0.75em">
+											（包含照片书专用券一张）
+										</p>
+									</div>
+									<div>
+										<p style="margin-top: 1em;color: darkgoldenrod;font-size: 20px;">￥{if $is_agent == 2} {$code['dealer_price']} {elseif $is_agent == 1} {$code['pt_dealer_price']}{/if}元</p>
 									</div>
 								</div>
-							</li>
-						</ul>
-						<div class="mui-col-sm-12 mui-col-xs-12">
-							<form class="mui-input-group" action="" method="post" onsubmit="return is_agent()">
-								<div class="mui-input-row">
-									<label>宝贝数量:</label>
-									<div class="mui-numbox" data-numbox-min="1">
-									  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-									  <input class="mui-numbox-input" type="number" name="count" />
-									  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
-									</div>
-								</div>
-								<input type="hidden" name="codeid" value="{$cid}">
-								<div class="mui-button-row">
-									<input type="hidden" name="token" value="{$_W['token']}">
-									<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-success" style="width: 100%;background: #01AAED;border-style: none;">微信支付</button>
-								</div>
-							</form>
+							</div>
 						</div>
-						<div style="height: 4em;"></div>
-					</div>
+					</li>
+				</ul>
+				<div class="mui-col-sm-12 mui-col-xs-12">
+					<form class="mui-input-group" action="" method="post" onsubmit="return is_agent()">
+						<div class="mui-input-row">
+							<label>宝贝数量:</label>
+							<div class="mui-numbox" data-numbox-min="1">
+							  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+							  <input class="mui-numbox-input" type="number" name="count" />
+							  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+							</div>
+						</div>
+						<input type="hidden" name="codeid" value="{$cid}">
+						<div class="mui-button-row">
+							<input type="hidden" name="token" value="{$_W['token']}">
+							<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-success" style="width: 100%;background: #01AAED;border-style: none;">微信支付</button>
+						</div>
+					</form>
 				</div>
+				<div style="height: 4em;"></div>
 			</div>
 		</div>
-		<script>	
-			function is_agent(){			
-				if({$is_agent} < 0){
-					alert('亲,只有代理商才能购买哦')
-					return false;
-				}
-			}
-		</script>
+	</div>
+</div>
+<script>	
+	function is_agent(){			
+		if({$is_agent} < 0){
+			alert('亲,只有代理商才能购买哦')
+			return false;
+		}
+	}
+</script>
 {template 'footer'}

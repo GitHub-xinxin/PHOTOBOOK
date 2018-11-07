@@ -1,0 +1,70 @@
+{template 'common/header'}
+<style>
+	th,tr{
+		text-align: center;
+	}
+</style>
+<ul class="nav nav-tabs">
+	<li class="active">
+		<a href="#">用户管理</a>
+	</li>
+</ul>
+<div class="panel panel-info">
+	<div class="panel-heading">
+		筛选
+	</div>
+	<div class="panel-body">
+		<form class="form-inline" role="form" action="" method="post">
+	        <div class="form-group">
+	            <label  for="name">筛选</label>
+	            <input type="text" style="margin:0 2vw" class="form-control" id="name" name="keyword" value="{$_GPC['keyword']}" placeholder="可按照昵称模糊搜索">
+	        </div>
+	        <input type="hidden" name="token" value="{$_W['token']}">
+	        <input type="submit" name="submit" value="搜索" class="btn btn-primary">
+	    </form>
+	</div>
+</div>
+<div class="panel panel-danger">
+	<div class="panel-heading">
+		用户列表
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>序号</th>
+					<th>昵称</th>
+					<th>提成</th>
+					<th>是否代理</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $clients $index $val}
+					<tr>
+						<td>{php echo $index+1}</td>
+						<td>{php echo $this->getnickname($val['openid'])}</td>
+						<td>{$val['commission']}</td>
+						<td>{if $val['dealer'] != -1} <span class="label label-danger">代理</span> {else} <span class="label label-default">非代理</span> {/if}</td>
+						<td><span data-openid="{$val['openid']}" class="btn btn-success">取消上下级关系</span></td>
+					</tr>
+				{/loop}
+			</tbody>
+		</table>
+	</div>
+</div>
+{$pager}
+<script>
+	$(function(){
+		$('.btn-success').click(function(){
+			var openid = $(this).data('openid')
+			$.post('{php echo $this->createWebUrl("client_mag")}', {openid: openid}, function(data, textStatus, xhr) {
+				if(data.code == 0)
+					alert('操作成功')
+				else if(data.code == 1)
+					alert('openid获取失败')
+			},'json');
+		})
+	})
+</script>
+{template 'common/footer'}

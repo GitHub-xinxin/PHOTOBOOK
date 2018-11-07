@@ -14,7 +14,7 @@
 				<div class="mui-row" style="margin-top: 0.5em;">
 					<div class="mui-col-sm-12 mui-col-xs-12">
 						<div class="mui-input-row mui-radio mui-left">
-							<label style="color: royalblue">地址：{$address['detail']}</label>
+							<label style="color: royalblue">地址：{$address['address']}{$address['detail']}</label>
 						</div>
 					</div>
 				</div>
@@ -33,7 +33,8 @@
 							</div>
 							<div>
 								<p style="margin-top: 2em;color: darkgoldenrod;font-size: 20px;">
-									{if $is_inner_sub}内部价格
+									{if $is_inner_sub == 1}
+									内部价格
 									￥{$template['inner_price']}
 									{else}
 									￥{$template['price']}
@@ -44,7 +45,13 @@
 					</div>
 				</div>
 			</li>
-			<li class="mui-table-view-cell">配送方式：包邮</li>
+			<li class="mui-table-view-cell">
+				{if $free == 1}
+					配送方式：包邮
+				{else}
+					配送方式：邮费<span style="color:red;padding-left: 2vw">{$remote_price}元</span>
+				{/if}
+			</li>
 			<li class="mui-table-view-cell">
 				<a class="mui-navigate-right">
 					<p>共{$number}件商品</p>
@@ -58,7 +65,11 @@
 		<div class="mui-col-sm-12 mui-col-xs-12">
 			<form class="mui-input-group">
 				<div class="mui-button-row">
-					<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
+					{if $free == 1}
+						<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
+					{else}
+						<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id,'remote_price'=>$remote_price))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
+					{/if}
 				</div>
 			</form>
 		</div>

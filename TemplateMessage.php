@@ -17,6 +17,19 @@ class templatemessage{
 			);
 		return $this->sendTemplate_common($arr['openid'],$arr['mid1'],$arr['url'],$_tdata);
 	}
+	/*
+	订单发货提醒
+	 */
+	public function order_send($arr){
+		$_tdata =array(
+			'first'=>array('value'=>$arr['first'],'color'=>'#1E9FFF'),
+			'keyword1'=>array('value'=>$arr['k1'],'color'=>'#2F4056'),
+            'keyword2'=>array('value'=>$arr['k2'],'color'=>'#2F4056'),
+            'keyword3'=>array('value'=>$arr['k3'],'color'=>'#FF5722'),
+			'remark'=>array('value'=>$arr['rem'],'color'=>'#5FB878')
+			);
+		return $this->sendTemplate_common($arr['openid'],$arr['mid1'],$arr['url'],$_tdata);
+	}
     /**
      * 工单处理发送模板消息
      */

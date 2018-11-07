@@ -21,7 +21,7 @@ td{
     <div class='panel-heading'>   
       创建代金券
   </div>
-  <div class="panel-body" style="text-align: center;">
+  <div class="panel-body" >
     <form class="form-inline" role="form" action="" method="post">
         <div class="form-group">
             <label class="sr-only" for="name">卡卷名称</label>
@@ -41,8 +41,22 @@ td{
         <div class="form-group">
             <input type="number" min="0.0" step="0.1" class="form-control" id="dealer_price" name="pt_dealer_price" placeholder="普通代理价格">
         </div>
-        <input type="hidden" name="token" value="{$_W['token']}">
-        <input style="float: right;margin-top: 1em" type="submit" name="submit" value="创建" class="btn btn-primary">
+         <div class="form-group">
+            <label class="sr-only" for="name">类型</label>
+            <select name="type" id="" class="form-control" style="width: 175px;">
+                <option value="1">软皮杂志社</option>
+                <option value="2">12寸硬壳写真集</option>
+                <option value="3">方款硬壳写真集</option>
+                <option value="4">PU精品写真集</option>
+            </select>
+        </div>
+        <div class="form-group">
+            {php echo tpl_form_field_image('pic');}
+        </div>
+        <div class="form-group">
+            <input type="hidden" name="token" value="{$_W['token']}">
+            <input style="float: right;margin-top: 1em" type="submit" name="submit" value="创建" class="btn btn-primary">
+        </div>
     </form>
 </div>
 
@@ -69,7 +83,7 @@ td{
                     <th>内部代理商价格</th>
                     <th>普通代理价格</th>
                     <th>模板价格</th>
-                    <th>创建时间</th>
+                    <th>展示图片</th>
                     <th style="width: 200px;">操作</th>
                 </tr>
 
@@ -86,7 +100,7 @@ td{
                     <td>{$l['dealer_price']}</td>
                     <td>{$l['pt_dealer_price']}</td>
                     <td>{$l['list_price']}</td>
-                    <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
+                    <td><img style="width: 50px" src="{media $l['pic']}" alt=""></td>
                     <td>
                         <a href="{php echo $this->createWebUrl('edit_code',array('id'=>$l['id']))}" class="btn btn-success">编辑</a>
                         <a href="{php echo $this->createWebUrl('deletecart',array('id'=>$l['id']))}" onclick="return confirm('删除后将不可恢复，确定删除吗？')" class="btn btn-danger"> 删除</a>

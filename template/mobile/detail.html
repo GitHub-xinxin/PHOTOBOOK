@@ -1,12 +1,25 @@
 {template 'header'}
 <style type="text/css">
-.select_ed{
-	border-bottom: 2px solid #c0392b;
-	color: #e74c3c;
-}
-#J-detail-content{
-	width: 100%
-}
+	.select_ed{
+		border-bottom: 2px solid #c0392b;
+		color: #e74c3c;
+	}
+	#J-detail-content{
+		width: 100%
+	}
+	.mui-content{
+		background: white
+	}
+	.mui-bar.mui-bar-nav{
+		background-color: rgb(233,67,141);
+	}
+	.mui-icon-bars:before{
+		color: white
+	}
+	.mui-h4, h4{
+		color: white;
+		font-size: 0.95em
+	}
 </style>
 商品详情
 <div id="scroll" class="mui-content mui-scroll-wrapper">
@@ -57,7 +70,7 @@
 	</div>
 </div>
 <a href="{php echo $this->createMobileUrl('userphotos',array('tid'=>$tid,'op'=>$_GPC['op']))}" style="color: #fff">
-	<nav class="mui-bar mui-bar-tab" style="text-align: center;padding-top: 1em;background-color: #f39c12;box-shadow: 0px -5px 5px #888888;">
+	<nav class="mui-bar mui-bar-tab" style="text-align: center;padding-top: 1em;background-color: rgb(233,67,141);box-shadow: 0px -2px 2px #888888;">
 		<span>开始定制</span>
 	</nav>
 </a>

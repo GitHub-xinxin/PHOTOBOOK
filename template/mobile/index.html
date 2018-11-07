@@ -1,5 +1,19 @@
 {template 'header'}
-
+<style>
+	.mui-content{
+		background: white
+	}
+	.mui-bar.mui-bar-nav{
+		background-color: rgb(233,67,141);
+	}
+	.mui-icon-bars:before{
+		color: white
+	}
+	.mui-h4, h4{
+		color: white;
+		font-size: 0.95em
+	}
+</style>
 <div id="scroll" class="mui-content mui-scroll-wrapper">
 	<div class="mui-scroll">
 		<div style="font-size: 12px;font-family: '微软雅黑';">
@@ -14,11 +28,11 @@
 						<div class="mui-card-content" style="overflow: hidden;">
 							<img src="{media $l['thumb']}" style="width: 100%;" />
 						</div>
-						<div style="font-size:0.8em">
+						<div style="font-size:0.8em;text-align: center;">
 							{$l['name']}
 						</div>
 						<div class="mui-row">
-							<div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;">
+							<div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;padding-left: 2.5vw">
 								{$l['price']}￥
 							</div>
 							<div class="mui-col-sm-6 mui-col-xs-6">
@@ -55,10 +69,10 @@
 					//查找类型模板成功
 					for (var x = 0; x < res.data.length; x++) {
 
-						var one = $('<div class="mui-col-sm-6 mui-col-xs-6"  style="font-size:0.8em">销量：' + res.data[x]["sales"] + '</div>')
-						var two = $('<div class="mui-row"><div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;">' + res.data[x]["price"] + '￥</div></div>')
+						var one = $('<div class="mui-col-sm-6 mui-col-xs-6"  style="font-size:0.8em;">销量：' + res.data[x]["sales"] + '</div>')
+						var two = $('<div class="mui-row"><div class="mui-col-sm-6 mui-col-xs-6" style="color: palevioletred;font-weight: bold;padding-left: 2.5vw">' + res.data[x]["price"] + '￥</div></div>')
 						two.append(one)
-						var three = $('<div class="mui-card"><div class="mui-card-content" style="overflow: hidden;"><img src="' + res.data[x]["thumb"] + '" style="width: 100%;" /></div><div style="font-size:0.8em">' + res.data[x]["name"] + '</div></div>')
+						var three = $('<div class="mui-card"><div class="mui-card-content" style="overflow: hidden;"><img src="' + res.data[x]["thumb"] + '" style="width: 100%;" /></div><div style="font-size:0.8em;text-align:center">' + res.data[x]["name"] + '</div></div>')
 						three.append(two)
 						var four = $('<a href="{php echo $this->createMobileUrl("detail")}&id=' + res.data[x]["id"] + '"></a>')
 						four.append(three)

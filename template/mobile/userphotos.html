@@ -18,6 +18,19 @@
 		mui.init();
 	</script>
 	<style>
+	.mui-content{
+		background: white
+	}
+	.mui-bar.mui-bar-nav{
+		background-color: rgb(233,67,141);
+	}
+	.mui-icon-bars:before{
+		color: white
+	}
+	.mui-h4, h4{
+		color: white;
+		font-size: 0.95em
+	}
 	#head_img_change{
 		position: absolute;
 		font-size: 100px;
@@ -34,7 +47,7 @@
 		position: relative;height: 0px;text-align: right
 	}
 	.cardspan{
-		font-size: 16px;background-color: #5FB878;color: #fff;
+		font-size: 16px;background-color: rgb(233,67,141);color: #fff;
 	}
 	.imgalert{
 		position: relative;height: 0px;text-align: left
@@ -92,7 +105,7 @@
 					</div>
 					<div class="mui-col-sm-10 mui-col-xs-10">
 						{if $_GPC['op'] !='del'}
-						<div style="text-align: center;padding-top: 0.5em;color: coral;">
+						<div style="text-align: center;padding-top: 0.85em;color: white;">
 							{if $HIDE}
 							选择一张图片
 							{else}
@@ -423,6 +436,9 @@
 			})
 		}
 	}
+	/*
+	 单图编辑页，更换图片
+	 */
 	$("#queding").bind('tap',function(e) {
 		var dangqianimgid=sessionStorage.getItem("dangqianimgid");
 
@@ -449,11 +465,20 @@
 					var arrimgtstr=sessionStorage.getItem("arrimgt");//图片尺寸的数据
 					var Source_of_change=sessionStorage.getItem("Source_of_change");//框的序列位置
 					
-					var order=JSON.parse(zhengze(jsonarr));
+					var reg = new RegExp("px","g");
+					// var order=JSON.parse(zhengze(jsonarr)); 修改bug，图片名称不能正则匹配，否则无法显示图片
+					var order=JSON.parse(jsonarr);
+					for (var index in order){
+					    for(var key in order[index])
+					    	if(key != 'imgurl' && key != 'type' && key != 'imageId' && key != 'roate'){	 
+					    		if(order[index][key]){
+									order[index][key] = order[index][key].toString().replace(reg,"");
+					    		}
+					    			
+					    	}
+					} 
 					var arrimgt=JSON.parse(zhengze(arrimgtstr));
 
-					// alert(Source_of_change)
-					// console.log(Source_of_change)
 					var bi;
 					var differ=5-order.length
 					
@@ -481,20 +506,17 @@
 					order[Source_of_change].roate=0;
 					order[Source_of_change].imageId=data.img.id;
 
-						//--
-						// arrimgt[Source_of_change].width=data.img.width;
-						// arrimgt[Source_of_change].height=data.img.height;
-						var New_insert_picture=JSON.stringify(order);
-						var New_arrimgt=JSON.stringify(arrimgt);
-						sessionStorage.setItem("jsonarr",New_insert_picture);
-						sessionStorage.setItem("arrimgt",New_arrimgt);
-						window.location.href="{$url_NEWtouch}"+"&id="+sessionStorage.getItem("WhenchangingID")+"&Npage={$_GPC['Npage']}";
-					}else{
-						mui.toast(data.message,{ duration:'short', type:'div' })
-					}
-				},
-				"json"
-				);
+					var New_insert_picture=JSON.stringify(order);
+					var New_arrimgt=JSON.stringify(arrimgt);
+					sessionStorage.setItem("jsonarr",New_insert_picture);
+					sessionStorage.setItem("arrimgt",New_arrimgt);
+					window.location.href="{$url_NEWtouch}"+"&id="+sessionStorage.getItem("WhenchangingID")+"&Npage={$_GPC['Npage']}";
+				}else{
+					mui.toast(data.message,{ duration:'short', type:'div' })
+				}
+			},
+			"json"
+			);
 		}
 	});
 	var Selected_pictures=function(){

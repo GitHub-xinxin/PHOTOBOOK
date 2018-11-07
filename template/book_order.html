@@ -73,7 +73,9 @@ td{
                         <td>{$l['count']}</td>
                         <td>{php echo date('Y-m-d H:i:s',$l['createtime'])}</td>
                         <td>
+                        {if $l['status'] == 2 }
                         <button class="btn btn-warning" onclick="sdfghdf({$l['id']})">发货</button>
+                        {/if}
                         <!-- <button class="btn btn-primary" onclick="create(this,{$l['id']})">下载打印</button> -->
                         <a href="{php echo $this->createWebUrl('down_list',array('order_id'=>$l['id']))}" class="btn btn-primary">打印列表</a>
                         <a href="{php echo $this->createWebUrl('book_order_detail',array('id'=>$l['id']))}" class="btn btn-info"> 详情</a>

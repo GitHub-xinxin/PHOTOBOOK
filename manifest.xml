@@ -3,7 +3,7 @@
 	<application setting="true">
 		<name><![CDATA[照片书]]></name>
 		<identifie><![CDATA[photobook]]></identifie>
-		<version><![CDATA[1.0068]]></version>
+		<version><![CDATA[1.0069]]></version>
 		<type><![CDATA[business]]></type>
 		<ability><![CDATA[照片书等其他印刷定制类商品]]></ability>
 		<description><![CDATA[照片书等其他印刷定制类商品]]></description>
@@ -72,6 +72,7 @@
 			<entry title="奖励申请" do="rebatelist" state="" direct="false" />
 			<entry title="模块设置" do="setting" state="" direct="false" />
 			<entry title="基本设置" do="deal_setting" state="" direct="false" />
+			<entry title="用户管理" do="client_mag" state="" direct="false" />
 			<entry title="代理列表" do="dealerlist" state="" direct="false" />
 			<entry title="文档管理" do="document_mag" state="" direct="false" />
 		</menu>

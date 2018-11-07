@@ -1,6 +1,6 @@
 <?php
 global $_W,$_GPC;
-
+load()->model('mc');
 //申请人
 $num_list = pdo_get('ly_photobook_apply_rebate',array('uniacid'=>$_W['uniacid'],'id'=>$_GPC['id']))['num_list'];
 $num_list = json_decode($num_list,true);

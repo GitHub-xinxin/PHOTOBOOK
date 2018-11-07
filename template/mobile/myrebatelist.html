@@ -42,7 +42,7 @@
 							已经体现并通过
 							{/if}
 		                </p>
-		                <p>备注：{if $c['type'] == 0} 下级购买返利 {elseif $c['type'] == 1} 新增粉丝奖励 {elseif $c['type'] == 2} 下级购买代金券{/if}</p>
+		                <p>备注：{$c['remark']}</p>
 		                <p>时间：<?php echo date('Y-m-d H:i:s',$c['createtime']);?></p>
 		            </div>
 		        </li>

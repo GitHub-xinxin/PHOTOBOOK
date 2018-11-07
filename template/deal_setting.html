@@ -1,28 +1,152 @@
 {template 'common/header'}
 <ul class="nav nav-tabs">
-    <li class="active">
-        <a href="#">代理价格</a>
+    <li class="{if $_GPC['do'] == 'deal_setting'} active {/if}">
+        <a href="{php echo $this->createWebUrl('deal_setting')}">代理价格</a>
+    </li>
+    <li>
+        <a href="{php echo $this->createWebUrl('carousel')}">首页轮播图</a>
     </li>
 </ul>
 
 <div class="panel-body" style="text-align: center;">
     <form class="form-horizontal" role="form" action="" method="post">
         <div class="form-group">
-            <label class="col-sm-2 control-label">代理价格</label>
-            <div class="col-sm-10">
+            <label class="col-sm-4 control-label">代理价格</label>
+            <div class="col-sm-8">
                <input type="text" class="form-control"  name="price" value="{$deal_setting['deal_price']}" placeholder="代理价格">
            </div> 
        </div>
        <div class="form-group">
-            <label class="col-sm-2 control-label">提现最低金额</label>
-            <div class="col-sm-10">
+            <label class="col-sm-4 control-label">提现最低金额</label>
+            <div class="col-sm-8">
                <input type="text" class="form-control"  name="take_price" value="{$deal_setting['take_price']}" placeholder="提现金额">
            </div> 
        </div>
        <div class="form-group">
-            <label class="col-sm-2 control-label">注册代理上级返利</label>
-            <div class="col-sm-10">
+            <label class="col-sm-4 control-label">偏远地区邮费</label>
+            <div class="col-sm-8">
+               <input type="text" class="form-control"  name="remote_price" value="{$deal_setting['remote_price']}" placeholder="邮费金额">
+           </div> 
+       </div>
+       <div class="form-group">
+            <label class="col-sm-4 control-label">注册代理上级返利</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control"  name="parent_price" value="{$deal_setting['parent_price']}" placeholder="注册代理上级返利">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">注册代理赠送代金券数量</label>
+            <div class="col-sm-8">
+               <input type="text" class="form-control"  name="send_card_count" value="{$deal_setting['send_card_count']}" placeholder="赠送代金券数量">
+           </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">注册代理赠送代金券类型</label>
+            <div class="col-sm-8">
+                <select class="form-control" name="send_card_type">
+                  {loop $cards $value}
+                  <option value="{$value['id']}" {if $deal_setting['send_card_type'] == $value['id']} selected="selected" {/if}>{$value['name']}</option> 
+                  {/loop}
+                </select>
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">升级团长满足直属代理数量</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="team_direct_cout" value="{$deal_setting['team_direct_cout']}" placeholder="升级团长满足直属代理数量">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">升级团长满足团队人数(代理)</label>
+            <div class="col-sm-8">
+               <input type="text" class="form-control"  name="team_team_count" value="{$deal_setting['team_team_count']}" placeholder="升级团长满足团队人数">
+           </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">粉丝注册代理团长返利</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="team_rebate_price" value="{$deal_setting['team_rebate_price']}" placeholder="粉丝注册代理团长返利">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">升级合伙人满足直属代理数量</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="partner_direct_cout" value="{$deal_setting['partner_direct_cout']}" placeholder="升级合伙人满足直属代理数量">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">升级合伙人满足团队人数(代理)</label>
+            <div class="col-sm-8">
+               <input type="text" class="form-control"  name="partner_partner_cout" value="{$deal_setting['partner_partner_cout']}" placeholder="升级合伙人满足团队人数">
+           </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">减去团队中团长小团队最多人数大于</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="team_max_count" value="{$deal_setting['team_max_count']}" placeholder="减去团队中团长小团队最多人数大于">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">粉丝注册代理上级有团长返利金额</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="has_team_price" value="{$deal_setting['has_team_price']}" placeholder="粉丝注册代理上级有团长返利金额">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">粉丝注册代理上级无团长返利金额</label>
+            <div class="col-sm-8">
+               <input type="text" class="form-control"  name="no_team_price" value="{$deal_setting['no_team_price']}" placeholder="粉丝注册代理上级无团长返利金额">
+           </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">合伙人的上级合伙人(仅1个)提成金额</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="partner_parent_price" value="{$deal_setting['partner_parent_price']}" placeholder="合伙人的上级合伙人(仅1个)提成金额">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">合伙人福利团队销售额百分比</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="partner_welfare" value="{$deal_setting['partner_welfare']}" placeholder="合伙人福利团队销售额百分比">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">是否开启直接代理数量满足5的倍数重复返利</label>
+            <div class="col-sm-8">
+                <select class="form-control" name="isrebate" id="">
+                  <option {if $deal_setting['isrebate'] == 0} selected="selected" {/if} value="0">关闭</option>
+                  <option {if $deal_setting['isrebate'] == 1} selected="selected" {/if} value="1">开启</option>
+                </select>
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">直接代理数量满足5的倍数重复返利金额</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="rebate_agin_price" value="{$deal_setting['rebate_agin_price']}" placeholder="直接代理数量满足5的倍数重复返利金额">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">粉丝没有用卡卷购买商品,上级代理返利比例</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="fans_nocard_price" value="{$deal_setting['fans_nocard_price']}" placeholder="粉丝没有用卡卷购买商品,上级代理返利比例">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">代理没有用卡卷购买商品,自己返利比例</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="agent_nocard_price" value="{$deal_setting['agent_nocard_price']}" placeholder="代理没有用卡卷购买商品,自己返利比例">
+            </div> 
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">代理没有用卡卷购买商品,上级代理返利比例</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="agent_nocard_parent" value="{$deal_setting['agent_nocard_parent']}" placeholder="代理没有用卡卷购买商品,上级代理返利比例">
+            </div> 
+        </div>
+         <div class="form-group">
+            <label class="col-sm-4 control-label">普通粉丝的下级粉丝平台直接消费返利比例</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control"  name="parent_fans_price" value="{$deal_setting['parent_fans_price']}" placeholder="普通粉丝的下级粉丝平台直接消费返利比例">
             </div> 
         </div>
         <input type="hidden" name="token" value="{$_W['token']}">

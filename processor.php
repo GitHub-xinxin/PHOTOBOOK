@@ -12,7 +12,6 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 	public function respond() {
 		load()->func('logging');
 		logging_run("====================================");
-		logging_run($this->message,'info','kkkkkkk');
 		// 已经关注回复关键字触发的
 		if ($this->message['msgtype'] == 'text'||($this->message['msgtype'] == 'event'&&$this->message['event'] == 'CLICK')) {
 			$openid = $this->message['from'];
@@ -43,6 +42,12 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 			$this->recordlog('进入关注...');
 			$this->subscribe($this->message['scene']);
 
+		}else if($this->message['msgtype']=='event' && $this->message['event']=='SCAN'){
+			//已经关注公众号扫码,重新扫码事件
+			/**
+			 * step1
+			 */
+			$this->subscribe($this->message['scene']);
 		}
 	}
 	private function randFloat($min=0, $max=1){
@@ -92,6 +97,7 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 						// 给上级发消息
 						if ($poster['utips']){
 							$text = str_replace('#昵称#',$mc['nickname'],$poster['utips']);
+							$this->sendText($share['openid'],$text);
 						}
 
 						// 海报存在，生成自己的海报，建立上下级关系
@@ -99,37 +105,67 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 						$parentid=$share['id'];
 						$img = createMPoster($mc,$poster,'ly_photobook',$parentid);
 						$media_id = $this->uploadImage($img); 
-						include 'TemplateMessage.php';
-						load()->model('mc');
-						$mc = mc_fetch($openid);
-						$num = $this->randFloat()/10;
-						$num = round($num,2);
-						while($num < 0.01){
-							$num = $this->randFloat()/10;
-							$num = round($num,2);
-						}
-						$send_mess = new templatemessage();
-						$send_arr = [
-							'first'=>'恭喜您有新的粉丝加入，获得了'.$num.'元的佣金',
-							'k1'=>$mc['nickname'],
-							'k2'=>$num.'元',
-							'k3'=>date('Y-m-d H:i:s',time()),
-							'rem'=>'你可以到【发现】-【照片书总代】-拉粉奖励 中查看更多信息',
-							'openid'=>$share['openid'],
-							'mid1'=>'2D5D0-Pq7WE7ngtUID7HsMXAM5u3GbFBdHYo8cw6eMY',
-							'url'=>''
-						];
-						$send_mess->send_momey_mess($send_arr);
+						$this->send_temp_message($openid,$share['openid']);
 						$parent_userid = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$share['openid']))['id'];
-						pdo_insert('ly_photobook_user_rebate',array('userid'=>$parent_userid,'money'=>$num,'remark'=>'新增粉丝奖励','type'=>1,'uniacid'=>$_W['uniacid'],'createtime'=>time()));
+						//检查团队中是否有人达到团长或合伙人身份
 						return $this->sendImage($openid,$media_id);
 					}	
+				}	
+			}
+		}elseif(empty($selfShare['parentid'])){//有海报，但是上级为空
+			// 上级分享记录存在
+			if(!empty($share)){
+				//如果上级不是自己，获取活动海报
+				if($share['openid']!=$openid){
+					//检查上下级关系，避免环形
+					if(!$this->check_parent($openid,$share['openid'])){
+						//将自己分享记录的上级parentid改为上级id
+						$res = pdo_update('ly_photobook_share',array('parentid'=>$share['id']),array('id'=>$selfShare['id']));
+						if($res){
+							$this->sendText($openid,'成功与'.$share['nickname'].'建立上下级关系!');
+							$this->sendText($share['openid'],'粉丝'.$mc['nickname'].'加入了您的团队！');
+							/**
+							 * 发送佣金
+							 */
+							$this->send_temp_message($openid,$share['openid']);
+						}else
+							$this->sendText($openid,'与'.$share['nickname'].'建立上下级关系失败了!');
+					}else{
+						$this->sendText($openid,'与'.$share['nickname'].'建立上下级关系失败了,您可能是他上级');
+					}
 				}
-				
 			}
 		}
 	}
-
+	/**
+	 * 发送佣金模板消息
+	 */
+	private function send_temp_message($openid,$parent){
+		global $_W;
+		include 'TemplateMessage.php';
+		load()->model('mc');
+		$mc = mc_fetch($openid);
+		$num = $this->randFloat()/10;
+		$num = round($num,2);
+		while($num < 0.01){
+			$num = $this->randFloat()/10;
+			$num = round($num,2);
+		}
+		$send_mess = new templatemessage();
+		$send_arr = [
+			'first'=>'恭喜您有新的粉丝加入，获得了'.$num.'元的佣金',
+			'k1'=>$mc['nickname'],
+			'k2'=>$num.'元',
+			'k3'=>date('Y-m-d H:i:s',time()),
+			'rem'=>'你可以到【发现】-【照片书总代】-拉粉奖励 中查看更多信息',
+			'openid'=>$parent,
+			'mid1'=>'2D5D0-Pq7WE7ngtUID7HsMXAM5u3GbFBdHYo8cw6eMY',
+			'url'=>''
+		];
+		$send_mess->send_momey_mess($send_arr);
+		$userid = pdo_get('ly_photobook_user',array('openid'=>$parent,'uniacid'=>$_W['uniacid']))['id'];
+		pdo_insert('ly_photobook_user_rebate',array('from_user'=>$openid,'userid'=>$userid,'money'=>$num,'remark'=>'新增粉丝奖励','type'=>1,'uniacid'=>$_W['uniacid'],'createtime'=>time()));
+	}
 	// 更新用户信息
 	private function updateUserInfo($openid){
 		load()->model('mc');
@@ -152,7 +188,42 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 		file_put_contents(IA_ROOT."/addons/photobook/log1.txt","\n".date('Y-m-d H:i:s',time())." : ".$data,FILE_APPEND);
 	}
 
-	
+	/**
+	 * 检查团队中是否有人达到团长或合伙人
+	 * @join  团长id
+	 * @agent 代理人数
+	 * @total 团队人数
+	 */
+	public function get_count($join,$total){
+
+		$sublist = pdo_getall('ly_photobook_share',array('parentid'=>$join));
+		if(empty($sublist)){
+			return ;
+		}else{
+			foreach ($sublist as $key => $value) {
+				$openid = pdo_get('ly_photobook_share',array('id'=>$value['id']))['openid'];
+				if(pdo_get('ly_photobook_user',array('openid'=>$openid))['dealer'] != -1){
+					if($this->total > $value['team_count'])
+						$this->total = $value['team_count'];
+					$this->get_count($value['id'],$total);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 检查上下级关系 是否树形结构
+	 */
+	private function check_parent($self,$scan){
+		global $_W;
+
+		$selfid = pdo_get('ly_photobook_share',array('openid'=>$self,'uniacid'=>$_W['uniacid']))['id'];
+		$scanid = pdo_get('ly_photobook_share',array('openid'=>$scan,'uniacid'=>$_W['uniacid']))['parentid'];
+		while (!empty($selfid) && !empty($scanid) && $selfid != $scanid) {
+			$scanid = pdo_get('ly_photobook_share',array('id'=>$scanid,'uniacid'=>$_W['uniacid']))['parentid'];
+		}
+		return $selfid == $scanid ? true : false;
+	}
 
 	// 发送文字消息
 	public function sendText($openid, $text) {
