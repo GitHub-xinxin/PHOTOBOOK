@@ -396,14 +396,26 @@ class PhotobookModuleSite extends WeModuleSite {
 			}else{
 				$res = pdo_update('ly_photobook_setting',$insert_data,array('id'=>$_GPC['id']));
 			}
-			if($res)
+			if($res){
+				$this->change_condition_check();//改变配置重新检查会员身份
 				message('操作成功',$this->createWebUrl('deal_setting'),'success');
+			}
 			else
 				message('操作失败',$this->createWebUrl('deal_setting'),'error');
 		}else{
 			$deal_setting = pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']));
 		}
 		include $this->template('deal_setting');
+	}
+	/**
+	 * 改变设置条件重新检查用户身份
+	 */
+	public function change_condition_check(){
+		global $_W;
+		$userlist = pdo_getall('ly_photobook_user',array('uniacid'=>$_W['uniacid']));
+		foreach ($userlist as $key => $value) { 
+			$this->isUpgrade($value['id']);
+		}
 	}
 	/**
 	 * trimarray:修剪信息；$data：模板的框图信息；$T_photo:模板图 $ordersub_id:订单页ID
@@ -691,20 +703,20 @@ class PhotobookModuleSite extends WeModuleSite {
 			 * 将自己的parentid与下级的parentid改为0，脱离上下级关系
 			 */
 			$openid = pdo_get('ly_photobook_user',array('id'=>$_GPC['id']))['openid'];
-			//step 1:将自己的parentid改为0
+			//step 1:查找取消代理人员
 			$selfid = pdo_get('ly_photobook_share',array('openid'=>$openid,'uniacid'=>$_W['uniacid']));
 			if($selfid){
+				//step 2:重新检查团长或合伙人身份
+				$this->check_identity_agin($this->sid2uid($selfid['id']));
+				//step 3:将自己上级的parentid改为0
 				pdo_update('ly_photobook_share',array('parentid'=>0),array('openid'=>$openid,'uniacid'=>$_W['uniacid']));
-				//step 2:将自己下级的parentid改为0
+				//step 4:将自己下级的parentid改为0
 				pdo_update('ly_photobook_share',array('parentid'=>0),array('parentid'=>$selfid['id']));
 				$res['code'] = 0;
 			}
 			$res = pdo_update('ly_photobook_user',array('dealer'=>-1,'agent_code'=>''),array('id'=>$_GPC['id']));
-			if($res){
-				//step 3:重新检查团长或合伙人身份
-				$this->check_identity_agin($selfid);
+			if($res)
 				message('代理取消成功',$this->createWebUrl('dealerlist'),'success');
-			}
 			else
 				message('代理取消失败',$this->createWebUrl('dealerlist'),'error');
 		}
@@ -723,16 +735,27 @@ class PhotobookModuleSite extends WeModuleSite {
 	 * @return 取消代理本人id
 	 */
 	public function check_identity_agin($uid){
-		pdo_update('ly_photobook_user',array('self_count'=>0,'team_count'=>0),array('id'=>$uid));
-		$sid = $this->uid2sid($uid);
-		$parentid = pdo_get('ly_photobook_share',array('id'=>$sid))['parentid'];
-		while(!empty($parentid)){
-			$uid = $this->sid2uid($parentid);
-			$userInfo = $this->id2info($uid);
-			if($userInfo['identity'])//如果是团长或合伙人身份，重新检查
-				$this->isUpgrade($uid);
-			$parentid = pdo_get('ly_photobook_share',array('id'=>$parentid))['parentid'];
-		}
+		$cancel_userinfo = $this->id2info($uid);//取消的是否为代理
+		pdo_update('ly_photobook_user',array('self_count'=>0,'team_count'=>0,'new_add'=>0,'day'=>time()),array('id'=>$uid));//将取消关系人的直接代理，团队人数清空
+		if($cancel_userinfo['dealer'] != -1){ //取消代理身份时，遍历团队人数递减
+			$sid = $this->uid2sid($uid);
+			$parentid = $this->parentid($sid); //获取上级
+			$subtract_num = empty($cancel_userinfo['team_count'])? 1 : $cancel_userinfo['team_count']+1; //取消代理团队人数+1
+			$flag = true; //直接上级开关
+			while(!empty($parentid)){
+				$uid = $this->sid2uid($parentid);
+				$userInfo = $this->id2info($uid);
+				if($flag){
+					pdo_update('ly_photobook_user',array('team_count -='=>$subtract_num,'self_count -='=>1),array('id'=>$uid));//直接上级 自己直接代理-1,团队数减去代理的团队数+1（自己）
+					$flag = false; //直接上级关闭
+				}else
+					pdo_update('ly_photobook_user',array('team_count -='=>$subtract_num),array('id'=>$uid));//上级的上级团队数减去代理的团队数+1（自己）
+				if($userInfo['identity']){//如果是团长或合伙人身份，重新检查
+					$this->isUpgrade($uid);
+				}
+				$parentid = $this->parentid($parentid);
+			}
+		}	
 	}
 	public function doWebSharelist(){
 		global $_W,$_GPC;
@@ -1818,25 +1841,17 @@ class PhotobookModuleSite extends WeModuleSite {
 		//下级粉丝数
 		$childrens = pdo_fetchall('select * from ims_ly_photobook_share where parentid = '.$self['id'].' and uniacid = '.$_W['uniacid']);
 		//下级是代理的列表
-		$sql = 'select u.openid,s.avatar,s.nickname,s.id from ims_ly_photobook_share as s left join ims_ly_photobook_user as u on s.openid = u.openid where s.parentid = '.$self['id'].' and u.dealer != -1 and s.uniacid = '.$_W['uniacid'].' and u.uniacid='.$_W['uniacid'];
+		$sql = 'select s.avatar,s.nickname,u.team_count,u.self_count from ims_ly_photobook_share as s left join ims_ly_photobook_user as u on s.openid = u.openid where s.parentid = '.$self['id'].' and u.dealer != -1 and s.uniacid = '.$_W['uniacid'].' and u.uniacid='.$_W['uniacid'];
 		$children_dl = pdo_fetchall($sql);
 		//我的直推人数　（是自己下级中是代理的人数）
 		$count = count($children_dl);
 		//团队人数　（自己下级中代理的代理的代理的人数）
-		$team_count = $this->id2info($this->sid2uid($self['id']))['team_count'];
+		$self_info = $this->id2info($this->sid2uid($self['id']));
+		$team_count = $self_info['team_count'];
+		//我的合伙人
+		
 		//新增人数
 		$new_add = count($childrens) - $count;
-		//我的购卷量
-		$user = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']));
-		$has_card = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$user['id'])['count'];
-		//下级列表
-		foreach ($children_dl as $key => $value) {
-			$children_dl[$key]['has_card'] = pdo_fetch('select sum(number) as count from ims_ly_photobook_code_order where uniacid = '.$_W['uniacid'].' and status = 1 and user_id = '.$this->shareid2uid($value['openid']))['count'];
-			$temp = $this->team_count($value['id']);
-			$children_dl[$key]['team_has'] = $temp['total'];
-			$team_count += $temp['dl_count'];
-			$new_add += $temp['fans'];
-		}
 		include $this->template('team');
 	}
 	/**
@@ -3175,7 +3190,6 @@ class PhotobookModuleSite extends WeModuleSite {
 							}
 						}else
 							$this->parent_fans_rebate($id,$params['fee'],true);//上级为粉丝返利
-						$this->maxTeamCount = 0;
 						$this->send_card($id);//购买新代理，赠送4张软皮卡卷
 						$this->identity($id);//有新代理加入，更改团队各上级人员代理数量，并检查是否有人升级为团长或合伙人
 						$this->identity_rebate($id);//给团长或合伙人返利
@@ -3379,6 +3393,11 @@ class PhotobookModuleSite extends WeModuleSite {
 			}else{//直接上级以上人员 需更改team_count
 				pdo_update('ly_photobook_user',array('team_count +='=>1),array('id'=>$uid));
 			}
+		
+			if(date('Y-m-d',$this->id2info($uid)['day']) == date('Y-m-d',time()) || empty($this->id2info($uid)['day']))
+				pdo_update('ly_photobook_user',array('new_add +='=>1,'day'=>time()),array('id'=>$uid));
+			else
+				pdo_update('ly_photobook_user',array('new_add'=>1,'day'=>time()),array('id'=>$uid));
 			$this->isUpgrade($uid);//检查是否升级为团长或合伙人 
 			$sid = pdo_get('ly_photobook_share',array('id'=>$sid))['parentid'];
 		}
@@ -3393,6 +3412,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		$info = $this->id2info($join);
 		if($info['team_count'] >= $setVal['partner_partner_cout'] && $info['self_count'] >= $setVal['partner_direct_cout'] && $info['dealer'] != -1){//合伙人身份 
 			$shareid = $this->uid2sid($join);
+			$this->maxTeamCount = 0;//清空小团长团队人数最多计数器
 			$this->get_maxTeamCount($shareid);
 			if($info['team_count'] - $this->maxTeamCount >= $setVal['team_max_count']){//减去团队团长小团队最多人数
 				pdo_update('ly_photobook_user',array('identity'=>2),array('id'=>$join));

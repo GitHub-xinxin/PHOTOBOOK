@@ -9,6 +9,9 @@
 	.mui-table-view-cell span{
 		font-size: 0.8em 
 	}
+	.mui-col-sm-4,.mui-col-xs-4{
+		margin-top: 2.2vw
+	}
 </style>
 <div id="scroll" class="mui-content mui-scroll-wrapper">
 	<div class="mui-scroll">
@@ -18,24 +21,20 @@
 					<span>我的上级:{if !empty($parent['nickname'])}{$parent['nickname']}{else}无{/if}</span>
 				</div>
 			</div>
-			<div class="mui-col-sm-6 mui-col-xs-6">
+			<div class="mui-col-sm-4 mui-col-xs-4">
 				<div class="tj">
-					<label>直推人数:{$count}</label>
+					<label>我的代理:{$count}人</label>
 				</div>
 			</div>
-			<div class="mui-col-sm-6 mui-col-xs-6">
+			<div class="mui-col-sm-4 mui-col-xs-4">
 				<div class="tj">
-					<label>团队人数:{php echo $team_count}</label>
+					<label>我的团队:{php echo $team_count}人</label>
 				</div>
 			</div>
-			<div class="mui-col-sm-6 mui-col-xs-6">
+
+			<div class="mui-col-sm-4 mui-col-xs-4">
 				<div class="tj">
-					<label>我的购卷量:{$has_card}</label>
-				</div>
-			</div>
-			<div class="mui-col-sm-6 mui-col-xs-6">
-				<div class="tj">
-					<label>新增人数:{$new_add}</label>
+					<label>新增人数:{if date('Y-m-d',time()) == date('Y-m-d',$self_info['day'])} {$self_info['new_add']}人 {else} 0人 {/if}</label>
 				</div>
 			</div>
 		</div>
@@ -55,10 +54,10 @@
 				    	<span>{$v['nickname']}</span>
 				    	<div class="mui-row">
 				    		<div class="mui-col-sm-4 mui-col-xs-4">
-				    			<span>个人购卷量：<span style="color:blue">{if !empty($v['has_card'])}{$v['has_card']}{else}0{/if}</span></span>
+				    			<span>代理人数：<span style="color:blue">{if !empty($v['self_count'])}{$v['self_count']}{else}0{/if}人</span></span>
 				    		</div>
 				    		<div class="mui-col-sm-4 mui-col-xs-4">
-				    			<span>团队购卷量：<span style="color:blue">{if !empty($v['team_has'])}{$v['team_has']}{else}0{/if}</span></span>
+				    			<span>团队人数：<span style="color:blue">{if !empty($v['team_count'])}{$v['team_count']}{else}0{/if}人</span></span>
 				    		</div>
 				    	</div>
 				    </li>

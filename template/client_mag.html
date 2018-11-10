@@ -46,7 +46,7 @@
 						<td>{php echo $this->getnickname($val['openid'])}</td>
 						<td>{$val['commission']}</td>
 						<td>{if $val['dealer'] != -1} <span class="label label-danger">代理</span> {else} <span class="label label-default">非代理</span> {/if}</td>
-						<td><span data-openid="{$val['openid']}" class="btn btn-success">取消上下级关系</span></td>
+						<td><button data-openid="{$val['openid']}" class="btn btn-success">取消上下级关系</button></td>
 					</tr>
 				{/loop}
 			</tbody>
@@ -57,10 +57,15 @@
 <script>
 	$(function(){
 		$('.btn-success').click(function(){
+			$(this).attr('disabled',true)
 			var openid = $(this).data('openid')
+			var that = $(this);
+	
 			$.post('{php echo $this->createWebUrl("client_mag")}', {openid: openid}, function(data, textStatus, xhr) {
-				if(data.code == 0)
+				if(data.code == 0){
+					that.removeClass('btn btn-success').addClass('btn btn-default').text('已取消')
 					alert('操作成功')
+				}
 				else if(data.code == 1)
 					alert('openid获取失败')
 			},'json');

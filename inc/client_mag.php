@@ -5,15 +5,16 @@ $psize = 20;
 if($_W['isajax']){
 	$openid = $_GPC['openid'];
 	if(!empty($openid)){
-		//step 1:将自己的parentid改为0
+		//step 1:查找取消关系人员
 		$selfid = pdo_get('ly_photobook_share',array('openid'=>$openid,'uniacid'=>$_W['uniacid']));
 		if($selfid){
+			//step 2:重新检查团长或合伙人身份
+			$this->check_identity_agin($this->sid2uid($selfid['id']));
+			//step 3:将自己的parentid改为0
 			pdo_update('ly_photobook_share',array('parentid'=>0),array('openid'=>$openid,'uniacid'=>$_W['uniacid']));
-			//step 2:将自己下级的parentid改为0
+			//step 4:将自己下级的parentid改为0
 			pdo_update('ly_photobook_share',array('parentid'=>0),array('parentid'=>$selfid['id']));
 			$res['code'] = 0;
-			//step 3:重新检查团长或合伙人身份
-			$this->check_identity_agin($this->sid2uid($selfid));
 		}
 	}else
 		$res['code'] = 2;

@@ -124,6 +124,8 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 						if($res){
 							$this->sendText($openid,'成功与'.$share['nickname'].'建立上下级关系!');
 							$this->sendText($share['openid'],'粉丝'.$mc['nickname'].'加入了您的团队！');
+							$this->maxTeamCount = 0;
+							$this->identity($this->sid2uid($selfShare['id']));//有代理加入，更改团队各上级人员代理数量，并检查是否有人升级为团长或合伙人
 							/**
 							 * 发送佣金
 							 */
@@ -137,6 +139,34 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 			}
 		}
 	}
+	
+	/**
+	 * 向上遍历团队，检查是否有人升级团长或合伙人
+	 * @join user表id
+	 */
+	public function identity($join){
+		
+		if($this->id2info($join)['dealer'] != -1){
+			$flag = 1;//直接上级开关
+			$sid = pdo_get('ly_photobook_share',array('id'=>$this->uid2sid($join)))['parentid'];
+			while($sid){//一直向上遍历，直到上级为平台 更改团队teamcount人数
+				$uid = $this->sid2uid($sid);
+				if($flag){//直接上级需更改  self_count(直接上级)与team_count(团队人数)
+					pdo_update('ly_photobook_user',array('team_count +='=>1,'self_count +='=>1),array('id'=>$uid));
+					$flag = 0;
+				}else{//直接上级以上人员 需更改team_count
+					pdo_update('ly_photobook_user',array('team_count +='=>1),array('id'=>$uid));
+				}
+				if(date('Y-m-d',$this->id2info($uid)['day']) == date('Y-m-d',time()) || empty($this->id2info($uid)['day']))
+					pdo_update('ly_photobook_user',array('new_add +='=>1,'day'=>time()),array('id'=>$uid));
+				else
+					pdo_update('ly_photobook_user',array('new_add'=>1,'day'=>time()),array('id'=>$uid));
+				$this->isUpgrade($uid);//检查是否升级为团长或合伙人 
+				$sid = pdo_get('ly_photobook_share',array('id'=>$sid))['parentid'];
+			}
+		}
+	}
+
 	/**
 	 * 发送佣金模板消息
 	 */
@@ -188,28 +218,6 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 		file_put_contents(IA_ROOT."/addons/photobook/log1.txt","\n".date('Y-m-d H:i:s',time())." : ".$data,FILE_APPEND);
 	}
 
-	/**
-	 * 检查团队中是否有人达到团长或合伙人
-	 * @join  团长id
-	 * @agent 代理人数
-	 * @total 团队人数
-	 */
-	public function get_count($join,$total){
-
-		$sublist = pdo_getall('ly_photobook_share',array('parentid'=>$join));
-		if(empty($sublist)){
-			return ;
-		}else{
-			foreach ($sublist as $key => $value) {
-				$openid = pdo_get('ly_photobook_share',array('id'=>$value['id']))['openid'];
-				if(pdo_get('ly_photobook_user',array('openid'=>$openid))['dealer'] != -1){
-					if($this->total > $value['team_count'])
-						$this->total = $value['team_count'];
-					$this->get_count($value['id'],$total);
-				}
-			}
-		}
-	}
 
 	/**
 	 * 检查上下级关系 是否树形结构
@@ -277,5 +285,73 @@ class PhotobookModuleProcessor extends WeModuleProcessor {
 
 	private function recordlog($data){
 		file_put_contents(IA_ROOT."/addons/photobook/log.txt","\n".date('Y-m-d H:i:s',time())." : ".$data,FILE_APPEND);
+	}
+	/**
+	 * id查用户user信息
+	 */
+	public function id2info($join){
+		return pdo_get('ly_photobook_user',array('id'=>$join));
+	}
+	/**
+	 * shareid 转 userid
+	 */
+	public function sid2uid($sid){
+		$openid = pdo_get('ly_photobook_share',array('id'=>$sid))['openid'];
+		return pdo_get('ly_photobook_user',array('openid'=>$openid))['id'];
+	}
+	public function uid2sid($uid){
+		global $_GPC,$_W; 
+		$openid = pdo_get('ly_photobook_user',array('id'=>$uid))['openid'];
+		return pdo_get('ly_photobook_share',array('uniacid'=>$_W['uniacid'],'openid'=>$openid))['id'];
+	}
+	/**
+	 *  获取设置信息
+	 */
+	public function getSetting(){
+		global $_W;
+		return pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']));
+	}
+	/**
+	 * 查找团队中团长人数最多的数量
+	 * @join  share表id
+	 * 团长人数最多的值存入 属性值maxTeamCount值中
+	 */
+	public function get_maxTeamCount($join){
+
+		$sublist = pdo_getall('ly_photobook_share',array('parentid'=>$join));
+		if(empty($sublist)){
+			return ;
+		}else{
+			foreach ($sublist as $key => $value) {
+				$uid = $this->sid2uid($value['id']);
+				$user = pdo_get('ly_photobook_user',array('id'=>$uid));
+				if($user['dealer'] != -1 && $user['identity'] == 1){//团长身份
+					if($this->maxTeamCount > $value['team_count'])
+						$this->maxTeamCount = $value['team_count'];
+				}
+				$this->get_maxTeamCount($value['id']);
+			}
+		}
+	}
+	private $maxTeamCount;
+	/**
+	 * 判断是否成为合伙人或团长
+	 * @join  user表id
+	 */
+	public function isUpgrade($join){
+		$setVal = $this->getSetting();
+		$info = $this->id2info($join);
+		if($info['team_count'] >= $setVal['partner_partner_cout'] && $info['self_count'] >= $setVal['partner_direct_cout'] && $info['dealer'] != -1){//合伙人身份 
+			$shareid = $this->uid2sid($join);
+			$this->maxTeamCount = 0;//清空团队人数最多计数器
+			$this->get_maxTeamCount($shareid);
+			if($info['team_count'] - $this->maxTeamCount >= $setVal['team_max_count']){//减去团队团长小团队最多人数
+				pdo_update('ly_photobook_user',array('identity'=>2),array('id'=>$join));
+			}
+		}elseif($info['team_count'] >= $setVal['team_team_count'] && $info['self_count'] >= $setVal['team_direct_cout'] && $info['dealer'] != -1){//团长身份
+			pdo_update('ly_photobook_user',array('identity'=>1),array('id'=>$join));
+		}else{
+			pdo_update('ly_photobook_user',array('identity'=>0),array('id'=>$join));//取消代理或上下级关系时，会用到
+		}
 	}
 }
