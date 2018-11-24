@@ -1,80 +1,77 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta name="viewport" content="width=device-width,user-scalable = no" />
-		<!-- <meta name="viewport" content="width = 1050, user-scalable = no" /> -->
-		<meta charset="utf-8" />
-		<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
-		<script src="../addons/photobook/template/mobile/layer/layer.js"></script>
-		<script type="text/javascript" src="../addons/photobook/template/mobile/turn/extras/modernizr.2.5.3.min.js"></script>
-		<link href="../addons/photobook/template/mobile/css/mui.min.css" rel="stylesheet" />
-		<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
-	</head>
-	<style type="text/css">
-	</style>
-	<body>
-		<header class="mui-bar mui-bar-nav">
-					<div class="mui-row">
-						<div class="mui-col-sm-2 mui-col-xs-2">
-							
-						</div>
-						<div class="mui-col-sm-8 mui-col-xs-7">
-							<div class="mui-input-row mui-search">
-								<div style="text-align: center;padding-top: 0.5em;color: coral;">
-								<h5>{$userInfo['nickname']}的照片书</h5>
-							</div>
-							</div>
-						</div>
-						<div class="mui-col-sm-2 mui-col-xs-3" style="text-align: center">
-							<a href="{php echo $this->createMobileUrl('MyWork')}">
-								<button type="button" class="mui-btn mui-btn-danger">查看作品</button>	
-							</a>
-						</div>
+<head>
+	<meta name="viewport" content="width=device-width,user-scalable = no" />
+	<!-- <meta name="viewport" content="width = 1050, user-scalable = no" /> -->
+	<meta charset="utf-8" />
+	{php echo register_jssdk(false);} 
+	<script src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+	<script src="../addons/photobook/template/mobile/layer/layer.js"></script>
+	<script type="text/javascript" src="../addons/photobook/template/mobile/turn/extras/modernizr.2.5.3.min.js"></script>
+	<link href="../addons/photobook/template/mobile/css/mui.min.css" rel="stylesheet" />
+	<link href="../addons/photobook/template/mobile/css/icons-extra.css" rel="stylesheet">
+</head>
+<script>
+	wx.ready(function () {
+		sharedata = {
+			title: '我在时光印定制了一款照片书',
+			desc: '定制让生活更美丽，快随我一起来！！！',
+			link:  "{$shareUrl}",
+			imgUrl: 'http://photos.leyaocn.com/addons/photobook/images/share.png',
+			success: function(){
+				alert('分享成功');
+			}
+		};
+		wx.onMenuShareAppMessage(sharedata);
+		wx.onMenuShareTimeline(sharedata);
+	});
+</script>
+<body>
+	<header class="mui-bar mui-bar-nav">
+		<div class="mui-row">
+			<div class="mui-col-sm-2 mui-col-xs-2">
+
+			</div>
+			<div class="mui-col-sm-8 mui-col-xs-7">
+				<div class="mui-input-row mui-search">
+					<div style="text-align: center;padding-top: 0.5em;color: coral;">
+						<h5>{$userInfo['nickname']}的照片书</h5>
 					</div>
-				</header>
-<!-- 		<div class="flipbook-viewport" id="flipbook-viewport">
+				</div>
+			</div>
+			<div class="mui-col-sm-2 mui-col-xs-3" style="text-align: center">
+				<a href="{php echo $this->createMobileUrl('MyWork')}">
+					<button type="button" class="mui-btn mui-btn-danger">查看作品</button>	
+				</a>
+			</div>
+		</div>
+	</header>
+	<div id="alls">
+		<div class="flipbook-viewport">
 			<div class="container">
 				<div class="flipbook">
-					<div style="background-image:url({$item['img']})" class="page" onclick="window.location.href=
-					'{php $nn=$index+1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'"">
+					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$startPage['img']}" onclick="window.location.href=
+					'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'">
+					{if $template_main_type == 0}
 					{loop $list $index $item}
-					<div style="background-image:url({$item['img']})" class="double" onclick="window.location.href=
-					'{php $nn=$index+1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'"">
-					</div>
+					
+					<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
+					'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'">
 					{/loop}
-					<div style="background-image:url({$item['img']})" class="page" onclick="window.location.href=
-					'{php $nn=$index+1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'"">
+					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
+					'{php echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+1,"id"=>$endPage["id"],"time"=>time()))}'">
+					{else}
+					{loop $list $index $item}
+					<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
+					'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
+					{/loop}
+					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
+					'{php echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2,"id"=>$endPage["id"],"time"=>time()))}'">
+
+					{/if}	
 				</div>
 			</div>
 		</div>
-	</div>
-</div> -->
-<div id="alls">
-	<div class="flipbook-viewport">
-		<div class="container">
-			<div class="flipbook">
-				<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$startPage['img']}" onclick="window.location.href=
-							'{php $nn=1;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$startPage["id"],"time"=>time()))}'">
-				{if $template_main_type == 0}
-					{loop $list $index $item}
-					
-						<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
-								'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn,"id"=>$item["id"],"time"=>time()))}'">
-					{/loop}
-					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
-							'{php echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn+1,"id"=>$endPage["id"],"time"=>time()))}'">
-				{else}
-					{loop $list $index $item}
-						<img class="double" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['img']}"  onclick="window.location.href=
-								'{php $nn=$index+2;echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2-1,"id"=>$item["id"],"time"=>time()))}'">
-					{/loop}
-					<img class="smallpage" src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$endPage['img']}" onclick="window.location.href=
-							'{php echo $this->createMobileUrl("Newimgtouchit",array("Npage"=>$nn*2,"id"=>$endPage["id"],"time"=>time()))}'">
-			
-				{/if}	
-			</div>
-		</div>
-	</div>
 		<div style="margin:350px 1em 0em 1em;text-align: center;line-height: 1em;">
 			<p style="font-size: 12px">
 				您可以翻动书角进行浏览，点击右上角展开全部以平铺模式列出照片书内页列表进行浏览和编辑~
@@ -83,27 +80,26 @@
 				温馨提示：在您制作完成照片书进行下单的时候，进行一次整书的预览是一个很好的习惯。当看到有不满意的地方时，可以点击某页编辑该内容。
 			</p>
 		</div>
-</div>
-		<nav class="mui-bar mui-bar-tab">
-			<a class="mui-tab-item mui-active" href="{php echo $this->createMobileUrl('homea')}">
-				<span class="mui-icon mui-icon-extra mui-icon-extra-find"></span>
-				<span class="mui-tab-label">首页</span>
-			</a>
+	</div>
+	<nav class="mui-bar mui-bar-tab">
+		<a class="mui-tab-item mui-active" href="{php echo $this->createMobileUrl('homea')}">
+			<span class="mui-icon mui-icon-extra mui-icon-extra-find"></span>
+			<span class="mui-tab-label">首页</span>
+		</a>
+		{if empty($_GPC['share']) || $_GPC['share'] == $_W['openid']}
 			<span class="mui-tab-item" id="car">
 				<span class="mui-icon mui-icon-extra mui-icon-extra-cart"></span>
 				<span class="mui-tab-label" style="padding-left: 0.35em">加入购物车</span>
 			</span>
-			<a class="mui-tab-item" href="#tabbar-with-map">
-				
-			</a>
 			<span class="mui-tab-item" id="buy" style="background: #e74c3c;color: #fff;font-weight: bold;">
 				下单购买
 			</span>
-		</nav>
-		<script type="text/javascript">
-			$(function(){
-				$('#car').click(function(){
-					$.post("{php echo $this->createMobileUrl('turn')}",
+		{/if}
+	</nav>
+	<script type="text/javascript">
+		$(function(){
+			$('#car').click(function(){
+				$.post("{php echo $this->createMobileUrl('turn')}",
 					{order_id:"{$_GET['tid']}",op:"{$_GPC['op']}"},
 					function(res){
 						if(res.code == 0)
@@ -115,33 +111,33 @@
 						else if(res.code ==3)
 							layer.msg('不能加入购物车，该订单已经支付了,如想再次购买，请直接点下单购买哦')
 					},'json')
-				})
-				$('#buy').click(function(){
-					if("{$is_buy}" != 0){
-						layer.msg('亲,该款照片书已经支付,如果想再次下单购买请联系客服哦',{icon:6}) 
-						return;
-					}else{
-						window.location.href = "{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid'],'op'=>$_GPC['op']))}"
-					}
-				})
 			})
-			window.onload=function(){
-				var windows_width= $(window).width()
-				$("#alls").css({
-					position:'relative',
-					width:windows_width+'px',
-					overflow:'hidden',
-					top:'2em'
-				});
-				function loadApp() {
-					var flipbook = $('.flipbook')
-					if (flipbook.width()==0 || flipbook.height()==0) {
-						setTimeout(loadApp, 10)
-						return
-					}
-					if({$template_main_type}==1||{$template_main_type}==2)
-						$('.flipbook .double').scissor()
-					flipbook.turn({
+			$('#buy').click(function(){
+				if("{$is_buy}" != 0){
+					layer.msg('亲,该款照片书已经支付,如果想再次下单购买请联系客服哦',{icon:6}) 
+					return;
+				}else{
+					window.location.href = "{php echo $this->createMobileUrl('place_order',array('order_id'=>$_GET['tid'],'op'=>$_GPC['op']))}"
+				}
+			})
+		})
+		window.onload=function(){
+			var windows_width= $(window).width()
+			$("#alls").css({
+				position:'relative',
+				width:windows_width+'px',
+				overflow:'hidden',
+				top:'2em'
+			});
+			function loadApp() {
+				var flipbook = $('.flipbook')
+				if (flipbook.width()==0 || flipbook.height()==0) {
+					setTimeout(loadApp, 10)
+					return
+				}
+				if({$template_main_type}==1||{$template_main_type}==2)
+					$('.flipbook .double').scissor()
+				flipbook.turn({
 						//展示方式。
 						//页数
 						// page:{$Npage},
@@ -157,17 +153,17 @@
 						// Enable gradients
 						gradients: true
 					});
-					var size = $('.flipbook').turn("size")
-					$(".flipbook").turn("page",{$Npage});
-				}
-				yepnope({
-					test: Modernizr.csstransforms,
-					yep: ['../addons/photobook/template/mobile/turn/lib/turn.min.js'],
-					nope: ['../addons/photobook/template/mobile/turn/lib/turn.html4.min.js'],
-					both: ['../addons/photobook/template/mobile/turn/lib/scissor.min.js', '../addons/photobook/template/mobile/turn/double-page/css/double.css'],
-					complete: loadApp
-				})
+				var size = $('.flipbook').turn("size")
+				$(".flipbook").turn("page",{$Npage});
 			}
-		</script>
-	</body>
+			yepnope({
+				test: Modernizr.csstransforms,
+				yep: ['../addons/photobook/template/mobile/turn/lib/turn.min.js'],
+				nope: ['../addons/photobook/template/mobile/turn/lib/turn.html4.min.js'],
+				both: ['../addons/photobook/template/mobile/turn/lib/scissor.min.js', '../addons/photobook/template/mobile/turn/double-page/css/double.css'],
+				complete: loadApp
+			})
+		}
+	</script>
+</body>
 </html>

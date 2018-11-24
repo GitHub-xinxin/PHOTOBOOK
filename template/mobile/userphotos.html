@@ -156,38 +156,38 @@
 						</div>
 						<div class="mui-row" id="zuixin">
 							{loop $userimg $index $item}
-							{if $day <=(int)$item['createtime']}
-							{if empty($userimg[$index-1])}
-							<div class="mui-col-sm-12 mui-col-xs-12">
-								<div class="time_line">
-									<hr>
-									<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
-								</div>
-							</div>
-							{elseif (int)$item['createtime'] < (int)$userimg[$index-1]['createtime'] - 300}
-							<div class="mui-col-sm-12 mui-col-xs-12">
-								<div class="time_line">
-									<hr>
-									<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
-								</div>
-							</div>
-							{/if}
-							<div class="mui-col-sm-3 mui-col-xs-3">
-								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
-									<div class="mui-card-content" style="height: 5em;overflow: hidden;">
-										<div class="thisorder"> 
-											{if !$HIDE}<span class="cardspan">0</span>{/if}
-										</div>
-										<div class="imgalert" >
-											{if  $item['width']<400}<label class="mui-icon mui-icon-info one"></label>
-											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
-											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
-										</div>
-										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:5em;" />
+								{if $day <=(int)$item['createtime']}
+								{if empty($userimg[$index-1])}
+								<div class="mui-col-sm-12 mui-col-xs-12">
+									<div class="time_line">
+										<hr>
+										<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
 									</div>
 								</div>
-							</div>
-							{/if}
+								{elseif (int)$item['createtime'] < (int)$userimg[$index-1]['createtime'] - 300}
+								<div class="mui-col-sm-12 mui-col-xs-12">
+									<div class="time_line">
+										<hr>
+										<div>{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+									</div>
+								</div>
+								{/if}
+								<div class="mui-col-sm-3 mui-col-xs-3">
+									<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
+										<div class="mui-card-content" style="height: 5em;overflow: hidden;">
+											<div class="thisorder"> 
+												<span class="cardspan">0</span>
+											</div>
+											<div class="imgalert" >
+												{if  $item['size']<50}<label class="mui-icon mui-icon-info two"></label>
+												{elseif $item['size']<100}<label class="mui-icon mui-icon-info one"></label>{/if}
+												{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
+											</div>
+											<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:5em;" />
+										</div>
+									</div>
+								</div>
+								{/if}
 							{/loop}							
 						</div>
 						<div class="mui-col-sm-12 mui-col-xs-12" style="background-color: white;padding: 1em;">
@@ -215,11 +215,11 @@
 								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
 									<div class="mui-card-content" style="height: 5em;overflow: hidden;">
 										<div class="thisorder"> 
-											{if !$HIDE}<span class="cardspan">0</span>{/if}
+											<span class="cardspan">0</span>
 										</div>
 										<div class="imgalert" > 
-											{if  $item['width']<400}<label class="mui-icon mui-icon-info one"></label>
-											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
+											{if  $item['size']<50}<label class="mui-icon mui-icon-info two"></label>
+											{elseif $item['size']<100}<label class="mui-icon mui-icon-info one"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
 										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}" alt="" style="width: 100%;height:5em;" />
@@ -239,11 +239,11 @@
 								<div class="mui-card" id="card_{$item['id']}" name="{$item['id']}"> 
 									<div class="mui-card-content" style="height: 5em;overflow: hidden;">
 										<div class="thisorder"> 
-											{if !$HIDE}<span class="cardspan">0</span>{/if}
+											<span class="cardspan">0</span>
 										</div>
 										<div class="imgalert" > 
-											{if  $item['width']<400}<label class="mui-icon mui-icon-info one"></label>
-											{elseif $item['width']<600}<label class="mui-icon mui-icon-info two"></label>{/if}
+											{if  $item['size']<400}<label class="mui-icon mui-icon-info two"></label>
+											{elseif $item['size']<600}<label class="mui-icon mui-icon-info one"></label>{/if}
 											{if $HIDE}<span class="mui-icon mui-icon-star star_alert" data-check="0"></span>{/if}
 										</div>
 										<img src="http://demo-photo.oss-cn-beijing.aliyuncs.com/{$item['thumb']}" data-name="{$item['thumb']}"  alt="" style="width: 100%;height:5em;" />
@@ -522,7 +522,7 @@
 	var Selected_pictures=function(){
 		var thisid="#"+this.id;
 		console.log(thisid);
-		$this_span=$(thisid).find('span');
+		$this_span=$(thisid).find('span').eq(1);
 		if($this_span.data("check")==0){
 			var imgs=$(thisid).find('img').attr("src");
 			var Tid=Number(thisid.replace("#card_",""));
@@ -537,14 +537,23 @@
 		}
 	}
 	{if $HIDE}
-	for(var i=0;i<muicard.length;i++){
-		muicard[i].addEventListener("tap",Selected_pictures);
-	}
+		for(var i=0;i<muicard.length;i++){
+			muicard[i].addEventListener("tap",Selected_pictures);
+		}
+		var useImages = {$usedImages}//所有用到的图片
+		for(var i=0; i<useImages.length;i++){
+			$('.mui-card').each(function(){
+				if($(this).find('img').eq(0).data('name') == useImages[i]){
+					var dis_info = $(this).find('span').eq(0)
+					dis_info.text(i+1).show()
+				}
+			})
+		}
 	{/if}
 	{if !$HIDE}
-	for(var i=0;i<muicard.length;i++){
-		muicard[i].addEventListener("tap",func);
-	}
+		for(var i=0;i<muicard.length;i++){
+			muicard[i].addEventListener("tap",func);
+		}
 	{/if}
 	//_____________快速排序页底部按钮_______________________________
 	document.getElementById("fanhui").addEventListener("tap",function(){

@@ -16,6 +16,7 @@
 				<br> 2.确保收获地址正确。
 				<br> 3.下单后订单无法修改。
 				<br> 4.偏远地区不包邮(新疆、西藏、内蒙、宁夏、青海)。
+				<br> 5.下单后照片书照片,请勿从照片库中删除，避免印刷空白。
 			</li>
 			<li class="mui-table-view-cell">
 				<div class="mui-col-sm-10 mui-col-xs-10">
@@ -48,7 +49,7 @@
 					<label>宝贝数量:</label>
 					<div class="mui-numbox" data-numbox-min="1">
 					  <button class="mui-btn mui-numbox-btn-minus" type="button">-</button>
-					  <input class="mui-numbox-input" type="number" name="count" />
+					  <input class="mui-numbox-input" type="number"  name="count" />
 					  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
 					</div>
 				</div>
@@ -83,7 +84,7 @@
 					<label>使用卡券</label>
 					<select name="card" id="card">
 					  <option value ="0">不使用</option>
-					  <option value ="1" {if $_GPC['op'] == 'card' || !empty($order_info['card_id'])} selected="selected"{/if}>使用</option>
+					  <option value ="1" {if $_GPC['op'] == 'card' || !empty($order_info['card_id']) || !empty($card_list)} selected="selected"{/if}>使用</option>
 					</select>
 				</div>
 				<div class="mui-input-row" id="card_list">
@@ -91,7 +92,7 @@
 					<select name="select_card" id="select_card" style="color:red">
 						{if !empty($card_list)}
 							{loop $card_list $row}
-								<option value="{$row['id']}" {if $order_info['card_id'] == $row['id']} selected="selected"{/if}> {$row['name']}</option>
+								<option value="{$row['id']}" {if $order_info['card_id'] == $row['id'] || !empty($row['id'])} selected="selected"{/if}> {$row['name']}</option>
 							{/loop}
 						{else}
 							<option value="0">无可用卡卷</option>
@@ -121,7 +122,7 @@
 				</div> 
 				<div class="mui-button-row">
 					<input type="hidden" name="token" value="{$_W['token']}">
-				<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-primary" style="width: 100%;">提交订单</button>
+					<button type="submit" name="submit" value="提交" class="mui-btn mui-btn-primary" style="width: 100%;">提交订单</button>
 				</div>
 			</form>
 		</div>
@@ -131,9 +132,7 @@
 <script src="../addons/photobook/template/js/jquery.min.js"></script>
 <script>
 	$(function(){
-		if("{$_GPC['op']}" == 'card' || "{$order_info['card_id']}" !=0){
-			$('#card_list').show();
-		}else{
+		if($('#card').val() == 0){
 			$('#card_list').hide();
 		}
 		$('#card').change(function(){
@@ -146,14 +145,9 @@
 	function check(){		
 		var val = document.getElementById('agree').checked;
 		if(val == false){
-				alert("请仔细阅读免责条款");
-				return false;
+			alert("请仔细阅读免责条款");
+			return false;
 		}
-		// var phone =document.getElementsByName('phone')[0].value;
-		// if(!(/^1[34578]\d{9}$/.test(phone))){ 
-		// 	alert("请填写正确的11位电话号码,请重填");  
-		// 	return false; 
-		// } 
 	}		
 </script>
 {template 'footer'}

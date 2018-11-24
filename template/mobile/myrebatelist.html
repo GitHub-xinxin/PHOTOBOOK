@@ -63,8 +63,13 @@
 		}else if({$allmoney} < {$take_money}){
 			alert("最低提现金额{$take_money}元");
 			return false;
+		}else{
+			if(!confirm('每笔提现将扣除手续费5元')){
+				return false
+			}
 		}
-		var money = $('#rebate').data('money')
+
+		var money = parseFloat($('#rebate').data('money'))  - 5//申请体现扣除5元手续费
 		$.post('{php echo $this->createMobileUrl("applyrebate")}', {money: money}, function(res, textStatus, xhr) {
 			if(res){
 				alert('申请成功,等待审核');

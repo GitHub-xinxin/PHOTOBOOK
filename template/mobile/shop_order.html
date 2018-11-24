@@ -1,4 +1,19 @@
 {template 'header'}
+<!-- <script type="text/javascript" src="{$_W['siteroot']}app/resource/js/app/util.js"></script>
+<script>
+	window.sysinfo = {
+		{if !empty($_W['uniacid'])}'uniacid': '{$_W['uniacid']}',{/if}
+		{if !empty($_W['acid'])}'acid': '{$_W['acid']}',{/if}{if !empty($_W['openid'])}'openid': '{$_W['openid']}',{/if}
+		{if !empty($_W['uid'])}'uid': '{$_W['uid']}',{/if}
+		'siteroot': '{$_W['siteroot']}',
+		'siteurl': '{$_W['siteurl']}',
+		'attachurl': '{$_W['attachurl']}',
+		'attachurl_local': '{$_W['attachurl_local']}',
+		'attachurl_remote': '{$_W['attachurl_remote']}',
+		{if defined('MODULE_URL')}'MODULE_URL': '{MODULE_URL}',{/if}
+		'cookie' : {'pre': '{$_W['config']['cookie']['pre']}'}
+	};
+</script> -->
 <div id="scroll" class="mui-content mui-scroll-wrapper">
 	<div class="mui-scroll">
 		<ul class="mui-table-view">
@@ -47,9 +62,9 @@
 			</li>
 			<li class="mui-table-view-cell">
 				{if $free == 1}
-					配送方式：包邮
+				配送方式：包邮
 				{else}
-					配送方式：邮费<span style="color:red;padding-left: 2vw">{$remote_price}元</span>
+				配送方式：邮费<span style="color:red;padding-left: 2vw">{$remote_price}元</span>
 				{/if}
 			</li>
 			<li class="mui-table-view-cell">
@@ -66,9 +81,11 @@
 			<form class="mui-input-group">
 				<div class="mui-button-row">
 					{if $free == 1}
-						<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
+						<!-- <button type="button" class="mui-btn mui-btn-primary mui-disabled js-wechat-pay">微信支付（加载中）</button> -->
+					<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
 					{else}
-						<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id,'remote_price'=>$remote_price))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
+						<!-- <button type="button" class="mui-btn mui-btn-primary mui-disabled js-wechat-pay">微信支付（加载中）</button> -->
+					<a href="{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id,'remote_price'=>$remote_price))}" class="mui-btn mui-btn-primary" style="width: 100%;">微信支付</a>
 					{/if}
 				</div>
 			</form>
@@ -76,4 +93,33 @@
 		<div style="height: 4em;"></div>
 	</div>
 </div>
+<script>
+	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+		$('.js-wechat-pay').removeClass('mui-disabled');
+		$('.js-wechat-pay').on('click',function(){
+			var url = "{$free}" == 1? "{php echo $this->createMobileUrl('pay',array('order_id'=>$order_id))}" : "{php echo $this->createMobileUrl('pay',array('remote_price'=>$remote_price,'order_id'=>$order_id))}"
+			$.getJSON(url, function(data, status){
+				if(status == 'success'){
+					util.pay({
+						orderFee : data.fee,
+						payMethod : 'wechat',
+						orderTitle : '消费'+data.fee+'元',
+						orderTid : data.orderTid,
+						module : 'recharge',
+						success : function(result) {
+							alert('支付成功');
+						},
+						fail : function(result) {
+							alert('fail : ' + result.message);
+						},
+						complete : function(result) {
+							location.reload();
+						}
+					});
+				}
+			})
+			$('.js-wechat-pay').html('微信支付');
+		})
+	})
+</script>
 {template 'footer'}

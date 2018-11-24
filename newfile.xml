@@ -3,9 +3,9 @@
 <return_msg><![CDATA[]]></return_msg>
 <mch_appid><![CDATA[wx5a62fcdd2bb6d08b]]></mch_appid>
 <mchid><![CDATA[1490470722]]></mchid>
-<nonce_str><![CDATA[NG9vmGJZnO4g454mkOZg8mMzZkv5y56k]]></nonce_str>
+<nonce_str><![CDATA[UhTX1mBT4B4YkGBrVXaByPBtzt5aXR48]]></nonce_str>
 <result_code><![CDATA[SUCCESS]]></result_code>
-<partner_trade_no><![CDATA[timeA1537415698A1425211294]]></partner_trade_no>
-<payment_no><![CDATA[1000018301201809201965348021]]></payment_no>
-<payment_time><![CDATA[2018-09-20 11:54:59]]></payment_time>
+<partner_trade_no><![CDATA[timeA1542763123A9646633226]]></partner_trade_no>
+<payment_no><![CDATA[1490470722201811210275181712]]></payment_no>
+<payment_time><![CDATA[2018-11-21 09:18:44]]></payment_time>
 </xml>

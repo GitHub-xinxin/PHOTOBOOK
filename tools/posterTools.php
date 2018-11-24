@@ -596,15 +596,14 @@ function createMPoster($fans,$poster,$modulename,$parentid){
 		$share = pdo_fetch('select * from '.tablename($modulename."_share")." where id='{$share['id']}'");
 	}else{
 		recordlog('有这个人的share记录了');
-		// exit();
 	} 
 
 	$qrcode = str_replace('#sid#',$share['id'],IA_ROOT ."/addons/photobook/poster/mposter#sid#.jpg");//海报的存放位置
 	if(file_exists($qrcode)){
-		// 如果海报存在，不再生，直接返回
-		// 注意：====> 海报二维码可能过期了
-		recordlog('没有生成海报，返回以前生成的');
-		return $qrcode;	
+		//重新生成新的海报，覆盖掉原先海报
+		// 如果海报存在，不再生，直接返回 // 注意：====> 海报二维码可能过期了 改为永久二维码
+		// recordlog('没有生成海报，返回以前生成的');
+		// return $qrcode;	
 	}
 	
 	//data是三个位置（头像，二维码等）
@@ -616,7 +615,8 @@ function createMPoster($fans,$poster,$modulename,$parentid){
 	$bg = imagecreates(tomedia($bg));
 	imagecopy($target, $bg, 0, 0, 0, 0,$size[0], $size[1]);
 	imagedestroy($bg);
-
+	$flag = true;//显示微信号 true为显示手机号
+	$userInfo = getUserInfo($openid);//用户信息
 	foreach ($data as $value) {
 		$value = trimPx($value);
 		if ($value['type'] == 'qr'){
@@ -637,15 +637,20 @@ function createMPoster($fans,$poster,$modulename,$parentid){
 			$img = saveImage($fans['avatar']);
 			mergeImage($target,$img,array('left'=>$value['left'],'top'=>$value['top'],'width'=>$value['width'],'height'=>$value['height']));
 			@unlink($img);
-		}elseif ($value['type'] == 'name') 
-			mergeText($modulename,$target,$fans['nickname'],array('size'=>$value['size'],'color'=>$value['color'],'left'=>$value['left'],'top'=>$value['top']));
+		}elseif ($value['type'] == 'name') {
+			$textInfo = $flag? $userInfo['name'] : $userInfo['phone'];
+			$flag = $flag? false : true;//切换微信号或手机号
+			mergeText($modulename,$target,$textInfo,array('size'=>$value['size'],'color'=>$value['color'],'left'=>$value['left'],'top'=>$value['top']));
+		}
 	}
 	imagejpeg($target, $qrcode);
 	imagedestroy($target);
 	recordlog($qrcode);
 	return $qrcode;
 }
-
+function getUserInfo($openid){
+	return pdo_get('ly_photobook_user',array('openid'=>$openid));
+}
 function getQR($fans,$poster,$share_id,$modulename){//shid：分享表中的主键
 	recordlog('进入getQR');
 	global $_W;

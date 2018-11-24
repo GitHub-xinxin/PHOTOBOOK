@@ -370,7 +370,7 @@ ul li{
 		jsonreq();
 		var Source_of_change=kuai.data("xulie");
 		sessionStorage.setItem("Source_of_change",Source_of_change);
-		window.location.href="{$url}"+"&Npage={$Npage}"
+		window.location.href="{$url}"+"&Npage={$Npage}&ordersubid={$ordersubid}" //新增参数ordersubid，用于获取该照片书使用的所有图片
 	}
 	//更换模板
 	var jsonTEP={}

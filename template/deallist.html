@@ -11,6 +11,21 @@ td {
     word-break: break-all !important;
 }
 </style>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        筛选
+    </div>
+    <div class="panel-body">
+        <form class="form-inline" role="form" action="" method="post">
+            <div class="form-group">
+                <label  for="name">筛选</label>
+                <input type="text" style="margin:0 2vw" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="可按照昵称模糊搜索">
+            </div>
+            <input type="hidden" name="token" value="{$_W['token']}">
+            <input type="submit" name="submit" value="搜索" class="btn btn-primary">
+        </form>
+    </div>
+</div>
 <div class="panel panel-default">
 
     <div class='panel-heading'>
@@ -25,8 +40,8 @@ td {
                 <tr>
                     <th>序号</th>
                     <th>昵称</th>
-                    <th>提成</th>
-                    <th>代理商邀请码</th>
+                    <th>手机号</th>
+                    <th>身份</th>
                     <th style="width: 300px;">操作</th>
 
                 </tr>
@@ -41,8 +56,16 @@ td {
 
                     <td>{php echo $index+1}</td>
                     <td>{$l['nickname']}</td>
-                    <td>{$l['commission']}</td>
-                    <td>{$l['agent_code']}</td>
+                    <td>{$l['phone']}</td>
+                    <td>
+                        {if $l['identity'] == 0}
+                            <label class="label label-default">普通代理</label>
+                        {elseif $l['indentity'] == 1}
+                            <label class="label label-info">团长</label>
+                        {elseif $l['identity'] == 2}
+                            <label class="label label-danger">合伙人</label>
+                        {/if}
+                    </td>
                     <td>
                         <a class="btn btn-warning btn-sm" target="_blank" href="{php echo $this->createWebUrl('sharelist',array('id'=>$l['id']))}">推广记录 【
                             {if !empty($l['count'])}
@@ -53,6 +76,7 @@ td {
                             】
                         </a>
                         <a href="{php echo $this->createWebUrl('dealerlist',array('id'=>$l['id'],'op'=>'cancel'))}" onclick="if(!confirm('你确定要取消{$l['nickname']}代理吗?')) return false;" class="btn btn-danger">取消代理</a>
+                        <button  class="btn btn-primary info" data-id="{$l['id']}" data-name="{$l['name']}" data-phone="{$l['phone']}">备注</button>
                     </td>
 
                 </tr>
@@ -64,6 +88,55 @@ td {
         </table>
         {$pager}
     </div>
-
 </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">备注</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label  for="name">微信号</label>
+                        <input type="text" style="margin:0 2vw" class="form-control" id="name"  placeholder="请输入微信号">
+                    </div>
+                    <div class="form-group">
+                        <label  for="name">手机号</label>
+                        <input type="number" style="margin:0 2vw" class="form-control" id="phone"  placeholder="请输入手机号">
+                    </div>
+                    <input type="hidden" id="uid">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="submit-info">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $('.info').click(function(){
+            $('#name').val($(this).data('name'))
+            $('#phone').val($(this).data('phone'))
+            $('#uid').val($(this).data('id'))
+            $('#myModal').modal('show')
+        })
+        $('#submit-info').click(function(){
+            var name = $('#name').val()
+            var phone = $('#phone').val()
+            var id = $('#uid').val()
+            $.post('{php echo $this->createWebUrl("dealerlist")}', {uid: id,name:name,phone:phone}, function(data, textStatus, xhr) {
+                if(data){
+                    $('#myModal').modal('hide')
+                    alert('修改成功')
+                    window.location.reload()
+                }else
+                    alert('修改失败')
+            });
+        })
+    })
+</script>
 {template 'common/footer'}
