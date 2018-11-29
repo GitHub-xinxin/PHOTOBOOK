@@ -1,9 +1,130 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<meta charset="utf-8">
+	<title>預留信息</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="../addons/photobook/template/css/layui.css"  media="all">
+	<script type="text/javascript" src="../addons/photobook/template/mobile/js/jquery-2.1.4.min.js"></script>
+	<style type="text/css">
+		.layui-input, .layui-textarea{
+			width: 81%;
+		}
+		.send_btn{
+		    position: relative;
+		    top: -10.3vw;
+		    left: 39vw;
+		}
+		.verify{
+			width: 56%
+		}
+		.submit-btn{
+		    width: 60%;
+		    position: relative;
+		    top: -6vw
+		}
+		.top{
+		    height: 46vw;
+    		background: #1E9FFF;
+		}
+		.bottom{
+			margin-top: 13vw;
+		}
+		.info{
+		    color: #c2c2c2;
+			margin: 0 8vw;
+			font-size: 2.8vw;
+		}
+	</style>
 </head>
 <body>
-
+	<div class="top">
+		<img style="width: 100%" src="../addons/photobook/images/info.jpg">
+	</div>
+	<div class="bottom">
+		<form class="layui-form" action="" onsubmit="return check()" method="POST">
+		 	<div class="layui-form-item">
+		    	<label class="layui-form-label">微信号</label>
+			    <div class="layui-input-block">
+			      <input type="text" id="account" name="account" lay-verify="title" autocomplete="off" placeholder="请输入微信号" class="layui-input">
+			    </div>
+		  	</div>
+			<div class="layui-form-item">
+			    <label class="layui-form-label">手机号</label>
+			    <div class="layui-input-block">
+			    	<input type="number" id="phone" name="phone" lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			    <label class="layui-form-label">验证码</label>
+			    <div class="layui-input-block">
+			    	<input type="number" id="verify_num" name="verify_num" placeholder="短信验证码" disabled class="layui-input verify">
+			    	<button type="button" class="layui-btn layui-btn-normal send_btn">发送</button>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			    <div class="layui-input-block">
+			    	<input type="hidden" name="token" value="{$_W['token']}">
+			      	<input class="layui-btn layui-btn-normal submit-btn" value="提交" type="submit" name="submit"/>
+			    </div>
+			</div>
+		</form>
+	</div>
+	<div class="info">
+		说明：
+		<p>1.恭喜您成为代理,请正确您的手机号码，该号码将成为以后系统升级会员身份唯一标识；</p>
+		<p>2.微信号与手机号将更新到宣传海报中</p>
+	</div>
 </body>
 </html>
+<script type="text/javascript">
+	var countdown = 60;
+	$(function(){
+		$('.send_btn').click(function(){
+			checkPhone(this)
+		})
+	})
+	function settime(val) {  
+	    if (countdown == 0) {  
+	        val.removeClass('layui-btn-disabled').addClass('layui-btn-normal').attr('disabled',false).text('发送')
+	        countdown = 60;  
+	        return false;  
+	    } else {  
+	        val.text(countdown + " s");  
+	        countdown--;  
+	    }  
+	    setTimeout(function() {  
+	        settime(val);  
+	    },1000);  
+	}  
+	function check(argument) {
+		if(!$('#account').val()){
+			alert('请输入微信号')
+			return false
+		}
+		var phone = $('#phone').val();
+	    if(!(/^1[34578]\d{9}$/.test(phone))){ 
+	        alert("手机号码有误，请重填");  
+	        return false; 
+	    } 
+		if(!$('#verify_num').val()){
+			alert('请输入验证码')
+			return false
+		}
+	}
+	function checkPhone(that){ 
+	    var phone = $('#phone').val();
+	    if(!(/^1[34578]\d{9}$/.test(phone))){ 
+	        alert("手机号码有误，请重填");  
+	        return false; 
+	    } 
+	    $('#verify_num').attr('disabled',false)
+	    $.post('{php echo $this->createMobileUrl("agent_register")}', {phone: phone}, function(data, textStatus, xhr) {
+	    	
+	    });
+	    $(that).removeClass('layui-btn-normal').addClass('layui-btn-disabled').attr('disabled',true)
+		settime($(that))
+	}
+</script>

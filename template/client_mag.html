@@ -34,7 +34,7 @@
 				<tr>
 					<th>序号</th>
 					<th>昵称</th>
-					<th>提成</th>
+					<th>手机</th>
 					<th>是否代理</th>
 					<th>操作</th>
 				</tr>
@@ -44,7 +44,7 @@
 					<tr>
 						<td>{php echo $index+1}</td>
 						<td>{php echo $this->getnickname($val['openid'])}</td>
-						<td>{$val['commission']}</td>
+						<td>{$val['phone']}</td>
 						<td>{if $val['dealer'] != -1} <span class="label label-danger">代理</span> {else} <span class="label label-default">非代理</span> {/if}</td>
 						<td><button data-openid="{$val['openid']}" class="btn btn-success">取消上下级关系</button></td>
 					</tr>

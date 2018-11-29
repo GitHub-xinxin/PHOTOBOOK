@@ -9,6 +9,7 @@ defined('IN_IA') or exit('Access Denied');
 define('M_PATH', IA_ROOT . '/addons/photobook');
 include 'tools/delete.class.php';
 include 'TemplateMessage.php';
+include 'tools/aliyun-dysms-php-sdk/api_demo/SmsDemo.php';
 class PhotobookModuleSite extends WeModuleSite {
 	//测试
 	public function doMobileGetdata(){
@@ -235,7 +236,7 @@ class PhotobookModuleSite extends WeModuleSite {
 				$y_data = round($frame['top']* $coefficient);
 				$send_data ='x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,text_'.$text_data.',size_'.$size_data.',color_'.$color_data.',g_nw,x_'.$x_data.',y_'.$y_data.'|sys/saveas,o_'.base64_encode($template_thumb).',b_'.base64_encode('demo-photo');
 				$response = ihttp_post('http://demo-photo.oss-cn-beijing.aliyuncs.com/'.$template_thumb.'?x-oss-process', $send_data);
-				logging_run('id===='.json_encode($response),'info','compo333333und');
+				// logging_run('id===='.json_encode($response),'info','compo333333und');
 			}
 		}
 		/**
@@ -1755,7 +1756,17 @@ class PhotobookModuleSite extends WeModuleSite {
 		}
 		return $str; 
 	} 
-
+	/**
+	 * 随机验证码
+	 */
+	private function randNum($length = 10) { 
+		$chars = '0123456789';
+		$str =''; 
+		for($i = 0; $i < $length; $i++){
+			$str.= $chars[mt_rand(0, strlen($chars) - 1)]; 
+		}
+		return $str; 
+	} 
 	/**
 	 * 首页
 	 */
@@ -2786,7 +2797,6 @@ class PhotobookModuleSite extends WeModuleSite {
 				'title' => '代金券',
 				'fee' => $money
 			);
-			
 			$this->pay($params);
 			exit;
 		}
@@ -2994,18 +3004,22 @@ class PhotobookModuleSite extends WeModuleSite {
 		 */
 		if(!empty($_GPC['remote_price']))
 			$money += $_GPC['remote_price'];
-		// $data = [
-		// 	'status'=>'success',
-		// 	'fee'=>$money,
-		// 	'orderTid'=>$tickets
-		// ];
-		// echo json_encode($data);exit;
 		$params = array(
 			'tid' => $tickets,
 			'ordersn' => $tickets,
 			'title' => '照片书',
 			'fee' => $money
 		);
+		$orderData = [ //录入订单表
+			'uniacid'=>$_W['uniacid'],
+			'from_user'=>$_W['openid'],
+			'ticket'=>$tickets,
+			'fee'=>$money,
+			'kind'=>1,
+			'status'=>0,
+			'create_time'=>time()
+		];
+		pdo_insert('ly_photobook_orderInfo',$orderData);
 		$this->pay($params);
 	}
 
@@ -3030,6 +3044,16 @@ class PhotobookModuleSite extends WeModuleSite {
 					'title' => '成为代理商',
 					'fee' => $price
 				); 
+				$orderData = [ //录入订单表
+					'uniacid'=>$_W['uniacid'],
+					'from_user'=>$_W['openid'],
+					'ticket'=>$tickets,
+					'fee'=>$price,
+					'kind'=>2,
+					'status'=>0,
+					'create_time'=>time()
+				];
+				pdo_insert('ly_photobook_orderInfo',$orderData);
 				$this->pay($params);
 				exit;
 			}
@@ -3084,155 +3108,102 @@ class PhotobookModuleSite extends WeModuleSite {
 	private function randFloat($min=0, $max=1){
 		return $min + mt_rand()/mt_getrandmax() * ($max-$min);
 	}
+	//重新生成海报
+	public function refreshPoster($openid){
+		global $_W;
+		load()->model('mc');
+		$mc = mc_fetch($openid);
+		include 'tools/posterTools.php';
+		$poster = pdo_fetch('select * from '.tablename('ly_photobook_poster')." where uniacid = ".$_W['uniacid']);
+		$img = createMPoster($mc,$poster,'ly_photobook',0);
+	}
+	//验证码保存session
+	public function StoreSession($code){
+		session_start();
+		$session_data = [];  
+        $session_data['code'] = $code;  
+        $session_data['expire'] = time()+900;  
+        $_SESSION['verify'] = $session_data;
+	}
 	/**
 	 * 代理注册后，填写微信号与手机号，完成注册
 	 */
 	public function doMobileAgent_register(){
 		global $_W,$_GPC;
-
+		if($_W['isajax']){//发送手机验证码
+			$sendMsg = new SmsDemo();
+			$verifyNum = $this->randNum(4);
+			$this->StoreSession($verifyNum);
+			$res = $sendMsg->sendSms($_GPC['phone'],$verifyNum);
+			echo json_encode($res);exit();
+		}
+		if(checksubmit()){//提交信息
+			session_start();
+			if(time() > $_SESSION['verify']['expire'])
+				message('验证码已失效',$this->createMobileUrl('agent_register'),'error');
+			elseif($_SESSION['verify']['code'] != trim($_GPC['verify_num']))
+				message('验证码错误',$this->createMobileUrl('agent_register'),'error');
+			$update_data = [
+				'name'=>$_GPC['account'],
+				'phone'=>$_GPC['phone']
+			];
+			$res = pdo_update('ly_photobook_user',$update_data,array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']));
+			if($res)
+				$this->refreshPoster($_W['openid']);
+			$res? message('信息录入成功',$this->createMobileUrl('agency_center'),'success') :  message('信息录入失败',$this->createMobileUrl('agent_register'),'error');
+		}
 		include $this->template('agent_register');
 	}
+	
 	// 支付回调函数
 	public function payResult($params) {
 		global $_W,$_GPC;
 		load()->func('logging');					
 		logging_run('支付参数'.json_encode($params),'info','pay');
-        // params数据： 
-		/*rray(14) { ["weid"]=> string(1) "2" ["uniacid"]=> string(1) "2" ["result"]=> string(7) "success" ["type"]=> string(6) "wechat" ["from"]=> string(6) "return" ["tid"]=> string(31) "agent_20171007194847_6462226982" ["uniontid"]=> string(28) "2017100719485200013226668291" ["user"]=> string(1) "1" ["fee"]=> string(4) "0.02" ["tag"]=> array(1) { ["transaction_id"]=> string(28) "4200000023201710076697445140" } ["is_usecard"]=> string(1) "0" ["card_type"]=> string(1) "0" ["card_fee"]=> string(4) "0.02" ["card_id"]=> string(1) "0" }*/
 		if($params['result'] == 'success'){
-
-			$type=explode('_',$params['tid'])[0];
-			$order_id=end(explode('_',$params['tid']));
-			if($type =='book'){
+			$type = explode('_',$params['tid'])[0];
+			$order_id = end(explode('_',$params['tid']));
+			$this->resetNotifyInfo($type,$params['tid']);//notify返回值没有openid，重构openid
+			if($type == 'book'){
 				if(!pdo_get('ly_photobook_order_main',array('id'=>$order_id))['status']){
-					//如果用卡卷 更新卡卷数量
+					$this->buyLog($params['fee'],'照片书');	//记录日志
 					$card_main = pdo_get('ly_photobook_order_main',array('id'=>$order_id));
 					$card_id = $card_main['card_id'];
-
-					//购买照片书的订单状态
-					pdo_update('ly_photobook_order_main',array('status'=>1),array('id'=>$order_id));
-					//更新照片书购买数量
-					pdo_update('ly_photobook_template_main',array('sales +='=>$card_main['count']),array('uniacid'=>$_W['uniacid'],'id'=>$card_main['template_id']));
-
-					if(!empty($card_id)){
+					pdo_update('ly_photobook_order_main',array('status'=>1),array('id'=>$order_id));//购买照片书的订单状态
+					pdo_update('ly_photobook_orderInfo',array('status'=>1),array('ticket'=>$params['tid']));//更改订单表中的订单状态
+					pdo_update('ly_photobook_template_main',array('sales +='=>$card_main['count']),array('uniacid'=>$_W['uniacid'],'id'=>$card_main['template_id']));//更新照片书购买数量
+					if(!empty($card_id)){//如果用卡卷 更新卡卷数量
 						pdo_update('ly_photobook_user_code',array('number -='=>$card_main['card_count']),array('id'=>$card_id));
-					}else{
-						$config = $this->module['config'];
-						$setting=$config['msetting'];
-						/**
-						 * 给上级返利
-						 */
-						$prev_share_id=pdo_get('ly_photobook_share',array('openid'=>$_W['openid']),array('parentid'))['parentid'];
-						$self_id = pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['id'];
-						if($prev_share_id){
-							/**
-							 * 如果加收邮费，返利扣除邮费
-							 */
-							$remote_price = pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']))['remote_price'];
-							$address_id = pdo_get('ly_photobook_order_main',array('id'=>$order_id))['address_id'];
-							$address = pdo_get('ly_photobook_address',array('id'=>$address_id));
-							if(preg_match('/^(新疆|西藏|青海|内蒙|宁夏)/',trim($address['address']))){
-								//返利扣除运费
-								$params['fee'] -= $remote_price;
-							}
-							// 有上级
-							$prev=pdo_get('ly_photobook_share',array('id'=>$prev_share_id['parentid']));
-							$prev_user=pdo_get('ly_photobook_user',array('openid'=>$prev['openid']));
-							if($prev_user['dealer'] != -1){//代理身份返利
-								$prev_userid = $prev_user['id'];
-								$prev_money=$setting['one_level'] * $params['fee'];
-
-								$insert=array(
-									'from_user'=>$_W['openid'],
-									'userid'=>$prev_userid['id'],
-									'uniacid'=>$_W['uniacid'],
-									'createtime'=>time(),
-									'money'=>$prev_money,
-									'remark'=>'下级购买返利',
-									'status'=>0
-								);
-								pdo_insert('ly_photobook_user_rebate',$insert);
-								if($prev['parentid']){
-									/**
-									 * 给上级上级返利
-									 */
-									$prev_prev=pdo_get('ly_photobook_share',array('id'=>$prev['parentid']));
-									$prev_prev_user=pdo_get('ly_photobook_user',array('openid'=>$prev_prev['openid']));
-									if($prev_prev_user['dealer'] != -1){
-										$prev_prev_userid=$prev_prev_user['id'];
-										$prev_prev_money=$setting['two_level'] * $params['fee'];
-										$insert=array(
-											'from_user'=>$_W['openid'],
-											'userid'=>$prev_prev_userid['id'],
-											'uniacid'=>$_W['uniacid'],
-											'createtime'=>time(),
-											'money'=>$prev_prev_money,
-											'remark'=>'下下级购买返利',
-											'status'=>0
-										);		
-										pdo_insert('ly_photobook_user_rebate',$insert);		
-									}		
-								}
-							}else
-								$this->parent_fans_rebate($card_main['user_id'],$params['fee']);//上级是粉丝返利
-						}
+					}
+					if(!empty($params['fee'])){
+						$this->buyBookSuperiorRebate($params['fee'],$order_id);//购买照片书二级返利
 						$this->noCard_rebate($card_main['user_id'],$params['fee']);//无卷购买平台产品返利
 						$this->partner_rwelfare($card_main['user_id'],$params['fee']);//合伙人福利返利
 					}
-					message('照片书支付成功',$this->createMobileUrl('usercenter'),'success');
-				}
-				
+					message('照片书支付成功',$this->createMobileUrl('usercenter'),'success');	
+				}else
+					message('照片书支付成功',$this->createMobileUrl('usercenter'),'success');	
 			}else if($type =='code'){
-
 				if(!pdo_get('ly_photobook_code_order',array('id'=>$order_id))['status']){
-					// 代理商购买代金券的
-					pdo_update('ly_photobook_code_order',array('status'=>1),array('id'=>$order_id));
-					/**
-					 * 插入到用户卡卷表
-					 */
-					$order_info =pdo_get('ly_photobook_code_order',array('uniacid'=>$_W['uniacid'],'id'=>$order_id));
-					$count = pdo_get('ly_photobook_codes',array('uniacid'=>$_W['uniacid'],'id'=>$order_info['codeid']))['number'];
-					$data =array(
-						'uniacid'=>$_W['uniacid'],
-						'user_id'=>$order_info['user_id'],
-						'number'=>$order_info['number'] * $count,
-						'code_id'=>$order_info['codeid'],
-						'status'=>0
-					);
-					/**
-					 * 判断是更新还是插入
-					 */
-					$ishas = pdo_get('ly_photobook_user_code',array('uniacid'=>$_W['uniacid'],'user_id'=>$order_info['user_id'],'code_id'=>$order_info['codeid']));
-					if(empty($ishas))
-						pdo_insert('ly_photobook_user_code',$data);
-					else{
-						$data['number'] += $ishas['number'];
-						pdo_update('ly_photobook_user_code',$data,array('id'=>$ishas['id']));
-					}
-
-					$parentid = $this->parentid($this->uid2sid($order_info['user_id']));
-
+					$this->buyLog($params['fee'],'代金券');	//记录日志
+					pdo_update('ly_photobook_code_order',array('status'=>1),array('id'=>$order_id));// 代理商购买代金券的
+					$this->buyCodeUpdateInfo($order_id); //更新用户代金券信息
+					$parentid = $this->parentid($this->uid2sid($this->openid2id($_W['openid'])));//上级shareid
 					if(!empty($parentid)){
-						$num = $this->randFloat()/2;
-						$num = round($num,2);
-						while($num < 0.01){
-							$num = $this->randFloat()/10;
-							$num = round($num,2);
-						}
-						$this->add_rebate($this->id2openid($order_info['user_id']),$parentid,$num,2,true);//上级返利
-						$this->sendRebateTepMsg($this->id2openid($this->sid2uid($parentid)),$num,2,$this->id2openid($order_info['user_id']));//上级代理或非代理随机返利，模板消息  
-					}	
-					
-					$this->partner_rwelfare($order_info['user_id'],$params['fee']);//合伙人福利返利
+						$num = $this->getRoundNum();//生成大于0.01的随机数，进行上级返利
+						$this->add_rebate($_W['openid'],$parentid,$num,2,true);//上级返利
+						$this->sendRebateTepMsg($this->id2openid($this->sid2uid($parentid)),$num,2,$_W['openid']);//上级代理或非代理随机返利，模板消息  
+					}
+					$this->partner_rwelfare($order_info['user_id'],$params['fee']);//合伙人福利返利	
+				}else
 					message('代金券支付成功',$this->createMobileUrl('usercenter'),'success');
-				}
-
 			}else if($type=='agent'){
         		// 成为代理商
 				if(pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$_W['openid']))['dealer'] != 1){
-					$code=$this->randChar(5);
+					$this->buyLog($params['fee'],'代理');	//记录日志
 					$id=pdo_fetchcolumn('select id from '.tablename('ly_photobook_user').' where openid=:openid and uniacid=:uniacid',array('openid'=>$_W['openid'],'uniacid'=>$_W['uniacid']));
-					$res = pdo_update('ly_photobook_user',array('dealer'=>1,'agent_code'=>$code),array('id'=>$id));
+					$res = pdo_update('ly_photobook_user',array('dealer'=>1),array('id'=>$id));
+					pdo_update('ly_photobook_orderInfo',array('status'=>1),array('ticket'=>$params['tid']));//更改订单表中的订单状态
 					if($res){
 						$parentid = pdo_get('ly_photobook_share',array('openid'=>$_W['openid']),array('parentid'))['parentid'];
 						$parent_openid = pdo_get('ly_photobook_share',array('id'=>$parentid))['openid'];
@@ -3251,15 +3222,109 @@ class PhotobookModuleSite extends WeModuleSite {
 						$this->identity_rebate($id);//给团长或合伙人返利
 						$this->multiple_rebate($id);//检测是否开启直接下级代理数是5的倍数返利；
 						$this->partner_rwelfare($id,$params['fee']);//合伙人福利返利
-						message('恭喜你成为代理商',$this->createMobileUrl('usercenter'),'success');
 					}else
-						message('系统故障，请联系管理员',$this->createMobileUrl('usercenter'),'success');
+						logging_run('代理购买成功，但更新数据表错误'.json_encode($params),'info','agent_error');
 				}else
-					message('您已成为代理商',$this->createMobileUrl('usercenter'),'success');
+					message('恭喜你成为代理',$this->createMobileUrl('agent_register'),'success');
 			}
 		}else{
 			message('支付失败',$this->createMobileUrl('chart'),'error');
 		}
+	}
+	/**
+	 * 保存购买日志
+	 */
+	public function buyLog($fee,$type){
+		global $_W,$_GPC;
+		$account_api = WeAccount::create();
+		$nickname = $account_api->fansQueryInfo($_W['openid'])['nickname'];
+		$fee = empty($fee)? 0 : $fee;
+		$data =[
+			'uniacid'=>$_W['uniacid'],
+			'fromuser'=>$_W['openid'],
+			'time'=>time(),
+			'content'=>$nickname.'在'.date('Y-m-d H:i:s').'花'.$fee.'元购买了'.$type
+		];
+		pdo_insert('ly_photobook_order_log',$data);
+	}
+	//重置notify通知信息没有openid 与 uniacid
+	public function resetNotifyInfo($type,$val){
+		global $_W,$_GPC;
+		if($type == 'code'){
+			$order_id = end(explode('_',$val));
+			$userid = pdo_get('ly_photobook_code_order',array('id'=>$order_id))['user_id'];
+			$userInfo = $this->id2info($userid);
+			$_W['openid'] = $userInfo['openid'];
+			$_W['uniacid'] = $userInfo['uniacid'];
+		}else{
+			$orderInfo = pdo_get('ly_photobook_orderInfo',array('ticket'=>$val));
+			$_W['openid'] = $orderInfo['from_user'];
+			$_W['uniacid'] = $orderInfo['uniacid'];
+		}
+	}
+
+	//购买照片书二级返利
+	public function buyBookSuperiorRebate($fee,$order_id){
+		global $_W;
+		$config = $this->module['config'];
+		$setting=$config['msetting'];
+		$selfid = $this->openid2id($_W['openid']);
+		$parentid = $this->parentid($this->uid2sid($selfid));
+		if($parentid){//上级是否存在
+			load()->func('logging');					
+			logging_run('支付参数'.json_encode($parentid),'info','TEST');
+			$remote_price = pdo_get('ly_photobook_setting',array('uniacid'=>$_W['uniacid']))['remote_price'];
+			$address_id = pdo_get('ly_photobook_order_main',array('id'=>$order_id))['address_id'];
+			$address = pdo_get('ly_photobook_address',array('id'=>$address_id));
+			if(preg_match('/^(新疆|西藏|青海|内蒙|宁夏)/',trim($address['address'])))
+				$fee -= $remote_price;//如果加收邮费,返利扣除邮费
+			$parentInfo = $this->id2info($this->sid2uid($parentid));
+			if($parentInfo['dealer'] != -1){//代理身份返利
+				$rebateMoney = $setting['one_level'] * $fee;
+				$this->add_rebate($_W['openid'],$parentid,$rebateMoney,0);
+				$this->sendRebateTepMsg($this->sid2openid($parentid),$rebateMoney,0,$_W['openid']);
+				$grandfartherId = $this->parentid($parentid);
+				if($grandfartherId){//上上级是否存在
+					$grandfartherInfo = $this->id2info($this->sid2uid($grandfartherId));
+					if($grandfartherInfo['dealer'] != -1){
+						$prev_prev_money = $setting['two_level'] * $fee;
+						$this->add_rebate($_W['openid'],$grandfartherId,$prev_prev_money,0);	
+						$this->sendRebateTepMsg($this->sid2openid($grandfartherId),$prev_prev_money,0,$_W['openid']);
+					}		
+				}
+			}else
+				$this->parent_fans_rebate($card_main['user_id'],$params['fee']);//上级是粉丝返利
+		}
+	}
+	//购买代金券更新数量
+	public function buyCodeUpdateInfo($order_id){
+		global $_W;
+
+		$order_info =pdo_get('ly_photobook_code_order',array('uniacid'=>$_W['uniacid'],'id'=>$order_id));
+		$count = pdo_get('ly_photobook_codes',array('uniacid'=>$_W['uniacid'],'id'=>$order_info['codeid']))['number'];
+		$data =array(
+			'uniacid'=>$_W['uniacid'],
+			'user_id'=>$order_info['user_id'],
+			'number'=>$order_info['number'] * $count,
+			'code_id'=>$order_info['codeid'],
+			'status'=>0
+		);
+		$ishas = pdo_get('ly_photobook_user_code',array('uniacid'=>$_W['uniacid'],'user_id'=>$order_info['user_id'],'code_id'=>$order_info['codeid']));
+		if(empty($ishas))//插入代金券
+			pdo_insert('ly_photobook_user_code',$data);
+		else{//更新代金券
+			$data['number'] += $ishas['number'];
+			pdo_update('ly_photobook_user_code',$data,array('id'=>$ishas['id']));
+		}
+	}
+	public function getRoundNum(){
+		$num = $this->randFloat()/2;
+		$num = round($num,2);
+		while($num < 0.01){
+			$num = $this->randFloat()/10;
+			$num = round($num,2);
+		}
+		return $num;
 	}
 	/**
 	 * 上级不是代理，是粉丝返利
@@ -3325,14 +3390,17 @@ class PhotobookModuleSite extends WeModuleSite {
 		$sid = $this->uid2sid($uid);
 		$parentid = $this->parentid($sid);
 		if($info['dealer'] == -1){//粉丝无卡卷购买商品，上级代理返利	
-
-			$this->add_rebate($info['openid'],$parentid,$setVal['fans_nocard_price']*$fee,7);
-			$this->sendRebateTepMsg($this->sid2openid($parentid),$setVal['fans_nocard_price']*$fee,6,$info['openid']);
+			if(!empty($parentid)){
+				$this->add_rebate($info['openid'],$parentid,$setVal['fans_nocard_price']*$fee,7);
+				$this->sendRebateTepMsg($this->sid2openid($parentid),$setVal['fans_nocard_price']*$fee,6,$info['openid']);
+			}
 		}else{
 			$this->add_rebate($info['openid'],$sid,$setVal['agent_nocard_price']*$fee ,8); //代理无卡卷购买商品，自己返利
 			$this->sendRebateTepMsg($this->sid2openid($sid),$setVal['agent_nocard_price']*$fee,7,$info['openid']);
-			$this->add_rebate($info['openid'],$parentid,$setVal['agent_nocard_parent']*$fee,9);//代理无卡卷购买商品，上级代理返利
-			$this->sendRebateTepMsg($this->sid2openid($parentid),$setVal['agent_nocard_parent']*$fee,8,$info['openid']);
+			if(!empty($parentid)){
+				$this->add_rebate($info['openid'],$parentid,$setVal['agent_nocard_parent']*$fee,9);//代理无卡卷购买商品，上级代理返利
+				$this->sendRebateTepMsg($this->sid2openid($parentid),$setVal['agent_nocard_parent']*$fee,8,$info['openid']);
+			}
 		}
 	}
 	/**
@@ -3413,6 +3481,7 @@ class PhotobookModuleSite extends WeModuleSite {
 			'type'=>$type
 		];
 		switch ($type) {
+			case 0:$data['remark']="下级购买照片书";break;
 			case 2:$data['remark']="下级购买代金券";break;
 			case 3:$data['remark']="下级购买代理";break;
 			case 4:$data['remark']="下级购买代理,团长返利";break;
@@ -3529,6 +3598,13 @@ class PhotobookModuleSite extends WeModuleSite {
 		return pdo_get('ly_photobook_user',array('openid'=>$openid))['id'];
 	}
 	/**
+	 * openid 转 userid
+	 */
+	public function openid2id($openid){
+		global $_W;
+		return pdo_get('ly_photobook_user',array('uniacid'=>$_W['uniacid'],'openid'=>$openid))['id'];
+	}
+	/**
 	 *  userid 转shareid
 	 * @param  [type] $uid
 	 * @return [type] shareid
@@ -3546,6 +3622,7 @@ class PhotobookModuleSite extends WeModuleSite {
 		load()->model('mc');
 		$mc = mc_fetch($from_openid);
 		switch ($type) {
+			case 0:$remark="恭喜您,您有粉丝购买照片书三级返利，您获得了".$money."元的佣金";break;
 			case 1:$remark="恭喜您,您有粉丝已经注册为代理了，您获得了".$money."元的佣金";break;
 			case 2:$remark="恭喜您,您的下级代理购买了代金券，您获得了".$money."元的佣金";break;
 			case 3:$remark="恭喜您,您有团队粉丝已经注册为代理了，团长返利，您获得了".$money."元的佣金";break;
